@@ -1,0 +1,4 @@
+**/*.bak
+tst.nix
+.sops.yaml
+.tmp
