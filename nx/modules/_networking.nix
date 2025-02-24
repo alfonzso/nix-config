@@ -5,8 +5,8 @@
 }:
 let
 
-  wifiList = [ "house" "house5" ];
-  # wifiList = [ ];
+  # wifiList = [ "house" "house5" ];
+  wifiList = [ ];
   interface = "wlan0";
   _lib = config.hostCfg._lib ;
 

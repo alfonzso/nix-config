@@ -20,6 +20,8 @@
       neofetch
       neovim
       nmon
+      python3
+      nodejs_23
       rsync
       rclone
       sops

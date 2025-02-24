@@ -8,15 +8,7 @@
   ...
 }:
 let
-  # lib = pkgs.lib ;
-  # PROJECT_ROOT = builtins.toString ./. ;
-  # PROJECT_WS   = builtins.toString ./nx/. ;
-  # ws           = ./nx/. ;
-  # mods         =  "${PROJECT_WS}/modules" ;
-  # _mods        =  ../../modules/. ;
   _mods        =  ProjectRoot + "/nx/modules" ;
-  # secrets      =  "${PROJECT_WS}/secrets" ;
-  # __secrets    =  ws + "/secrets"  ;
   hostCfg      = config.hostCfg ;
 in
 {
@@ -28,6 +20,7 @@ in
   ];
 
   imports = lib.flatten [
+    ./desktop
     ./hardware-configuration.nix
 
     "${_mods}/_sops.nix"
@@ -43,6 +36,7 @@ in
   environment.systemPackages = with pkgs; [
     openssh
     bash-completion
+    gcc
   ];
 
   hardware.enableRedistributableFirmware = true;
