@@ -1,5 +1,11 @@
+#!/usr/bin/env bash
+
+extras="--phases kexec,disko,install"
+extras=""
+extras="--phases kexec,disko,install"
+
 nix run github:numtide/nixos-anywhere -- \
-  --flake .#zs00ltNix --phases kexec,disko,install --extra-files $(pwd)/nx/extra-files  \
+  --flake .#zs00lt ${extras} --extra-files $(pwd)/nx/extra-files  \
   nixiso
 
 # kexec,disko,install

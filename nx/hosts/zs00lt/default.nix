@@ -1,5 +1,5 @@
 {
-  # inputs,
+  inputs,
   config,
   pkgs,
   lib,
@@ -18,18 +18,15 @@ let
   hostCfg      = config.hostCfg ;
 in
 {
+  system.stateVersion = "24.11";
+
+  nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.permittedInsecurePackages = [
+    "openssl-1.1.1w"
+  ];
+
   imports = lib.flatten [
-    #
-    # ========== Hardware ==========
-    #
-    #inputs.nixos-hardware.nixosModules.lenovo-thinkpad-e14
     ./hardware-configuration.nix
-
-
-    # ./nx/modules/_sops.nix
-    # ./nx/modules/_ssh.nix
-    # ./nx/modules/_networking.nix
-    # ./nx/modules/_user.nix
 
     "${_mods}/_sops.nix"
     "${_mods}/_ssh.nix"
@@ -39,35 +36,33 @@ in
 
   hostCfg.root = PROJECT_ROOT ;
   hostCfg.username = "zsolt" ;
-  # hostCfg.hostname = "zs00lt" ;
-  hostCfg.hostname = HostName + "Nix" ;
-
-  # _SOPS.dsf =  __secrets + "/secrets.yaml" ; 
+  hostCfg.hostname = HostName ;
 
   environment.systemPackages = with pkgs; [
     openssh
   ];
 
   hardware.enableRedistributableFirmware = true;
-  system.stateVersion = "24.11";
 
   home-manager = {
     extraSpecialArgs = {
-      # inherit pkgs inputs;
-      inherit pkgs ;
+      inherit pkgs inputs;
       hostCfg = config.hostCfg;
     };
+
+    useUserPackages = true;
+    useGlobalPkgs = true;
+
     users.${hostCfg.username}.imports = [
       (
       { config, ... }:
-      # import ./nx/modules/home.nix {
       import ./hm {
         inherit
-            # inputs
-            config
-            hostCfg
-            lib
             pkgs
+            inputs
+            config
+            lib
+            hostCfg
             ; 
       }
       )
