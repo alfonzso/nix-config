@@ -4,17 +4,19 @@
   pkgs,
   lib,
   HostName,
+  ProjectRoot,
   ...
 }:
 let
   # lib = pkgs.lib ;
-  PROJECT_ROOT = builtins.toString ./. ;
-  PROJECT_WS   = builtins.toString ./nx/. ;
-  ws           = ./nx/. ;
-  mods         =  "${PROJECT_WS}/modules" ;
-  _mods        =  ../../modules/. ;
-  secrets      =  "${PROJECT_WS}/secrets" ;
-  __secrets    =  ws + "/secrets"  ;
+  # PROJECT_ROOT = builtins.toString ./. ;
+  # PROJECT_WS   = builtins.toString ./nx/. ;
+  # ws           = ./nx/. ;
+  # mods         =  "${PROJECT_WS}/modules" ;
+  # _mods        =  ../../modules/. ;
+  _mods        =  ProjectRoot + "/nx/modules" ;
+  # secrets      =  "${PROJECT_WS}/secrets" ;
+  # __secrets    =  ws + "/secrets"  ;
   hostCfg      = config.hostCfg ;
 in
 {
@@ -34,12 +36,13 @@ in
     "${_mods}/_user.nix"
   ];
 
-  hostCfg.root = PROJECT_ROOT ;
+  hostCfg.root = ProjectRoot ;
   hostCfg.username = "zsolt" ;
   hostCfg.hostname = HostName ;
 
   environment.systemPackages = with pkgs; [
     openssh
+    bash-completion
   ];
 
   hardware.enableRedistributableFirmware = true;

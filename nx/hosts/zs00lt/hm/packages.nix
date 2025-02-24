@@ -21,10 +21,11 @@
       neovim
       nmon
       rsync
+      rclone
       sops
+      starship
       sublime4
       tmux
-      # vim
       vscode
       x11vnc
   ];

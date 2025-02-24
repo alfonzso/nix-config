@@ -40,7 +40,8 @@
           in
           systemFunc {
             specialArgs = {
-              HostName = host;
+              HostName    = host;
+              ProjectRoot = ./.;
               inherit
                 inputs
                 outputs

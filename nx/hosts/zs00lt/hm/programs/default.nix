@@ -8,6 +8,10 @@ hostCfg,
 #   hostCfg = config.hostCfg ;
 # in
 {
+  imports = [
+    ./bash.nix
+  ];
+
     programs.git = {
       enable = true;
       userName  = "alfonzso";
@@ -33,6 +37,9 @@ hostCfg,
         vim-fzf-coauthorship
         vim-sensible
         vim-automkdir
+        vim-nix        # Syntax highlighting for Nix
+        nerdtree       # File explorer
+        fugitive       # Git integration
       ];
       # plugins = with pkgs.vimPlugins; [
       #   vim-nix        # Syntax highlighting for Nix
