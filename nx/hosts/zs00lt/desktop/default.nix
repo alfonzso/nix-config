@@ -4,9 +4,10 @@
   ...
 }:
 let
-  wifiList = [ "house" "house5" ];
-  kek = config.hostCfg._lib.genNetManProfiles wifiList ;
-  lel = builtins.trace "Value of myAttr: ${builtins.toJSON kek}" kek ;
+  wifiList       = [ "house" "house5" ];
+  netManProfiles = config.hostCfg._lib.genNetManProfiles wifiList ;
+  # lel = builtins.trace "Value of myAttr: ${builtins.toJSON kek}" kek ;
+  hostCfg        = config.hostCfg ;
 in
 {
 
@@ -34,26 +35,42 @@ in
     totem # video player
   ]);
 
-  networking.networkmanager.ensureProfiles.profiles = lel ;
-  # networking.networkmanager.ensureProfiles = builtins.trace "kek: " config.hostCfg._lib.genNetManProfiles wifiList ;
-  # networking.networkmanager.ensureProfiles = builtins.trace "kek: " config.hostCfg._lib.genNetManProfiles wifiList ;
+  # extra browsers
+  # chromium
 
-  # networking.networkmanager.ensureProfiles = {
-  #   "house" = {
-  #     connection = {
-  #       id = "house";
-  #       type = "wifi";
-  #       # uuid = "YOUR_GENERATED_UUID";  # Generate with `uuidgen`
-  #     };
-  #     wifi = {
-  #       ssid = "house";
-  #       mode = "infrastructure";
-  #     };
-  #     wifi-security = {
-  #       key-mgmt = "wpa-psk";
-  #       # psk = "your-wifi-password";  # Or use a hashed PSK (see below)
-  #       psk = "your-wifi-password";  # Or use a hashed PSK (see below)
-  #     };
-  #   };
-  # };
+  # services.gnome.chrome-gnome-shell.enable = true;
+
+  networking.networkmanager.ensureProfiles.profiles = netManProfiles ;
+
+  home-manager.users.${hostCfg.username} = {
+
+    home.packages = with pkgs; [
+      chromium
+    ] ++ (with pkgs.gnomeExtensions; [
+        system-monitor
+        # blur-my-shell
+        dash-to-panel
+    ]);
+    # ];
+
+    dconf = {
+      enable = true;
+      # settings."org/gnome/desktop/interface".color-scheme = "prefer-dark";
+      settings = {
+        "org/gnome/desktop/interface".color-scheme = "prefer-dark";
+        "org/gnome/shell" = {
+          # Enable dash-to-panel and other extensions
+          enabled-extensions = [
+            "dash-to-panel@jderose9.github.com"
+          ];
+        };
+
+        # Optional: Customize dash-to-panel settings
+        "org/gnome/shell/extensions/dash-to-panel" = {
+          panel-size = 48;
+          appicon-margin = 4;
+        };
+      };
+    };
+  };
 }

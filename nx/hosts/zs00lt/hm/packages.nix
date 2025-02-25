@@ -6,7 +6,7 @@
 
 {
   home.packages = with pkgs; [
-      busybox
+      # busybox
       fzf
       git
       go
