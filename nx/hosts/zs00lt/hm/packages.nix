@@ -5,6 +5,8 @@
 }:
 
 {
+  # home.packages = with pkgs; [
+  # packages = with pkgs; [
   home.packages = with pkgs; [
       # busybox
       fzf
@@ -20,6 +22,7 @@
       neofetch
       neovim
       nmon
+      ripgrep # needed by neovim telescope grep
       python3
       nodejs_23
       rsync

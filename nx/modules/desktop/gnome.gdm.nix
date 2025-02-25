@@ -4,10 +4,10 @@
   ...
 }:
 let
-  wifiList       = [ "house" "house5" ];
-  netManProfiles = config.hostCfg._lib.genNetManProfiles wifiList ;
+  # wifiList       = [ "house" "house5" ];
+  # netManProfiles = config.hostCfg._lib.genNetManProfiles wifiList ;
   # lel = builtins.trace "Value of myAttr: ${builtins.toJSON kek}" kek ;
-  hostCfg        = config.hostCfg ;
+  _hostCfg        = config.hostCfg ;
 in
 {
 
@@ -40,9 +40,9 @@ in
 
   # services.gnome.chrome-gnome-shell.enable = true;
 
-  networking.networkmanager.ensureProfiles.profiles = netManProfiles ;
+  networking.networkmanager.ensureProfiles.profiles = _hostCfg.genNetMan ;
 
-  home-manager.users.${hostCfg.username} = {
+  home-manager.users.${_hostCfg.username} = {
 
     home.packages = with pkgs; [
       chromium

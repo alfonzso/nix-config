@@ -8,8 +8,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-secrets = {
-      # url = "git+ssh://git@gitlab.com/emergentmind/nix-secrets.git?ref=main&shallow=1";
-      # url = "git+ssh://git@github.com:alfonzso/nix-secrets.git?ref=main&shallow=1";
       url = "git+ssh://git@github.com/alfonzso/nix-secrets.git?ref=main&shallow=1";
       inputs = { };
     };
@@ -42,6 +40,7 @@
             specialArgs = {
               HostName    = host;
               ProjectRoot = ./.;
+              # KeK         = config.hostCfg 
               inherit
                 inputs
                 outputs
@@ -54,17 +53,15 @@
 
             };
             modules = [
-              # ./nx/hosts/${host} { inherit (HostName = host); };
               ./nx/modules/_host.cfg.nix
               ./nx/hosts/${host}
-              # (import ./nx/hosts/${host} { HostName = host; })
               home-manager.nixosModules.home-manager
               disko.nixosModules.disko
               sops-nix.nixosModules.sops
               {
                 disko.rootMountPoint = "/mnt";
                 # disko.devices = import ./nx/modules/disko-config.nix;
-                disko.devices = import ./nx/hosts/${host}/disko;
+                disko.devices = import ./nx/modules/disko/${host}.nix;
               }
             ];
           };
@@ -74,8 +71,8 @@
         hosts: lib.foldl (acc: set: acc // set) { } (lib.map (host: mkHost host) hosts);
       # Return the hosts declared in the given directory
       readHosts = lib.attrNames (builtins.readDir ./nx/hosts);
-    in 
- 
+    in
+
   {
     nixosConfigurations = mkHostConfigs (readHosts);
     # nixosConfigurations.zs00ltNix = nixpkgs.lib.nixosSystem {
