@@ -28,8 +28,9 @@ in
       	neededForUsers = true;
       };
 
-      "wifi/house"  = {} ; 
-      "wifi/house5" = {} ; 
+      # TODO: needed auto default secret from sops ?
+      # "wifi/house"  = {} ; 
+      # "wifi/house5" = {} ; 
     };
 
   };
