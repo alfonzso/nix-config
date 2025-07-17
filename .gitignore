@@ -2,3 +2,5 @@
 tst.nix
 .sops.yaml
 .tmp
+nx/extra-files/
+result

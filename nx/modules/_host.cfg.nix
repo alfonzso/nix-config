@@ -1,13 +1,26 @@
+# {
+#   config,
+#   lib,
+#   HostName,
+#   ProjectRoot,
+#   ...
+# }:
+# let
+#   personal = import config.nixSecrets + "/nix/personal.nix";
+# in
+
 {
  config,
+ NixSecrets,
  pkgs,
  lib,
  ...
 }:
 let
-  _hostCfg = config.hostCfg ; 
+  personal = import NixSecrets + "/nix/personal.nix";
+  _hostCfg = config.hostCfg ;
   _lib = _hostCfg._lib ;
-in 
+in
 {
 
   options = {
@@ -50,9 +63,10 @@ in
           };
         };
       };
-    };
+    } // personal;
   };
 
   config.hostCfg.genNetMan = _lib.genNetManProfiles _hostCfg.network.wifiNames ;
+  # config.hostCfg = lib.deepRecMerge config.hostCfg personal;
 
 }

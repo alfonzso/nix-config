@@ -7,6 +7,9 @@
 {
   home.packages = with pkgs; [
       # busybox
+      # mergerfs
+      podman
+
       fzf
       git
       # go

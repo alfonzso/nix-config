@@ -2,18 +2,19 @@
   inputs,
   config,
   lib,
+  NixSecrets,
   ...
 }:
 let
-  sopsFolder = (builtins.toString inputs.nix-secrets) + "/sops";
+  sopsFolder = NixSecrets + "/sops";
   hostCfg = config.hostCfg;
-  _lib = config.hostCfg._lib;
 in
+  # builtins.trace (builtins.toJSON sopsFolder)
 {
 
   sops = {
 
-    defaultSopsFile = "${sopsFolder}/${config.hostCfg.hostname}.yaml";
+    defaultSopsFile = "${sopsFolder}/${hostCfg.hostname}.yaml";
     validateSopsFiles = false;
     
     age.keyFile = "/tmp/keys.txt";
