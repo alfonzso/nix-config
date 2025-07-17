@@ -26,6 +26,7 @@
         wifi-security = {
           key-mgmt = "wpa-psk";
           psk = config.sops.secrets."wifi/${name}".path;
+          # psk = sops.secrets."wifi/${name}".path;
         };
       };
     }) wifiList);
@@ -34,6 +35,7 @@
     builtins.listToAttrs (map (name: {
       inherit name;
       value = { psk = config.sops.secrets."wifi/${name}".path; };
+      # value = { psk = sops.secrets."wifi/${name}".path; };
     }) wifiList);
 
   genSecrets = wifiList: {

@@ -35,13 +35,16 @@
         ${host} =
           let
             systemFunc = lib.nixosSystem;
+            # NixSecrets = builtins.toString inputs.nix-secrets ;
           in
           systemFunc {
             specialArgs = {
               HostName    = host;
               ProjectRoot = ./.;
               NixSecrets = builtins.toString inputs.nix-secrets ;
-              # KeK         = config.hostCfg 
+              # KeK         = config.hostCfg
+              # HostCfg =  import ./nx/modules/_host.cfg.nix {inherit  lib NixSecrets; } ;
+              # HostCfg =  import ./nx/modules/_host.cfg.nix {inherit lib ... ; } ;
               inherit
                 inputs
                 outputs
@@ -61,9 +64,11 @@
               sops-nix.nixosModules.sops
               {
                 disko.rootMountPoint = "/mnt";
-                # disko.devices = import ./nx/modules/disko-config.nix;
                 disko.devices = import ./nx/modules/disko/${host}.nix;
               }
+              ({ config, lib, ... }: {
+                config._module.args.personal = import "${inputs.nix-secrets}/nix/personal.nix" { };
+              })
             ];
           };
       };

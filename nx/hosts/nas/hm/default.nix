@@ -8,6 +8,7 @@ let
   hostCfg = config.hostCfg ;
   homeDir = "/home/${hostCfg.username}" ;
   vimTMP  = "${homeDir}/.vim-tmp" ;
+  # sambaPassPath = config.sops.secrets.samba_user_pwd.path;
 in
 {
   home-manager = {

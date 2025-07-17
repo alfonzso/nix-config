@@ -17,7 +17,10 @@
  ...
 }:
 let
-  personal = import NixSecrets + "/nix/personal.nix";
+  # personal = import (NixSecrets + "/nix/personal.nix") ;
+  # sops = config.sops ;
+  # personal   = import "${NixSecrets}/nix/personal.nix" { inherit lib; };
+  # personal   = import "${NixSecrets}/nix/personal.nix" ;
   _hostCfg = config.hostCfg ;
   _lib = _hostCfg._lib ;
 in
@@ -28,6 +31,7 @@ in
       _lib = lib.mkOption {
         type = lib.types.attrs;
         default = import ./helpers.nix { inherit config; } ;
+        # default = import ./helpers.nix {inherit sops ; } ; #  { inherit config; } ;
         description = "Helpers of nix-config";
       };
       genNetMan = lib.mkOption {
@@ -44,6 +48,11 @@ in
         type = lib.types.str;
         default = "admin" ;
         description = "User of the machine";
+      };
+      sambaUser = lib.mkOption {
+        type = lib.types.str;
+        default = "admin" ;
+        description = "User of samba";
       };
       hostname = lib.mkOption {
         type = lib.types.str;
@@ -63,7 +72,7 @@ in
           };
         };
       };
-    } // personal;
+    } ; #  // (personal {});
   };
 
   config.hostCfg.genNetMan = _lib.genNetManProfiles _hostCfg.network.wifiNames ;
