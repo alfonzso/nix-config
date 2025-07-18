@@ -7,8 +7,8 @@
   ...
 }:
 let
-  _common     =  ProjectRoot + "/nx/common" ;
-  hostCfg      = config.hostCfg ;
+  _common  =  ProjectRoot + "/nx/common" ;
+  hostCfg  = config.hostCfg ;
 in
 {
   system.stateVersion = "24.11";
@@ -21,19 +21,18 @@ in
   ];
 
   imports = lib.flatten [
-    ./hm 
-
-    ./config.nix
+    ./hm
     ./hardware-configuration.nix
 
-    "${_common}/desktop/gnome.gdm.nix"
+    ./modules/config.nix
+    ./modules/sops.nix
 
+    "${_common}/desktop/gnome.gdm.nix"
     "${_common}/_sops.nix"
     "${_common}/_ssh.nix"
     "${_common}/_networking.nix"
     "${_common}/_user.nix"
 
-    ./sops.nix
   ];
 
   environment.systemPackages = with pkgs; [
