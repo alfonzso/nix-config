@@ -3,17 +3,12 @@
   config,
   pkgs,
   lib,
-  # HostName,
   ProjectRoot,
-  # KeK,
   ...
 }:
 let
-  _mods        =  ProjectRoot + "/nx/modules" ;
-  # inherit (import config.hostCfg) hostCfg; 
-  # inherit (hostCfg) config.hostCfg ; 
+  _modules     =  ProjectRoot + "/nx/modules" ;
   hostCfg      = config.hostCfg ;
-  # hostCfg      = KeK ;
 in
 {
   system.stateVersion = "24.11";
@@ -31,17 +26,15 @@ in
     ./config.nix
     ./hardware-configuration.nix
 
-    "${_mods}/desktop/gnome.gdm.nix"
+    "${_modules}/desktop/gnome.gdm.nix"
 
-    "${_mods}/_sops.nix"
-    "${_mods}/_ssh.nix"
-    "${_mods}/_networking.nix"
-    "${_mods}/_user.nix"
+    "${_modules}/_sops.nix"
+    "${_modules}/_ssh.nix"
+    "${_modules}/_networking.nix"
+    "${_modules}/_user.nix"
+
+    ./sops.nix
   ];
-
-  # hostCfg.root = ProjectRoot ;
-  # hostCfg.username = "zsolt" ;
-  # hostCfg.hostname = HostName ;
 
   environment.systemPackages = with pkgs; [
     openssh
