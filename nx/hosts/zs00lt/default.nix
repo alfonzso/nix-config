@@ -7,7 +7,7 @@
   ...
 }:
 let
-  _modules     =  ProjectRoot + "/nx/modules" ;
+  _common     =  ProjectRoot + "/nx/common" ;
   hostCfg      = config.hostCfg ;
 in
 {
@@ -26,12 +26,12 @@ in
     ./config.nix
     ./hardware-configuration.nix
 
-    "${_modules}/desktop/gnome.gdm.nix"
+    "${_common}/desktop/gnome.gdm.nix"
 
-    "${_modules}/_sops.nix"
-    "${_modules}/_ssh.nix"
-    "${_modules}/_networking.nix"
-    "${_modules}/_user.nix"
+    "${_common}/_sops.nix"
+    "${_common}/_ssh.nix"
+    "${_common}/_networking.nix"
+    "${_common}/_user.nix"
 
     ./sops.nix
   ];

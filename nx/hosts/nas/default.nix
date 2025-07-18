@@ -4,59 +4,29 @@
   pkgs,
   lib,
   ProjectRoot,
-  HostName,
-  # hostCfg,
   ...
 }:
 let
-  _mods        =  ProjectRoot + "/nx/modules" ;
-  # hostCfg      = builtins.trace "---> ${config.hostCfg}" config.hostCfg ;
+  _common        =  ProjectRoot + "/nx/common" ;
   hostCfg      = config.hostCfg ;
-  # hostCfg      = config.hostCfg ;
-  # nixSecrets   = builtins.toString inputs.nix-secrets ;
-  # hostCfg = builtins.trace (builtins.toJSON config.hostCfg) ;
-  # lel = builtins.trace "Value of myAttr: ${builtins.toJSON hostCfg}" hostCfg ;
-  # var = builtins.trace "---> ${hostCfg.domain}" HostName ;
-  # var = builtins.trace "---> ${hostCfg.domain}" HostName ;
-  # kek = "";
-  # _ = builtins.trace
-  #   ( "HOSTCFG = " + toString config.hostCfg )
-  #   config.hostCfg;
 in
-# ( var )
-# builtins.seq (lib.debug.showVal hostCfg)
-{
-  # HostCfg.username = var ;
-
-
   imports = lib.flatten [
     ./hm
-
-    ./config.nix
     ./hardware-configuration.nix
-    ./mounts.nix
-    ./mergerfs.nix
-    ./samba.nix
 
-    # no desktop for servers
-    # "${_mods}/desktop/gnome.gdm.nix"
+    ./modules/config.nix
+    ./modules/mounts.nix
+    ./modules/mergerfs.nix
+    ./modules/samba.nix
+    ./modules/sops.nix
 
-    "${_mods}/_sops.nix"
-    "${_mods}/_ssh.nix"
-    "${_mods}/_networking.nix"
-    "${_mods}/_user.nix"
+    "${_common}/_sops.nix"
+    "${_common}/_ssh.nix"
+    "${_common}/_networking.nix"
+    "${_common}/_user.nix"
   ];
 
-  # options.nixSecrets = lib.mkOption {
-  #   type    = lib.types.str;
-  #   default = hostCfg ;  
-  # };
-
-  # ( builtins.trace "foo" "bar" ) ;
-
   config = {
-    # asdf = var ;
-    # kek =  lel ;
 
     system.stateVersion = "25.05";
 
