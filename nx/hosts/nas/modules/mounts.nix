@@ -8,27 +8,19 @@ let
   ];
 
   indexedUUIDs =
-    lib.zipLists
-      (map toString (lib.range 1 (builtins.length diskUUIDs)))
-      diskUUIDs;
-in
-{
-  fileSystems =
-    lib.listToAttrs (map (pair:
-      let
-        idx = pair.fst;
-        uuid = pair.snd;
-      in
-      {
-        # name = "/mnt/disk${lib.padLeft 3 0 idx}";
-        # name = "/mnt/disk${builtins.format "%03d" [ idx ]}";
-
-        name = "/mnt/disk${lib.strings.fixedWidthString 3 "0" (toString idx)}";
-        value = {
-          device = "UUID=${uuid}";
-          fsType = "ext4";
-        };
-      }
-    ) indexedUUIDs);
+    lib.zipLists (map toString (lib.range 1 (builtins.length diskUUIDs)))
+    diskUUIDs;
+in {
+  fileSystems = lib.listToAttrs (map (pair:
+    let
+      idx = pair.fst;
+      uuid = pair.snd;
+    in {
+      name = "/mnt/disk${lib.strings.fixedWidthString 3 "0" (toString idx)}";
+      value = {
+        device = "UUID=${uuid}";
+        fsType = "ext4";
+      };
+    }) indexedUUIDs);
 }
 

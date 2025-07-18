@@ -1,20 +1,12 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, lib, pkgs, ... }:
 let
-  hostCfg = config.hostCfg ;
-  homeDir = "/home/${hostCfg.username}" ;
-  vimTMP  = "${homeDir}/.vim-tmp" ;
+  hostCfg = config.hostCfg;
+  homeDir = "/home/${hostCfg.username}";
+  vimTMP = "${homeDir}/.vim-tmp";
   # sambaPassPath = config.sops.secrets.samba_user_pwd.path;
-in
-{
+in {
   home-manager = {
-    extraSpecialArgs = {
-      hostCfg = config.hostCfg;
-    };
+    extraSpecialArgs = { hostCfg = config.hostCfg; };
 
     useUserPackages = true;
     useGlobalPkgs = true;
@@ -40,15 +32,14 @@ in
           fi
         '';
 
-        username = hostCfg.username ; # This needs to actually be set to your username
-        homeDirectory = homeDir ;
+        username =
+          hostCfg.username; # This needs to actually be set to your username
+        homeDirectory = homeDir;
         # You do not need to change this if you're reading this in the future.
         # Don't ever change this after the first build.  Don't ask questions.
         stateVersion = "25.05";
 
-        sessionVariables = {
-          POETRY_VIRTUALENVS_IN_PROJECT = "true";
-        };
+        sessionVariables = { POETRY_VIRTUALENVS_IN_PROJECT = "true"; };
       };
     };
   };

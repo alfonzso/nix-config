@@ -1,15 +1,10 @@
-{
-  pkgs,
-  config,
-  ...
-}:
+{ pkgs, config, ... }:
 let
   # wifiList       = [ "house" "house5" ];
   # netManProfiles = config.hostCfg._lib.genNetManProfiles wifiList ;
   # lel = builtins.trace "Value of myAttr: ${builtins.toJSON kek}" kek ;
-  _hostCfg        = config.hostCfg ;
-in
-{
+  _hostCfg = config.hostCfg;
+in {
 
   services.xserver = {
     enable = true;
@@ -40,17 +35,16 @@ in
 
   # services.gnome.chrome-gnome-shell.enable = true;
 
-  networking.networkmanager.ensureProfiles.profiles = _hostCfg.genNetMan ;
+  networking.networkmanager.ensureProfiles.profiles = _hostCfg.genNetMan;
 
   home-manager.users.${_hostCfg.username} = {
 
-    home.packages = with pkgs; [
-      chromium
-    ] ++ (with pkgs.gnomeExtensions; [
+    home.packages = with pkgs;
+      [ chromium ] ++ (with pkgs.gnomeExtensions; [
         system-monitor
         # blur-my-shell
         dash-to-panel
-    ]);
+      ]);
     # ];
 
     dconf = {
@@ -60,9 +54,7 @@ in
         "org/gnome/desktop/interface".color-scheme = "prefer-dark";
         "org/gnome/shell" = {
           # Enable dash-to-panel and other extensions
-          enabled-extensions = [
-            "dash-to-panel@jderose9.github.com"
-          ];
+          enabled-extensions = [ "dash-to-panel@jderose9.github.com" ];
         };
 
         # Optional: Customize dash-to-panel settings

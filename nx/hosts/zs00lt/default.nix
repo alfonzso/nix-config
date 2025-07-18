@@ -1,24 +1,14 @@
-{
-  inputs,
-  config,
-  pkgs,
-  lib,
-  ProjectRoot,
-  ...
-}:
+{ inputs, config, pkgs, lib, ProjectRoot, ... }:
 let
-  _common  =  ProjectRoot + "/nx/common" ;
-  hostCfg  = config.hostCfg ;
-in
-{
+  _common = ProjectRoot + "/nx/common";
+  hostCfg = config.hostCfg;
+in {
   system.stateVersion = "24.11";
 
   hardware.enableRedistributableFirmware = true;
 
   nixpkgs.config.allowUnfree = true;
-  nixpkgs.config.permittedInsecurePackages = [
-    "openssl-1.1.1w"
-  ];
+  nixpkgs.config.permittedInsecurePackages = [ "openssl-1.1.1w" ];
 
   imports = lib.flatten [
     ./hm
@@ -35,19 +25,12 @@ in
 
   ];
 
-  environment.systemPackages = with pkgs; [
-    openssh
-    bash-completion
-    gcc
-  ];
+  environment.systemPackages = with pkgs; [ openssh bash-completion gcc ];
 
   nix = {
     package = lib.mkDefault pkgs.nix;
     settings = {
-      experimental-features = [
-        "nix-command"
-        "flakes"
-      ];
+      experimental-features = [ "nix-command" "flakes" ];
       warn-dirty = false;
     };
   };

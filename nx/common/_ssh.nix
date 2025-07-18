@@ -1,4 +1,4 @@
-{config, lib, ...}:
+{ config, lib, ... }:
 # let
 #   # Define a new option with a default value.
 # in

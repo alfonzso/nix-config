@@ -1,19 +1,16 @@
-{
-  hostCfg,
-  ...
-}:
+{ hostCfg, ... }:
 let
   gitPrompt = builtins.fetchurl {
-    url = "https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh";
+    url =
+      "https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh";
     sha256 = "7ff718f4a06fd0a0be7edfef926abb41b1353c48c1515ad312d226965b74943a";
   };
-  PROJECT_ROOT = hostCfg.root; 
-in
-{
-   programs = {
-     bash = {
+  PROJECT_ROOT = hostCfg.root;
+in {
+  programs = {
+    bash = {
       enable = true;
-       profileExtra = ''
+      profileExtra = ''
         # if running bash
         if [ -n "$BASH_VERSION" ]; then
             # include .bashrc if it exists
@@ -32,8 +29,7 @@ in
             PATH="$HOME/.local/bin:$PATH"
         fi
       '';
-      initExtra =
-        ''
+      initExtra = ''
         # export BASH_COMPLETION_USER_DIR=$HOME/.nix-profile/share/bash-completion.d/
 
         # Eternal bash history.
@@ -65,7 +61,7 @@ in
         eval "$(starship init bash)"
         alias sudonix='sudo env PATH=$PATH'
         alias k='kubectl'
-        '';
+      '';
     };
   };
 

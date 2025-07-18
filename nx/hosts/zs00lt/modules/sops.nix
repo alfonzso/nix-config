@@ -1,18 +1,11 @@
-{
-  inputs,
-  config,
-  lib,
-  ...
-}:
-let
-  hostCfg = config.hostCfg;
-in
-{
+{ inputs, config, lib, ... }:
+let hostCfg = config.hostCfg;
+in {
 
   sops = {
     secrets = {
-       "wifi/house"  = {} ; 
-       "wifi/house5" = {} ; 
+      "wifi/house" = { };
+      "wifi/house5" = { };
     };
   };
 }

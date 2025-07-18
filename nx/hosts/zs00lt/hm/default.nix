@@ -1,17 +1,13 @@
 {
-  # inputs,
-  config,
-  lib,
-  pkgs,
-  # hostCfg,
-  ...
-}:
+# inputs,
+config, lib, pkgs,
+# hostCfg,
+... }:
 let
-  hostCfg = config.hostCfg ;
-  homeDir = "/home/${hostCfg.username}" ;
-  vimTMP  = "${homeDir}/.vim-tmp" ;
-in
-{
+  hostCfg = config.hostCfg;
+  homeDir = "/home/${hostCfg.username}";
+  vimTMP = "${homeDir}/.vim-tmp";
+in {
   # inherit hostCfg ;
   imports = [
     # ./programs/git.nix
@@ -26,7 +22,6 @@ in
       # inherit pkgs inputs;
       hostCfg = config.hostCfg;
     };
-
 
     useUserPackages = true;
     useGlobalPkgs = true;
@@ -100,15 +95,14 @@ in
           fi
         '';
 
-        username = hostCfg.username ; # This needs to actually be set to your username
-        homeDirectory = homeDir ;
+        username =
+          hostCfg.username; # This needs to actually be set to your username
+        homeDirectory = homeDir;
         # You do not need to change this if you're reading this in the future.
         # Don't ever change this after the first build.  Don't ask questions.
         stateVersion = "24.11";
 
-        sessionVariables = {
-          POETRY_VIRTUALENVS_IN_PROJECT = "true";
-        };
+        sessionVariables = { POETRY_VIRTUALENVS_IN_PROJECT = "true"; };
       };
     };
   };
@@ -116,6 +110,5 @@ in
   # With nixOS and hm, it wont be intalled,
   # use instead: nixos-rebuild switch --flake .#asdf
   # programs.home-manager.enable = true;
-
 
 }

@@ -10,6 +10,7 @@ let
   _common        =  ProjectRoot + "/nx/common" ;
   hostCfg      = config.hostCfg ;
 in
+{
   imports = lib.flatten [
     ./hm
     ./hardware-configuration.nix
