@@ -26,10 +26,10 @@ in {
         default = "admin";
         description = "User of the machine";
       };
-      sambaUser = lib.mkOption {
+      NASUser = lib.mkOption {
         type = lib.types.str;
         default = "admin";
-        description = "User of samba";
+        description = "User of samba/nfs";
       };
       hostname = lib.mkOption {
         type = lib.types.str;
@@ -37,7 +37,18 @@ in {
         description = "Hostname of the machine";
       };
 
-      # network = {
+      storage = lib.mkOption {
+        type = lib.types.submodule {
+          options = {
+            disksUUID = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
+              default = [ ];
+              description = "List of pre-exsisted disk uuid";
+            };
+          };
+        };
+      };
+
       network = lib.mkOption {
         type = lib.types.submodule {
           options = {

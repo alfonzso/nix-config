@@ -52,18 +52,18 @@
 
           };
           modules = [
-            ./nx/modules/_host.cfg.nix
+            ./nx/common/_host.cfg.nix
             ./nx/hosts/${host}
             home-manager.nixosModules.home-manager
             disko.nixosModules.disko
             sops-nix.nixosModules.sops
             {
               disko.rootMountPoint = "/mnt";
-              disko.devices = import ./nx/modules/disko/${host}.nix;
+              disko.devices = import ./nx/common/disko/${host}.nix;
             }
             ({ config, lib, ... }: {
               config._module.args.personal =
-                import "${inputs.nix-secrets}/nix/personal.nix" { };
+                import "${inputs.nix-secrets}/personal" { };
             })
           ];
         };

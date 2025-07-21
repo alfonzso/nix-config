@@ -25,6 +25,7 @@ in {
           mkdir -p ${vimTMP} || true
           chmod u+rw ${vimTMP}
         '';
+
         activation.cloneGitRepo = lib.mkAfter ''
           export PATH=${pkgs.git}/bin:${pkgs.openssh}/bin:$PATH
           if [ ! -d "$HOME/.config/nvim/.git" ]; then

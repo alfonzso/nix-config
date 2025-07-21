@@ -16,10 +16,13 @@ in
     ./hardware-configuration.nix
 
     ./modules/config.nix
-    ./modules/mounts.nix
-    ./modules/mergerfs.nix
-    ./modules/samba.nix
+    # ./modules/mergerfs_4_samba.nix
+    # ./modules/samba.nix
+    ./modules/nfs.nix
+    ./modules/mergerfs_4_nfs.nix
     ./modules/sops.nix
+
+    ./modules/mounts.nix
 
     "${_common}/_sops.nix"
     "${_common}/_ssh.nix"

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 extras="--phases kexec,disko,install"
-extras=""
+# extras=""
 # extras="--phases kexec,disko,install"
 
 # nix run github:numtide/nixos-anywhere -- \
@@ -10,7 +10,7 @@ extras=""
 
 nix run github:numtide/nixos-anywhere -- \
   --flake .#nas ${extras} --extra-files $(pwd)/nx/extra-files  \
-  nxadmin@nasNix
-  # admin@nix-iso
+  admin@nix-iso
+  # nxadmin@nasNix
 
 # kexec,disko,install

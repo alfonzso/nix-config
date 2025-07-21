@@ -1,9 +1,8 @@
 { config, pkgs, ... }:
-
 {
   environment.systemPackages = with pkgs; [ mergerfs ];
 
-  fileSystems."/mnt/storage" = {
+  fileSystems."/storage" = {
     fsType = "fuse.mergerfs";
     device = "/mnt/disk00*";
     options = [

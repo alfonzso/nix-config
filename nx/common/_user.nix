@@ -17,7 +17,9 @@ in {
       "${hostCfg.username}" = {
         isNormalUser = true;
         hashedPasswordFile = config.sops.secrets.${hostCfg.username}.path;
-        extraGroups = [ "wheel" ];
+        # extraGroups = [ "wheel" ];
+        # group = "nasusers";
+        extraGroups = [ "wheel" "nasusers" ];
         openssh.authorizedKeys.keys = personal.ssh.public;
         # openssh.authorizedKeys.keys = lll.ssh.public  ;
         # [
