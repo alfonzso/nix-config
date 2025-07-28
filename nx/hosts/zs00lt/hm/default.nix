@@ -1,21 +1,18 @@
 {
-# inputs,
-config, lib, pkgs,
-# hostCfg,
-... }:
+config, lib, pkgs, ...
+}:
 let
   hostCfg = config.hostCfg;
   homeDir = "/home/${hostCfg.username}";
   vimTMP = "${homeDir}/.vim-tmp";
+  ProjectRoot = config.hostCfg.root;
+  _hm_programs = ProjectRoot + "/nx/common/hm_programs" ;
 in {
-  # inherit hostCfg ;
-  imports = [
-    # ./programs/git.nix
-    # ./programs/bash.nix
-    # ./programs/tmux.nix
-    # ./programs/vim.nix
-    # ./packages.nix
-  ];
+
+  # imports = [
+  #   ./${_hm_common}/programs.nix
+  #   ./packages.nix
+  # ];
 
   home-manager = {
     extraSpecialArgs = {
@@ -26,63 +23,14 @@ in {
     useUserPackages = true;
     useGlobalPkgs = true;
 
-    # users.${hostCfg.username}.imports = [
-    #   (
-    #   { config, ... }:
-    #   import ./hm {
-    #     inherit
-    #         pkgs
-    #         inputs
-    #         config
-    #         lib
-    #         hostCfg
-    #         ;
-    #   }
-    #   )
-    # ];
     users.${hostCfg.username} = {
+
       imports = [
-        ./programs/git.nix
-        ./programs/bash.nix
-        ./programs/tmux.nix
-        ./programs/vim.nix
+        "${_hm_programs}"
         ./packages.nix
       ];
+
       home = {
-        # imports = [
-        #  #  ./programs/git.nix
-        #  #  ./programs/bash.nix
-        #  #  ./programs/tmux.nix
-        #  #  ./programs/vim.nix
-        #   ./packages.nix
-        # ];
-        # packages = with pkgs; [
-        #     # busybox
-        #     fzf
-        #     git
-        #     go
-        #     htop
-        #     htop
-        #     iotop
-        #     kubectl
-        #     kubernetes-helm
-        #     lynx
-        #     mc
-        #     neofetch
-        #     neovim
-        #     nmon
-        #     ripgrep # needed by neovim telescope grep
-        #     python3
-        #     nodejs_23
-        #     rsync
-        #     rclone
-        #     sops
-        #     starship
-        #     sublime4
-        #     tmux
-        #     vscode
-        #     x11vnc
-        # ];
 
         activation.createCustomDir = lib.mkAfter ''
           mkdir -p ${vimTMP} || true
@@ -95,8 +43,8 @@ in {
           fi
         '';
 
-        username =
-          hostCfg.username; # This needs to actually be set to your username
+        username = hostCfg.username;
+        # This needs to actually be set to your username
         homeDirectory = homeDir;
         # You do not need to change this if you're reading this in the future.
         # Don't ever change this after the first build.  Don't ask questions.
@@ -106,9 +54,5 @@ in {
       };
     };
   };
-
-  # With nixOS and hm, it wont be intalled,
-  # use instead: nixos-rebuild switch --flake .#asdf
-  # programs.home-manager.enable = true;
 
 }

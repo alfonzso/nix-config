@@ -4,6 +4,8 @@ let
   homeDir = "/home/${hostCfg.username}";
   vimTMP = "${homeDir}/.vim-tmp";
   # sambaPassPath = config.sops.secrets.samba_user_pwd.path;
+  ProjectRoot = config.hostCfg.root;
+  _hm_programs = ProjectRoot + "/nx/common/hm_programs" ;
 in {
   home-manager = {
     extraSpecialArgs = { hostCfg = config.hostCfg; };
@@ -12,11 +14,9 @@ in {
     useGlobalPkgs = true;
 
     users.${hostCfg.username} = {
+
       imports = [
-        ./programs/git.nix
-        ./programs/bash.nix
-        ./programs/tmux.nix
-        ./programs/vim.nix
+        "${_hm_programs}"
         ./packages.nix
       ];
       home = {
@@ -33,8 +33,8 @@ in {
           fi
         '';
 
-        username =
-          hostCfg.username; # This needs to actually be set to your username
+        username = hostCfg.username;
+        # This needs to actually be set to your username
         homeDirectory = homeDir;
         # You do not need to change this if you're reading this in the future.
         # Don't ever change this after the first build.  Don't ask questions.
@@ -44,9 +44,5 @@ in {
       };
     };
   };
-
-  # With nixOS and hm, it wont be intalled,
-  # use instead: nixos-rebuild switch --flake .#asdf
-  # programs.home-manager.enable = true;
 
 }

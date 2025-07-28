@@ -3,12 +3,7 @@ let
   _common = ProjectRoot + "/nx/common";
   hostCfg = config.hostCfg;
 in {
-  system.stateVersion = "24.11";
-
-  hardware.enableRedistributableFirmware = true;
-
-  nixpkgs.config.allowUnfree = true;
-  nixpkgs.config.permittedInsecurePackages = [ "openssl-1.1.1w" ];
+  system.stateVersion = "25.05";
 
   imports = lib.flatten [
     ./hm
@@ -17,6 +12,8 @@ in {
     ./modules/config.nix
     ./modules/sops.nix
 
+    "${_common}/_default_config.nix"
+
     "${_common}/desktop/gnome.gdm.nix"
     "${_common}/_sops.nix"
     "${_common}/_ssh.nix"
@@ -24,15 +21,5 @@ in {
     "${_common}/_user.nix"
 
   ];
-
-  environment.systemPackages = with pkgs; [ openssh bash-completion gcc ];
-
-  nix = {
-    package = lib.mkDefault pkgs.nix;
-    settings = {
-      experimental-features = [ "nix-command" "flakes" ];
-      warn-dirty = false;
-    };
-  };
 
 }

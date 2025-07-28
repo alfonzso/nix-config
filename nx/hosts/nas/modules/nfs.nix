@@ -13,17 +13,21 @@
 
     # Recommended exports configuration
     exports = ''
-      /storage 192.168.1.0/24(rw,sync,no_subtree_check,fsid=0)
+      # /storage 192.168.1.0/24(rw,sync,no_subtree_check,fsid=0) 172.0.0.0/8(rw,sync,no_subtree_check,fsid=0) 
 
       # Public read-only share example
       # /srv/public *(ro,insecure,no_subtree_check,all_squash,anonuid=65534,anongid=65534)
+      # ,anonuid=65534,anongid=65534
+      # ,anonuid=65534,anongid=65534
+      /storage 192.0.0.0/8(rw,sync,no_subtree_check,fsid=0,insecure) 
+      /storage 172.0.0.0/8(rw,sync,no_subtree_check,fsid=0,insecure) 
     '';
 
     # Enable NFSv4 with Kerberos support
     extraNfsdConfig  = ''
       [nfsd]
       vers4 = y
-      vers3 = n
+      vers3 = y
 
       # [gssd]
       # use-gss-proxy = 1

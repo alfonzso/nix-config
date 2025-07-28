@@ -1,4 +1,4 @@
-{ hostCfg, ... }:
+{ config, hostCfg, ... }:
 let
   gitPrompt = builtins.fetchurl {
     url =
@@ -30,6 +30,14 @@ in {
         fi
       '';
       initExtra = ''
+        # some more ls aliases  
+        alias ll='ls -alF'      
+        alias la='ls -A'        
+        alias l='ls -CF'        
+        alias sudonix='sudo env PATH=$PATH'
+        alias k='kubectl'
+        alias rm="trash-put"
+
         # export BASH_COMPLETION_USER_DIR=$HOME/.nix-profile/share/bash-completion.d/
 
         # Eternal bash history.
@@ -53,14 +61,12 @@ in {
           . "${PROJECT_ROOT}/config-files/bashrc.zs00lt"
         fi
 
-        source <(kubectl completion bash)
-        source <(helm completion bash)
+        # source <(kubectl completion bash)
+        # source <(helm completion bash)
         # source <(rclone completion bash)
 
         source ${gitPrompt}
         eval "$(starship init bash)"
-        alias sudonix='sudo env PATH=$PATH'
-        alias k='kubectl'
       '';
     };
   };
