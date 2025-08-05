@@ -35,7 +35,6 @@ in {
 
   # services.gnome.chrome-gnome-shell.enable = true;
 
-  networking.networkmanager.ensureProfiles.profiles = _hostCfg.genNetMan;
 
   home-manager.users.${_hostCfg.username} = {
 

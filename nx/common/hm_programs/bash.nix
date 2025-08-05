@@ -51,7 +51,8 @@ in {
         # http://superuser.com/questions/575479/bash-history-truncated-to-500-lines-on-each-login
         export HISTFILE=~/.bash_eternal_history
         # Force prompt to write history after every command.
-        PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
+        # PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
+        PROMPT_COMMAND="history -a '$HISTFILE'; $PROMPT_COMMAND"
 
         export PATH="$PATH:${PROJECT_ROOT}/scripts"
         # source ${PROJECT_ROOT}/scripts/nokia.prox.sh

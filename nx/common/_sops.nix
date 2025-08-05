@@ -56,21 +56,57 @@ let
       # targetPath = "/home/${config.users.users.hostUser.name}/.ssh/${targetRel}";
       targetPath = "/home/${hostCfg.username}/.ssh/" + targetRel;
       fileBaseName = lib.strings.splitString "." targetRel ;
+      _name  = "ssh/" + targetRel ;
     in {
       # name  = "ssh-" + lib.replaceStrings ["/" "."] ["-" "-"] targetRel;
       # name  = "data" ;
       # name  = "ssh/" + builtins.elemAt (lib.reverseList fileBaseName) 0 ;
-      name  = "ssh/" + targetRel ;
+      name = builtins.trace _name _name;
       value = {
+        # neededForUsers = true;
+        # sopsFile = builtins.trace filePath filePath;
         sopsFile = filePath;
+        # path = "/tmp/" ;
         # path     = targetPath;
+        # path = "/persist/" + _name;
         # valueKey  = "data";
         key = "data";
       };
     }) _sshYamls
   );
 
+  # value.sopsFile = ./secrets + "/wifi-${name}.sops.yaml";
+  generatedWifiSopsSecret = builtins.listToAttrs (map (name: {
+    name = "wifi/${name}";
+    value = {};
+  }) config.hostCfg.network.wifiNames );
 in {
+
+
+
+  # sops.templates."wifi-env".path = "/etc/wifi-secrets/all.env";
+  # sops.templates."wifi-env".mode = "0600";
+  # sops.templates."wifi-env".user = "root";
+  # sops.templates."wifi-env".group = "root";
+  # sops.templates."wifi-env".content =
+  #   lib.concatStringsSep "\n" (map (name:
+  #     ''WIFI_${upperCase name}="${config.sops.placeholder."wifi/${name}"}"''
+  #   ) wifiList);
+
+
+  # sops.templates."wifi-env" = {
+  #   # path = "/etc/wifi-secrets/all.env";
+  #   mode = "0600";
+  #   # user = "root";
+  #   # group = "root";
+  #   content = lib.concatStringsSep "\n" (map (name:
+  #     ''WIFI_${lib.strings.toUpper name}="${config.sops.secrets."wifi/${name}"}"''
+  #   ) config.hostCfg.network.wifiNames );
+  # };
+
+  # sops.templates."wifi.env".content = lib.concatStringsSep "\n" (map (name:
+  #   ''WIFI_${lib.strings.toUpper name}="${config.sops.placeholder."wifi/${name}"}"''
+  # ) config.hostCfg.network.wifiNames );
 
   sops = {
 
@@ -79,40 +115,47 @@ in {
 
     age.keyFile = "/tmp/keys.txt";
 
-    secrets = {
+    secrets = lib.mkMerge [
+    # Any fixed secrets (e.g., from this module or other custom ones)
+    {
 
       root = { neededForUsers = true; };
 
       ${hostCfg.username} = { neededForUsers = true; };
 
-      # samba_user_pwd = { owner = "${hostCfg.username}"; };
-      #
-      # "samba/user/name" = { };
-      # "samba/user/password" = { };
+    }
 
-      # TODO: needed auto default secret from sops ?
-      # "wifi/house"  = {} ;
-      # "wifi/house5" = {} ;
-    } // sshSecrets ;
+    sshSecrets
+    generatedWifiSopsSecret
+
+    ];
+
+    templates."wifi.env".content = lib.concatStringsSep "\n" (map (name:
+      ''WIFI_${lib.strings.toUpper name}="${config.sops.placeholder."wifi/${name}"}"''
+    ) config.hostCfg.network.wifiNames );
 
   };
 
+  systemd.tmpfiles.rules = lib.mkForce [
+    "d /backup 0755 ${hostCfg.username}:users -"
+  ];
 
   system.activationScripts.deploySshConfigs =
   let
     sshFolder = "/home/${hostCfg.username}/.ssh" ;
+    secretSshFolderPath = lib.removeSuffix "config" config.sops.secrets."ssh/config".path ;
   in
   {
     text = ''
-      cp -r /run/secrets/ssh ${sshFolder}
+      if [[ -d ${sshFolder} ]] ; then
+        cp -r ${sshFolder} /backup/ssh_$(date +"%Y_%m_%d__%H_%M_%S")
+      fi
+      cp -r ${secretSshFolderPath} ${sshFolder}
       chown -R ${hostCfg.username}:users ${sshFolder}
       chmod 700 ${sshFolder}
       find ${sshFolder} -type f -exec chmod 600 {} +
-      # chown -R nxadmin:users /home/nxadmin/.ssh
-      # chmod 700 /home/nxadmin/.ssh
-      # find /home/nxadmin/.ssh -type f -exec chmod 600 {} +
     '';
-    # deps = [ config.sops ];
+    deps = [ "setupSecrets" ];
   };
 
   # # Deploy decrypted files to ~/.ssh

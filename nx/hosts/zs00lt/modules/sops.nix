@@ -3,9 +3,12 @@ let hostCfg = config.hostCfg;
 in {
 
   sops = {
-    secrets = {
-      "wifi/house" = { };
-      "wifi/house5" = { };
-    };
+    ##########
+    # wifi are dynaimcally generated from sops
+    ###########
+    # secrets = {
+    #   "wifi/house" = { };
+    #   "wifi/house5" = { };
+    # };
   };
 }

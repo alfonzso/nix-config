@@ -10,13 +10,15 @@ let
   # hostCfg = builtins.trace
   #   ( "HOSTCFG = " + toJSON hostCfg )
   #   config.hostCfg;
+
+  _hashedPasswordFile = config.sops.secrets.${hostCfg.username}.path;
 in {
   users = {
     mutableUsers = true;
     users = {
       "${hostCfg.username}" = {
         isNormalUser = true;
-        hashedPasswordFile = config.sops.secrets.${hostCfg.username}.path;
+        hashedPasswordFile = builtins.trace _hashedPasswordFile _hashedPasswordFile ;
         # extraGroups = [ "wheel" ];
         # group = "nasusers";
         extraGroups = [ "wheel" "nasusers" ];

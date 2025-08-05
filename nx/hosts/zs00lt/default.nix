@@ -9,7 +9,7 @@ in {
     ./hm
     ./hardware-configuration.nix
 
-    ./modules/config.nix
+    ./modules/_global_config.nix
     ./modules/sops.nix
 
     "${_common}/_default_config.nix"
