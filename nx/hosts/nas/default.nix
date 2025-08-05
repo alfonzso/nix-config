@@ -1,14 +1,7 @@
-{
-  inputs,
-  config,
-  pkgs,
-  lib,
-  ProjectRoot,
-  ...
-}:
+{ config, inputs, pkgs, lib, ... }:
 let
-  _common        =  ProjectRoot + "/nx/common" ;
-  hostCfg      = config.hostCfg ;
+  _hostCfg = config.hostCfg ;
+  _common = _hostCfg.root + "/nx/common" ;
 in
 {
   imports = lib.flatten [
@@ -32,8 +25,6 @@ in
 
   ];
 
-  config = {
-
     system.stateVersion = "25.05";
 
     # nix.settings.trusted-public-keys = [
@@ -49,5 +40,4 @@ in
 
     # nix.settings.require-sigs = false;
 
-  };
 }

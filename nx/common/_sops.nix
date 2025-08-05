@@ -110,7 +110,7 @@ in {
 
   sops = {
 
-    defaultSopsFile = "${sopsFolder}/${hostCfg.hostname}.yaml";
+    defaultSopsFile = "${sopsFolder}/${hostCfg.currentConfigName}.yaml";
     # validateSopsFiles = true;
 
     age.keyFile = "/tmp/keys.txt";
@@ -137,7 +137,7 @@ in {
   };
 
   systemd.tmpfiles.rules = lib.mkForce [
-    "d /backup 0755 ${hostCfg.username}:users -"
+    "d /backup 0755 ${hostCfg.username} users -"
   ];
 
   system.activationScripts.deploySshConfigs =

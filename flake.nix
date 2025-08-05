@@ -28,21 +28,17 @@
       ];
 
       #
-      # ========= Host Config Functions =========
+      # ========= flakeConfigName Config Functions =========
       #
-      # Handle a given host config based on whether its underlying system is nixos or darwin
-      mkHost = host: {
-        ${host} = let
+      # Handle a given flakeConfigName config based on whether its underlying system is nixos or darwin
+      mkHost = flakeConfigName: {
+        ${flakeConfigName} = let
           systemFunc = lib.nixosSystem;
           # NixSecrets = builtins.toString inputs.nix-secrets ;
         in systemFunc {
           specialArgs = {
-            HostName = host;
             ProjectRoot = ./.;
             NixSecrets = builtins.toString inputs.nix-secrets;
-            # KeK         = config.hostCfg
-            # HostCfg =  import ./nx/modules/_host.cfg.nix {inherit  lib NixSecrets; } ;
-            # HostCfg =  import ./nx/modules/_host.cfg.nix {inherit lib ... ; } ;
             inherit inputs outputs;
 
             # ========== Extend lib with lib.custom ==========
@@ -53,13 +49,18 @@
           };
           modules = [
             ./nx/common/_host.cfg.nix
-            ./nx/hosts/${host}
+            ./nx/hosts/${flakeConfigName}
             home-manager.nixosModules.home-manager
             disko.nixosModules.disko
             sops-nix.nixosModules.sops
             {
+              hostCfg.machineHostName = flakeConfigName + "Nix";
+              hostCfg.currentConfigName = flakeConfigName ;
+              hostCfg.root = ./. ;
+            }
+            {
               disko.rootMountPoint = "/mnt";
-              disko.devices = import ./nx/common/disko/${host}.nix;
+              disko.devices = import ./nx/common/disko/${flakeConfigName}.nix;
             }
             ({ config, lib, ... }: {
               config._module.args.personal =
@@ -68,20 +69,14 @@
           ];
         };
       };
-      # Invoke mkHost for each host config that is declared for either nixos or darwin
+      # Invoke mkHost for each flakeConfigName config that is declared for either nixos or darwin
       mkHostConfigs = hosts:
         lib.foldl (acc: set: acc // set) { }
-        (lib.map (host: mkHost host) hosts);
+        (lib.map (flakeConfigName: mkHost flakeConfigName) hosts);
       # Return the hosts declared in the given directory
       readHosts = lib.attrNames (builtins.readDir ./nx/hosts);
 
     in {
       nixosConfigurations = mkHostConfigs (readHosts);
-      # nixosConfigurations.zs00ltNix = nixpkgs.lib.nixosSystem {
-      #   system = "x86_64-linux";
-      #   modules = [
-      #     ./configuration.nix # { inherit inputs; }
-      #   ];
-      # };
     };
 }

@@ -1,5 +1,6 @@
 { inputs, config, lib, ... }:
-let hostCfg = config.hostCfg;
+let 
+  hostCfg = config.hostCfg;
 in {
 
   sops = {

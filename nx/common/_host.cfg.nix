@@ -1,21 +1,23 @@
-{ config, NixSecrets, pkgs, lib, ... }:
+# { config, NixSecrets, pkgs, lib, ... }:
+{ NixSecrets, pkgs, lib, ... }:
 let
-  _hostCfg = config.hostCfg;
-  _lib = _hostCfg._lib;
+  # _hostCfg = config.hostCfg;
+  # _lib = _hostCfg._lib;
 in {
 
   options = {
     hostCfg = {
-      _lib = lib.mkOption {
-        type = lib.types.attrs;
-        default = import ./helpers.nix { inherit config; };
-        description = "Helpers of nix-config";
-      };
-      genNetMan = lib.mkOption {
-        type = lib.types.attrs;
-        default = _: "Not implemented yet...";
-        description = "Network Manager generator wrapper";
-      };
+      # _lib = lib.mkOption {
+      #   type = lib.types.attrs;
+      #   # default = import ./helpers.nix { inherit config; };
+      #   default = import ./helpers.nix ; # { inherit config; };
+      #   description = "Helpers of nix-config";
+      # };
+      # genNetMan = lib.mkOption {
+      #   type = lib.types.attrs;
+      #   default = _: "Not implemented yet...";
+      #   description = "Network Manager generator wrapper";
+      # };
       root = lib.mkOption {
         type = lib.types.path;
         default = ./.;
@@ -31,7 +33,14 @@ in {
         default = "admin";
         description = "User of samba/nfs";
       };
-      hostname = lib.mkOption {
+
+      currentConfigName = lib.mkOption {
+        type = lib.types.str;
+        default = "zs00lt";
+        description = "Name of current flake config";
+      };
+
+      machineHostName = lib.mkOption {
         type = lib.types.str;
         default = "zs00lt";
         description = "Hostname of the machine";
@@ -63,6 +72,6 @@ in {
     };
   };
 
-  config.hostCfg.genNetMan = _lib.genNetManProfiles _hostCfg.network.wifiNames;
+  # config.hostCfg.genNetMan = _lib.genNetManProfiles _hostCfg.network.wifiNames;
 
 }

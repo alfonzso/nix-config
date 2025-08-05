@@ -3,10 +3,10 @@ let
 
   # # wifiList = [ "house" "house5" ];
   # wifiList = [ ];
-  interface = "wlan0";
-  _lib = config.hostCfg._lib;
+  # interface = "wlan0";
+  # _lib = config.hostCfg._lib;
 
-  HostName = config.hostCfg.hostname + "Nix";
+  # machineHostName = config.hostCfg.machineHostName + "Nix";
   # wifiList = config.hostCfg.network.wifiNames ;
 
 
@@ -26,7 +26,7 @@ let
         };
         wifi-security = {
           key-mgmt = "wpa-psk";
-          psk = "WIFI_${lib.strings.toUpper name}";
+          psk = "$WIFI_${lib.strings.toUpper name}";
         };
       };
     }) config.hostCfg.network.wifiNames );
@@ -35,7 +35,7 @@ in {
 
   networking = {
     enableIPv6 = false;
-    hostName = HostName;
+    hostName = config.hostCfg.machineHostName ;
     networkmanager = {
       enable = true ;
       ensureProfiles = {

@@ -1,11 +1,9 @@
-{
-config, lib, pkgs, ...
-}:
+{ config, lib, pkgs, ProjectRoot, ... }:
 let
   hostCfg = config.hostCfg;
   homeDir = "/home/${hostCfg.username}";
   vimTMP = "${homeDir}/.vim-tmp";
-  ProjectRoot = config.hostCfg.root;
+  # ProjectRoot = config.hostCfg.root;
   _hm_programs = ProjectRoot + "/nx/common/hm_programs" ;
 in {
 
@@ -13,7 +11,6 @@ in {
   #   ./${_hm_common}/programs.nix
   #   ./packages.nix
   # ];
-
   home-manager = {
     extraSpecialArgs = {
       # inherit pkgs inputs;
@@ -29,6 +26,8 @@ in {
         "${_hm_programs}"
         ./packages.nix
       ];
+
+      programs.home-manager.enable = true;
 
       home = {
 
