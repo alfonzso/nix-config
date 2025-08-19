@@ -17,13 +17,22 @@ in {
     openFirewall = false;    # Disable any firewall rules
   };
 
-  programs.dconf.enable = true; 
+  # programs.dconf.enable = true; 
 
-  # services.xserver = {
-  #   enable = true;
-  #   displayManager.gdm.enable = true;
-  #   desktopManager.gnome.enable = true;
-  # };
+  systemd.sleep.extraConfig = ''
+    AllowSuspend=no
+    AllowHibernation=no
+    AllowHybridSleep=no
+    AllowSuspendThenHibernate=no
+  '';
+
+  # its not x11 forwarding or any other thing i thought
+  # this config needed for gnome to be enabled
+  services.xserver = {
+    enable = true;
+    displayManager.gdm.enable = true;
+    desktopManager.gnome.enable = true;
+  };
 
   environment.gnome.excludePackages = (with pkgs; [
     atomix # puzzle game
