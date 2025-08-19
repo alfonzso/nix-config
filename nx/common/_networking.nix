@@ -1,18 +1,5 @@
 { config, lib, ... }:
 let
-
-  # # wifiList = [ "house" "house5" ];
-  # wifiList = [ ];
-  # interface = "wlan0";
-  # _lib = config.hostCfg._lib;
-
-  # machineHostName = config.hostCfg.machineHostName + "Nix";
-  # wifiList = config.hostCfg.network.wifiNames ;
-
-
-  # houseWifiProfile = wifiList:
-  #   ''WIFI_${lib.strings.toUpper name}="${config.sops.placeholder."wifi/${name}"}"''
-  # ) config.hostCfg.network.wifiNames );
   houseWifiProfile = builtins.listToAttrs (map (name: {
       inherit name;
       value = {

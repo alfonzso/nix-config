@@ -58,7 +58,7 @@ in {
 
   home-manager.users.${_hostCfg.username} = {
 
-    home.packages = with pkgs;
+   home.packages = with pkgs;
       [ chromium ] ++ (with pkgs.gnomeExtensions; [
         system-monitor
         # blur-my-shell

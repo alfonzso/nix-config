@@ -19,17 +19,10 @@ in {
       "${hostCfg.username}" = {
         isNormalUser = true;
         hashedPasswordFile = builtins.trace _hashedPasswordFile _hashedPasswordFile ;
-        # extraGroups = [ "wheel" ];
-        # group = "nasusers";
         extraGroups = [ "wheel" "nasusers" ];
         openssh.authorizedKeys.keys = personal.ssh.public;
-        # openssh.authorizedKeys.keys = lll.ssh.public  ;
-        # [
-        #   "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICgcJfi0dZotMWa8zQvxXduM76GmQfoPvMU5FjIFZCAa alfonzso@gmail.com"
-        # ];
       };
       root = {
-        # isNormalUser = true;
         hashedPasswordFile = config.sops.secrets.root.path;
         openssh.authorizedKeys.keys = personal.ssh.public;
       };
