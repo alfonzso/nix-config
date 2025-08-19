@@ -5,7 +5,7 @@ in {
 
   sops = {
     ##########
-    # wifi are dynaimcally generated from sops
+    # wifi are dynamically generated from sops
     ###########
     # secrets = {
     #   "wifi/house" = { };

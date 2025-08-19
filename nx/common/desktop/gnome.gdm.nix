@@ -1,23 +1,21 @@
 { pkgs, config, ... }:
 let
-  # wifiList       = [ "house" "house5" ];
-  # netManProfiles = config.hostCfg._lib.genNetManProfiles wifiList ;
-  # lel = builtins.trace "Value of myAttr: ${builtins.toJSON kek}" kek ;
   _hostCfg = config.hostCfg;
 in {
 
-  # services.avahi = {
-  #   enable = true;          # Ensure this is set
-  #   nssmdns = true;         # Also disable mDNS lookup if present
-  #   openFirewall = true;    # Disable any firewall rules
-  # };
-  services.avahi = {
-    enable = false;          # Ensure this is set
-    nssmdns = false;         # Also disable mDNS lookup if present
-    openFirewall = false;    # Disable any firewall rules
+  systemd.sockets.avahi-daemon = {
+    after = [
+      # Ensure that `/run/avahi-daemon` owned by `avahi` is created by `systemd.tmpfiles.rules` before the `avahi-daemon.socket`,
+      # otherwise `avahi-daemon.socket` will automatically create it owned by `root`, which will cause `avahi-daemon.service` to fail.
+      "systemd-tmpfiles-setup.service"
+    ];
   };
 
-  # programs.dconf.enable = true; 
+  # services.avahi = {
+  #   enable = false;          # Ensure this is set
+  #   nssmdns = false;         # Also disable mDNS lookup if present
+  #   openFirewall = false;    # Disable any firewall rules
+  # };
 
   systemd.sleep.extraConfig = ''
     AllowSuspend=no

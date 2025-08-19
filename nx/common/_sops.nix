@@ -136,10 +136,10 @@ in {
 
   };
 
-  systemd.tmpfiles.rules = lib.mkForce [
+  systemd.tmpfiles.rules = [
     "d /backup 0755 ${hostCfg.username} users -"
   ];
-
+  
   system.activationScripts.deploySshConfigs =
   let
     sshFolder = "/home/${hostCfg.username}/.ssh" ;
