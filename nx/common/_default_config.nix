@@ -42,6 +42,7 @@
     ];
 
     nix = {
+      gc = { automatic = true; dates = "weekly"; options = "--delete-older-than +15"; };
       package = lib.mkDefault pkgs.nix;
       settings = {
         experimental-features = [

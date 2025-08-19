@@ -5,7 +5,14 @@
   # packages = with pkgs; [
   home.packages = with pkgs; [
     # busybox
+    ps # ps aux
+    usbutils # lsusb
+    pciutils # lspci
+    jq
+    yq
+    unzip
     fzf
+    dig
     git
     go
     htop
@@ -21,7 +28,9 @@
     ripgrep # needed by neovim telescope grep
     python3
     # nodejs_23
-    rsync
+    nodejs_24
+    # toybox
+    # rsync # installed as systemPackage
     rclone
     sops
     starship
@@ -29,5 +38,5 @@
     tmux
     vscode
     x11vnc
-  ];
+];
 }
