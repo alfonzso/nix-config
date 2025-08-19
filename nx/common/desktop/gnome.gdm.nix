@@ -6,11 +6,24 @@ let
   _hostCfg = config.hostCfg;
 in {
 
-  services.xserver = {
-    enable = true;
-    displayManager.gdm.enable = true;
-    desktopManager.gnome.enable = true;
+  # services.avahi = {
+  #   enable = true;          # Ensure this is set
+  #   nssmdns = true;         # Also disable mDNS lookup if present
+  #   openFirewall = true;    # Disable any firewall rules
+  # };
+  services.avahi = {
+    enable = false;          # Ensure this is set
+    nssmdns = false;         # Also disable mDNS lookup if present
+    openFirewall = false;    # Disable any firewall rules
   };
+
+  programs.dconf.enable = true; 
+
+  # services.xserver = {
+  #   enable = true;
+  #   displayManager.gdm.enable = true;
+  #   desktopManager.gnome.enable = true;
+  # };
 
   environment.gnome.excludePackages = (with pkgs; [
     atomix # puzzle game

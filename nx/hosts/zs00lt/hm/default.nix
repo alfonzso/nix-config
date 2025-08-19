@@ -35,12 +35,12 @@ in {
           mkdir -p ${vimTMP} || true
           chmod u+rw ${vimTMP}
         '';
-        activation.cloneGitRepo = lib.mkAfter ''
-          export PATH=${pkgs.git}/bin:${pkgs.openssh}/bin:$PATH
-          if [ ! -d "$HOME/.config/nvim/.git" ]; then
-            git clone git@github.com:alfonzso/nvim.git $HOME/.config/nvim
-          fi
-        '';
+        # activation.cloneGitRepo = lib.mkAfter ''
+        #   export PATH=${pkgs.git}/bin:${pkgs.openssh}/bin:$PATH
+        #   if [ ! -d "$HOME/.config/nvim/.git" ]; then
+        #     git clone git@github.com:alfonzso/nvim.git $HOME/.config/nvim
+        #   fi
+        # '';
 
         username = hostCfg.username;
         # This needs to actually be set to your username
