@@ -1,6 +1,5 @@
-{ config , lib, ProjectRoot, ... }:
-let
-  _common = ProjectRoot + "/nx/common";
+{ config, lib, ProjectRoot, ... }:
+let _common = ProjectRoot + "/nx/common";
 in {
 
   system.stateVersion = "25.05";

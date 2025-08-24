@@ -18,7 +18,8 @@ in {
     users = {
       "${hostCfg.username}" = {
         isNormalUser = true;
-        hashedPasswordFile = builtins.trace _hashedPasswordFile _hashedPasswordFile ;
+        hashedPasswordFile =
+          builtins.trace _hashedPasswordFile _hashedPasswordFile;
         extraGroups = [ "wheel" "nasusers" ];
         openssh.authorizedKeys.keys = personal.ssh.public;
       };

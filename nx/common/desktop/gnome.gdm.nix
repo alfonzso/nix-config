@@ -1,6 +1,5 @@
 { pkgs, config, ... }:
-let
-  _hostCfg = config.hostCfg;
+let _hostCfg = config.hostCfg;
 in {
 
   systemd.sockets.avahi-daemon = {
@@ -55,10 +54,9 @@ in {
 
   # services.gnome.chrome-gnome-shell.enable = true;
 
-
   home-manager.users.${_hostCfg.username} = {
 
-   home.packages = with pkgs;
+    home.packages = with pkgs;
       [ chromium ] ++ (with pkgs.gnomeExtensions; [
         system-monitor
         # blur-my-shell

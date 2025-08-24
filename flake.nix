@@ -55,8 +55,8 @@
             sops-nix.nixosModules.sops
             {
               hostCfg.machineHostName = flakeConfigName + "Nix";
-              hostCfg.currentConfigName = flakeConfigName ;
-              hostCfg.root = ./. ;
+              hostCfg.currentConfigName = flakeConfigName;
+              hostCfg.root = ./.;
             }
             {
               disko.rootMountPoint = "/mnt";
@@ -76,7 +76,5 @@
       # Return the hosts declared in the given directory
       readHosts = lib.attrNames (builtins.readDir ./nx/hosts);
 
-    in {
-      nixosConfigurations = mkHostConfigs (readHosts);
-    };
+    in { nixosConfigurations = mkHostConfigs (readHosts); };
 }

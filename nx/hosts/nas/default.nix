@@ -1,9 +1,8 @@
 { config, inputs, pkgs, lib, ... }:
 let
-  _hostCfg = config.hostCfg ;
-  _common = _hostCfg.root + "/nx/common" ;
-in
-{
+  _hostCfg = config.hostCfg;
+  _common = _hostCfg.root + "/nx/common";
+in {
   imports = lib.flatten [
     ./hm
     ./hardware-configuration.nix
@@ -25,19 +24,19 @@ in
 
   ];
 
-    system.stateVersion = "25.05";
+  system.stateVersion = "25.05";
 
-    # nix.settings.trusted-public-keys = [
-    #   "nas:owUPp8g4dg7pKBKQAqcB48gEYkZFAyw12IfpGDBEeeY="
-    # ];
+  # nix.settings.trusted-public-keys = [
+  #   "nas:owUPp8g4dg7pKBKQAqcB48gEYkZFAyw12IfpGDBEeeY="
+  # ];
 
-    # nix = {
-    #   requireSignedBinaryCaches = false;
-    #   extraOptions = ''
-    #     require-sigs = false
-    #   '';
-    # };
+  # nix = {
+  #   requireSignedBinaryCaches = false;
+  #   extraOptions = ''
+  #     require-sigs = false
+  #   '';
+  # };
 
-    # nix.settings.require-sigs = false;
+  # nix.settings.require-sigs = false;
 
 }

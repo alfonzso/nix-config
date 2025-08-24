@@ -1,8 +1,10 @@
 { config, pkgs, lib, ... }:
 
 let
-  _disksUUID = config.hostCfg.storage.disksUUID ;
-  indexedUUIDs = lib.zipLists (map toString (lib.range 1 (builtins.length _disksUUID))) _disksUUID;
+  _disksUUID = config.hostCfg.storage.disksUUID;
+  indexedUUIDs =
+    lib.zipLists (map toString (lib.range 1 (builtins.length _disksUUID)))
+    _disksUUID;
 
   userName = config.hostCfg.NASUser;
 
@@ -41,10 +43,9 @@ in {
   #   name = "/mnt/disk${lib.strings.fixedWidthString 3 "0" (toString idx)}"  ;
   # }) indexedUUIDs;
 
-  systemd.services = builtins.listToAttrs (
-    map (pair:
+  systemd.services = builtins.listToAttrs (map (pair:
     let
-      idx = pair.fst ;
+      idx = pair.fst;
       # disk = "/mnt/disk${lib.strings.fixedWidthString 3 "0" (toString idx)}";
       disk = "disk${lib.strings.fixedWidthString 3 "0" (toString idx)}";
     in {
@@ -54,7 +55,7 @@ in {
       #   script = "echo ${idx}";
       # };
 
-      name = disk ; 
+      name = disk;
       # name = "mnt-disk${lib.strings.fixedWidthString 3 "0" (toString idx)}";
       value = {
 
@@ -69,7 +70,7 @@ in {
           #    chown -R ${userName} ${disk}
           # '';
           ExecStart = pkgs.writeShellScript "chown-mount-disk" ''
-              chown -R ${userName}:nasusers /mnt/${disk}
+            chown -R ${userName}:nasusers /mnt/${disk}
           '';
         };
       };

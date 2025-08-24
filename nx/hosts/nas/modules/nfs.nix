@@ -1,5 +1,4 @@
-{ config, pkgs, ... }:
-{
+{ config, pkgs, ... }: {
   # Required packages
   environment.systemPackages = [ pkgs.nfs-utils ];
 
@@ -24,7 +23,7 @@
     '';
 
     # Enable NFSv4 with Kerberos support
-    extraNfsdConfig  = ''
+    extraNfsdConfig = ''
       [nfsd]
       vers4 = y
       vers3 = y
@@ -37,17 +36,13 @@
   # Firewall configuration
   networking.firewall = {
     allowedTCPPorts = [
-      2049   # NFS
-      4001   # lockd
-      4002   # mountd
-      4003   # statd
-      111    # rpcbind
+      2049 # NFS
+      4001 # lockd
+      4002 # mountd
+      4003 # statd
+      111 # rpcbind
     ];
-    allowedUDPPorts = [
-      2049
-      4001
-      111
-    ];
+    allowedUDPPorts = [ 2049 4001 111 ];
   };
 
   # Create system users and groups
@@ -81,7 +76,7 @@
   boot.kernel.sysctl = {
     "sunrpc.tcp_slot_table_entries" = 128;
     "sunrpc.udp_slot_table_entries" = 128;
-  #   "fs.nfs.nfs_callback_tcpport" = 8765;  # Fixed callback port
+    #   "fs.nfs.nfs_callback_tcpport" = 8765;  # Fixed callback port
   };
 
   # Optional: Kerberos configuration for secure NFS

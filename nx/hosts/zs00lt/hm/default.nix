@@ -4,7 +4,7 @@ let
   homeDir = "/home/${hostCfg.username}";
   vimTMP = "${homeDir}/.vim-tmp";
   # ProjectRoot = config.hostCfg.root;
-  _hm_programs = ProjectRoot + "/nx/common/hm_programs" ;
+  _hm_programs = ProjectRoot + "/nx/common/hm_programs";
 
 in {
 
@@ -19,10 +19,7 @@ in {
 
     users.${hostCfg.username} = {
 
-      imports = [
-        "${_hm_programs}"
-        ./packages.nix
-      ];
+      imports = [ "${_hm_programs}" ./packages.nix ];
 
       programs.home-manager.enable = true;
 
@@ -34,7 +31,8 @@ in {
 
         Service = {
           Type = "oneshot";
-          Environment = "PATH=${lib.makeBinPath [ pkgs.curl pkgs.git pkgs.openssh ]}";
+          Environment =
+            "PATH=${lib.makeBinPath [ pkgs.curl pkgs.git pkgs.openssh ]}";
           ExecStart = pkgs.writeShellScript "clone-nvim" ''
             set -ex
             NVIM_DIR="$HOME/.config/nvim"
@@ -49,7 +47,7 @@ in {
 
         Install.WantedBy = [ "default.target" ];
       };
-     
+
       xdg.enable = true;
 
       home = {

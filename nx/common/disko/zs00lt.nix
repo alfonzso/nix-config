@@ -1,7 +1,7 @@
 {
   disk = {
     main = {
-      type    = "disk";
+      type = "disk";
       device = "/dev/disk/by-id/ata-Samsung_SSD_870_EVO_500GB_S6PYNL0XB06332K";
       # device = "/dev/sda";
       content = {
@@ -40,9 +40,9 @@
           size = "200G";
           # size = "20G";
           content = {
-            type         = "filesystem";
-            format       = "ext4";
-            mountpoint   = "/";
+            type = "filesystem";
+            format = "ext4";
+            mountpoint = "/";
             mountOptions = [ "defaults" ];
           };
         };
@@ -50,8 +50,8 @@
           size = "150G";
           # size = "1G";
           content = {
-            type       = "filesystem";
-            format     = "ext4";
+            type = "filesystem";
+            format = "ext4";
             mountpoint = "/home";
           };
         };

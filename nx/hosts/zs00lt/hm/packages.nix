@@ -38,5 +38,5 @@
     tmux
     vscode
     x11vnc
-];
+  ];
 }
