@@ -32,6 +32,7 @@
       bash-completion
       gcc
       trash-cli
+      wl-clipboard
     ];
 
     nix = {
