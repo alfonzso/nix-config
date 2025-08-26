@@ -60,7 +60,7 @@
             }
             {
               disko.rootMountPoint = "/mnt";
-              disko.devices = import ./nx/common/disko/${flakeConfigName}.nix;
+              disko.devices = import ./nx/disko/${flakeConfigName}.nix;
             }
             ({ config, lib, ... }: {
               config._module.args.personal =
