@@ -49,24 +49,20 @@ in {
     totem # video player
   ]);
 
-  # extra browsers
-  # chromium
-
-  # services.gnome.chrome-gnome-shell.enable = true;
-
   home-manager.users.${_hostCfg.username} = {
 
+    # browsers
     home.packages = with pkgs;
-      [ chromium ] ++ (with pkgs.gnomeExtensions; [
+      [
+        firefox
+        google-chrome
+      ] ++ (with pkgs.gnomeExtensions; [
         system-monitor
-        # blur-my-shell
         dash-to-panel
       ]);
-    # ];
 
     dconf = {
       enable = true;
-      # settings."org/gnome/desktop/interface".color-scheme = "prefer-dark";
       settings = {
         "org/gnome/desktop/interface".color-scheme = "prefer-dark";
         "org/gnome/shell" = {

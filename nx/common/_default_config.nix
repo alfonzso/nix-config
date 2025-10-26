@@ -27,10 +27,17 @@
     fonts.packages = with pkgs; [ nerd-fonts.hack ];
 
     environment.systemPackages = with pkgs; [
+
+      lua-language-server
+      stylua
+
       rsync
       openssh
       bash-completion
       gcc
+      cmake
+      gnumake
+      fzf
       trash-cli
       wl-clipboard
     ];
