@@ -5,13 +5,14 @@
   # packages = with pkgs; [
   home.packages = with pkgs; [
     # busybox
+    # fzf
     ps # ps aux
     usbutils # lsusb
     pciutils # lspci
     jq
     yq
     unzip
-    fzf
+    # fzf
     dig
     git
     go

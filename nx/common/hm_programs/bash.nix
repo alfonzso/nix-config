@@ -30,10 +30,10 @@ in {
         fi
       '';
       initExtra = ''
-        # some more ls aliases  
-        alias ll='ls -alF'      
-        alias la='ls -A'        
-        alias l='ls -CF'        
+        # some more ls aliases
+        alias ll='ls -alF'
+        alias la='ls -A'
+        alias l='ls -CF'
         alias sudonix='sudo env PATH=$PATH'
         alias k='kubectl'
         alias rm="trash-put"
@@ -54,8 +54,7 @@ in {
         # PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
         PROMPT_COMMAND="history -a '$HISTFILE'; $PROMPT_COMMAND"
 
-        export PATH="$PATH:${PROJECT_ROOT}/scripts"
-        # source ${PROJECT_ROOT}/scripts/nokia.prox.sh
+        # export PATH="$PATH:${PROJECT_ROOT}/scripts"
 
         # Source custom configuration
         if [ -f "$HOME/.bashrc.zs00lt" ]; then

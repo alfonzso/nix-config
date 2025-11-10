@@ -1,6 +1,6 @@
 { pkgs, inputs, config, lib, NixSecrets, ProjectRoot, ... }:
 let
-  diffFiles = ProjectRoot + "/nx/common/scripts/diff_files.sh";
+  # diffFiles = ProjectRoot + "/nx/common/scripts/diff_files.sh";
   nxLib = ProjectRoot + "/nx/lib";
   sopsFolder = NixSecrets + "/sops";
   hostCfg = config.hostCfg;

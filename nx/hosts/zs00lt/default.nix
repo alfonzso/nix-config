@@ -1,4 +1,4 @@
-{ config, lib, ProjectRoot, ... }:
+{ lib, ProjectRoot, ... }:
 let
   _common = ProjectRoot + "/nx/common";
   _desktop = ProjectRoot + "/nx/desktop";
@@ -18,7 +18,12 @@ in {
 
     "${_common}/_default_config.nix"
 
-    "${_desktop}/gnome.gdm.nix"
+    # added printer
+    "${_common}/_printer.nix"
+
+    "${_common}/_virtualisation.nix"
+
+    "${_common}/desktop/gnome.gdm.nix"
 
     "${_common}/_sops.nix"
     "${_common}/_ssh.nix"
