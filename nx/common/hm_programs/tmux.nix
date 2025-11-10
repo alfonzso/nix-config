@@ -13,19 +13,24 @@
 
       # bind-key q last-window
       # bind q last-window
+
       bind-key -T prefix e switch-client -T last_window
       bind-key -T last_window e last-window
+
       # List of plugins
       set -g @plugin 'tmux-plugins/tpm'
       set -g @plugin 'tmux-plugins/tmux-sensible'
       set -g @plugin 'tmux-plugins/tmux-resurrect'
       set -sg escape-time 50
+
       set-window-option -g mode-keys vi
+
       # press <prefix>‑T to toggle between C‑b and C‑a
       bind-key T run-shell "~/.tmux/toggle-prefix.sh"
-      set-option -g default-shell "/bin/bash"
+      set-option -g default-shell "${pkgs.bash}/bin/bash"
       set -g default-terminal "screen-256color"
       new -n WindowName bash --login
+
       # Other examples:
       # set -g @plugin 'github_username/plugin_name'
       # set -g @plugin 'git@github.com/user/plugin'

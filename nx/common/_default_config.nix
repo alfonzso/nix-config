@@ -35,11 +35,13 @@
       openssh
       bash-completion
       gcc
+      cargo
       cmake
       gnumake
       fzf
       trash-cli
       wl-clipboard
+
     ];
 
     nix = {
