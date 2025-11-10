@@ -12,8 +12,6 @@ in {
     ./hardware-configuration.nix
     ./_global_host_config.nix
 
-    # ./modules/sops.nix
-
     "${_activations}/deploy_ssh_files.nix"
 
     "${_common}/_default_config.nix"
@@ -29,6 +27,7 @@ in {
     "${_common}/_ssh.nix"
     "${_common}/_networking.nix"
     "${_common}/_user.nix"
+    "${_common}/_b2_rclone.nix"
 
   ];
 
