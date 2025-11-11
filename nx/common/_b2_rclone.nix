@@ -12,29 +12,59 @@ in {
     secrets = {
       "b2/storage-bucket/account" = { sopsFile = "${sopsFolder}/b2.yaml"; };
       "b2/storage-bucket/key" = { sopsFile = "${sopsFolder}/b2.yaml"; };
+      "restic/password" = {
+        sopsFile = "${sopsFolder}/b2.yaml";
+        owner = hostCfg.username;
+      };
     };
 
-    templates."b2.storage.rclone.conf" = {
-      content = ''
-        [b2-storage]
-        type = b2
-        account = ${config.sops.placeholder."b2/storage-bucket/account"}
-        key = ${config.sops.placeholder."b2/storage-bucket/key"}
-      '';
-      owner = hostCfg.username;
-      # owner = config.users.users."${hostCfg.username}" ;
-      path = "/home/${hostCfg.username}/.config/rclone/b2.storage.conf";
+    templates = {
+      # "restic-open" = {
+      #   content = ''
+      #     export RESTIC_REPOSITORY=rclone:b2-storage:cnwco-storage/restic
+      #     export RCLONE_CONFIG=/home/zsolt/.config/rclone/b2.storage.conf
+      #     export RESTIC_PASSWORD=${config.sops.placeholder."restic/password"}
+      #   '';
+      # };
+      "b2.storage.rclone.conf" = {
+        content = ''
+          [b2-storage]
+          type = b2
+          account = ${config.sops.placeholder."b2/storage-bucket/account"}
+          key = ${config.sops.placeholder."b2/storage-bucket/key"}
+        '';
+        owner = hostCfg.username;
+        # owner = config.users.users."${hostCfg.username}" ;
+        path = "/home/${hostCfg.username}/.config/rclone/b2.storage.conf";
+      };
     };
 
   };
 
   systemd.tmpfiles.rules = [
     "d /mnt/b2-storage 0755 ${hostCfg.username} users -"
+    "d /mnt/restic 0755 ${hostCfg.username} users -"
     "d /home/${hostCfg.username}/.config/rclone 0755 ${hostCfg.username} users -"
   ];
 
   home-manager = {
     users.${hostCfg.username} = {
+
+      home.packages = [
+
+        (pkgs.writeShellScriptBin "b2rclone" ''
+          ${pkgs.rclone}/bin/rclone --config=/home/${hostCfg.username}/.config/rclone/b2.storage.conf "$@"
+        '')
+
+        # (pkgs.writeScriptBin "restic-open" config.sops.templates."restic-open".content)
+        (pkgs.writeScriptBin "restic-open" ''
+          export RESTIC_REPOSITORY=rclone:b2-storage:cnwco-storage/restic
+          export RCLONE_CONFIG=/home/zsolt/.config/rclone/b2.storage.conf
+          export RESTIC_PASSWORD=$(cat ${
+            config.sops.secrets."restic/password".path
+          })
+        '')
+      ];
 
       systemd.user.services.b2-mounts = {
         Unit = {

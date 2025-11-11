@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
 {
   # home.packages = with pkgs; [
@@ -6,6 +6,7 @@
   home.packages = with pkgs; [
     # busybox
     # fzf
+    ncdu
     ps # ps aux
     usbutils # lsusb
     pciutils # lspci

@@ -42,6 +42,8 @@
       trash-cli
       wl-clipboard
 
+      restic
+
     ];
 
     nix = {
