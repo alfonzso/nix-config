@@ -21,7 +21,7 @@ in {
 
     "${_common}/_virtualisation.nix"
 
-    "${_common}/desktop/gnome.gdm.nix"
+    "${_desktop}/gnome.gdm.nix"
 
     "${_common}/_sops.nix"
     "${_common}/_ssh.nix"

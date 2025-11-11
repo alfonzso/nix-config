@@ -10,12 +10,12 @@ let
 
 in  {
 
+  sops.age.keyFile = "/home/${hostCfg.username}/.config/sops/age/keys.txt";
+
   sops = {
 
     defaultSopsFile = "${sopsFolder}/${hostCfg.currentConfigName}.yaml";
     # validateSopsFiles = true;
-
-    age.keyFile = "/tmp/keys.txt";
 
     secrets = lib.mkMerge [
       {

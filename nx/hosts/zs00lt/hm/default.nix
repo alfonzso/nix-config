@@ -1,9 +1,8 @@
-{ config, lib, pkgs, ProjectRoot, ... }:
+{ config, ProjectRoot, ... }:
 let
   hostCfg = config.hostCfg;
   homeDir = "/home/${hostCfg.username}";
   vimTMP = "${homeDir}/.vim-tmp";
-  # ProjectRoot = config.hostCfg.root;
   _hm_programs = ProjectRoot + "/nx/common/hm_programs";
 
 in {
