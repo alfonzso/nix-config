@@ -3,6 +3,11 @@ let
   sopsFolder = NixSecrets + "/sops";
 
   hostCfg = config.hostCfg;
+  b2_rclone_wrapper = (pkgs.writeScriptBin "b2rclone" ''
+
+    export RCLONE_CONFIG=/home/zsolt/.config/rclone/b2.storage.conf
+    # ${pkgs.rclone}/bin/rclone --config=/home/${hostCfg.username}/.config/rclone/b2.storage.conf "$@"
+  '');
 in {
 
   sops = {
@@ -50,11 +55,24 @@ in {
   home-manager = {
     users.${hostCfg.username} = {
 
+      programs = {
+        bash = {
+          enable = true;
+          initExtra = ''
+            if [ -f ${b2_rclone_wrapper}/bin/b2_rclone_wrapper ]; then
+              . ${b2_rclone_wrapper}/bin/b2_rclone_wrapper
+            fi
+          '';
+        };
+      };
+
       home.packages = [
 
-        (pkgs.writeShellScriptBin "b2rclone" ''
-          ${pkgs.rclone}/bin/rclone --config=/home/${hostCfg.username}/.config/rclone/b2.storage.conf "$@"
-        '')
+        b2_rclone_wrapper
+
+        # (pkgs.writeShellScriptBin "b2rclone" ''
+        #   ${pkgs.rclone}/bin/rclone --config=/home/${hostCfg.username}/.config/rclone/b2.storage.conf "$@"
+        # '')
 
         # (pkgs.writeScriptBin "restic-open" config.sops.templates."restic-open".content)
         (pkgs.writeScriptBin "restic-open" ''
