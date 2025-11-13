@@ -8,7 +8,10 @@ let
   personalDir = NixSecrets + "/personal";
   personalSSHDir = personalDir + "/ssh";
 
-in  {
+in {
+
+  # mount /home dir before sops
+  fileSystems."/home".neededForBoot = true;
 
   sops.age.keyFile = "/home/${hostCfg.username}/.config/sops/age/keys.txt";
 
@@ -23,15 +26,20 @@ in  {
         ${hostCfg.username} = { neededForUsers = true; };
       }
 
-      ( import "${nxLib}/_sops_ssh.nix" { inherit lib; sshDir = personalSSHDir; })
-      ( import "${nxLib}/_sops_wifi.nix" { wifiNames = config.hostCfg.network.wifiNames; })
+      (import "${nxLib}/_sops_ssh.nix" {
+        inherit lib;
+        sshDir = personalSSHDir;
+      })
+      (import "${nxLib}/_sops_wifi.nix" {
+        wifiNames = config.hostCfg.network.wifiNames;
+      })
     ];
 
-    templates."wifi.env".content = lib.concatStringsSep "\n" (map (name:
-      ''
-        WIFI_${lib.strings.toUpper name}="${ config.sops.placeholder."wifi/${name}" }"
-      ''
-    ) config.hostCfg.network.wifiNames);
+    templates."wifi.env".content = lib.concatStringsSep "\n" (map (name: ''
+      WIFI_${lib.strings.toUpper name}="${
+        config.sops.placeholder."wifi/${name}"
+      }"
+    '') config.hostCfg.network.wifiNames);
 
   };
 

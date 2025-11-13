@@ -47,6 +47,7 @@
 
     ];
 
+
     nix = {
       gc = {
         automatic = true;
