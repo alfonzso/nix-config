@@ -1,0 +1,44 @@
+# exclude common cruft and envs
+- **/.DS_Store
+- **/Thumbs.db
+- **/desktop.ini
+
+# python
+- **/venv/**
+- **/.venv/**
+- **/__pycache__/**
+- **/*.pyc
+- **/.pytest_cache/**
+
++ **/.git
++ **/.git/config
+- **/.git/**
+# - **/.git/objects/**
+# - **/.git/refs/**
+
+# node
+- **/node_modules/**
+- **/dist/**
+- **/build/**
+
+# caches, temporary
+- **/.cache/**
+- **/*.swp
+- **/*~
+- **/*.bak
+
+# VM/disks/databases (review before enabling)
+- **/*.vdi
+- **/*.vmdk
+- **/*.iso
+- **/*.img
+- **/*.sqlite3
+- **/*.db
+
+# more ignoring ...
+- **/.mypy_cache/**
+- **/__dist__/**
+- **/.ruff_cache/**
+- **/.tmp/**
+- **/tmp/**
+- **/.vagrant/**

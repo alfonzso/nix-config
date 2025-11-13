@@ -1,8 +1,4 @@
-{ config, pkgs, hostCfg, ... }:
-# let
-#   hostCfg = config.hostCfg ;
-# in
-{
+{ pkgs, ... }: {
   programs.tmux = {
     enable = true;
     extraConfig = ''

@@ -1,0 +1,102 @@
+
+# Cache directories
+.cache/
+*.cache/
+**/cache/
+**/Cache/
+**/CacheData/**
+**/CachedData/**
+**/CacheStorage/**
+**/Extensions/**
+**/Index*DB/**
+**/Code/logs/**
+
+# Temporary files
+.tmp/
+*.tmp/
+**/tmp/
+/tmp/
+
+# Browser caches and data
+.mozilla/firefox/*/cache2/
+.config/google-chrome/*/Cache/
+.config/chromium/*/Cache/
+
+# Development Stuffs
+node_modules/
+.venv/
+__pycache__/
+*.pyc
+
+# System garbage
+.Trash/
+.local/share/Trash/
+
+# Large media caches that we don't care about
+.thumbnails/
+
+# Junk from Windows Drives
+$RECYCLE.BIN/
+System\ Volume\ Information/
+
+
+**/venv/**
+**/.venv/**
+**/__pycache__/**
+**/*.pyc
+**/.pytest_cache/**
+
+# git
+# **/.git/*
+**/.git/*
+!**/.git/config
+
+# node
+**/virtualenv/**
+**/node_modules/**
+**/.ansible/**
+**/.tldrc/**
+**/.npm/**
+**/.cargo/**
+**/.docker/buildx/**
+**/dist/**
+**/build/**
+
+# caches, temporary
+**/.cache/**
+**/*.swp
+**/*~
+**/*.bak
+
+# VM/disks/databases (review before enabling)
+**/*.vdi
+**/*.vmdk
+**/*.iso
+**/*.img
+**/*.sqlite3
+**/*.db
+
+# more ignoring ...
+**/.mypy_cache/**
+**/__dist__/**
+**/.ruff_cache/**
+**/.tmp/**
+**/tmp/**
+**/.vagrant/**
+
+**/VirtualBox VMs
+# /home/alfoldi/go
+**/go/**
+**/snap
+**/share/containers/storage/**
+**/NokiaOneDrive/**
+**/NokiaSharePoint/**
+**/.vagrant.d/**
+**/.vscode-server/**
+**/.vscode/**
+**/.local/share/nvim/**
+**/.local/state/nvim/**
+**/.local/share/pipx/**
+
+# nix
+**/result/**

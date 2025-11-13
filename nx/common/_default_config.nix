@@ -43,6 +43,7 @@
       wl-clipboard
 
       restic
+      wireguard-tools
 
     ];
 

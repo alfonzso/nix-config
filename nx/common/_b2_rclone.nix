@@ -3,11 +3,23 @@ let
   sopsFolder = NixSecrets + "/sops";
 
   hostCfg = config.hostCfg;
-  b2_rclone_wrapper = (pkgs.writeScriptBin "b2rclone" ''
 
-    export RCLONE_CONFIG=/home/zsolt/.config/rclone/b2.storage.conf
-    # ${pkgs.rclone}/bin/rclone --config=/home/${hostCfg.username}/.config/rclone/b2.storage.conf "$@"
+  b2_rclone_wrapper = (pkgs.writeScriptBin "__b2rclone_o" ''
+    function b2-rclone-open() {
+      export RCLONE_CONFIG=/home/${hostCfg.username}/.config/rclone/b2.storage.conf
+    }
   '');
+
+  restic_wrapper = (pkgs.writeScriptBin "__restic_o" ''
+    function restic-open(){
+      export RESTIC_REPOSITORY=rclone:b2-storage:cnwco-storage/restic
+      export RCLONE_CONFIG=/home/${hostCfg.username}/.config/rclone/b2.storage.conf
+      export RESTIC_PASSWORD=$(cat ${
+        config.sops.secrets."restic/password".path
+      })
+    }
+  '');
+
 in {
 
   sops = {
@@ -24,13 +36,6 @@ in {
     };
 
     templates = {
-      # "restic-open" = {
-      #   content = ''
-      #     export RESTIC_REPOSITORY=rclone:b2-storage:cnwco-storage/restic
-      #     export RCLONE_CONFIG=/home/zsolt/.config/rclone/b2.storage.conf
-      #     export RESTIC_PASSWORD=${config.sops.placeholder."restic/password"}
-      #   '';
-      # };
       "b2.storage.rclone.conf" = {
         content = ''
           [b2-storage]
@@ -39,7 +44,6 @@ in {
           key = ${config.sops.placeholder."b2/storage-bucket/key"}
         '';
         owner = hostCfg.username;
-        # owner = config.users.users."${hostCfg.username}" ;
         path = "/home/${hostCfg.username}/.config/rclone/b2.storage.conf";
       };
     };
@@ -59,30 +63,17 @@ in {
         bash = {
           enable = true;
           initExtra = ''
-            if [ -f ${b2_rclone_wrapper}/bin/b2_rclone_wrapper ]; then
-              . ${b2_rclone_wrapper}/bin/b2_rclone_wrapper
+            if [ -f ${b2_rclone_wrapper}/bin/__b2rclone_o ]; then
+              . ${b2_rclone_wrapper}/bin/__b2rclone_o
+            fi
+            if [ -f ${restic_wrapper}/bin/__restic_o ]; then
+              . ${restic_wrapper}/bin/__restic_o
             fi
           '';
         };
       };
 
-      home.packages = [
-
-        b2_rclone_wrapper
-
-        # (pkgs.writeShellScriptBin "b2rclone" ''
-        #   ${pkgs.rclone}/bin/rclone --config=/home/${hostCfg.username}/.config/rclone/b2.storage.conf "$@"
-        # '')
-
-        # (pkgs.writeScriptBin "restic-open" config.sops.templates."restic-open".content)
-        (pkgs.writeScriptBin "restic-open" ''
-          export RESTIC_REPOSITORY=rclone:b2-storage:cnwco-storage/restic
-          export RCLONE_CONFIG=/home/zsolt/.config/rclone/b2.storage.conf
-          export RESTIC_PASSWORD=$(cat ${
-            config.sops.secrets."restic/password".path
-          })
-        '')
-      ];
+      home.packages = [ b2_rclone_wrapper restic_wrapper ];
 
       systemd.user.services.b2-mounts = {
         Unit = {
@@ -101,5 +92,5 @@ in {
       };
     };
   };
-
 }
+
