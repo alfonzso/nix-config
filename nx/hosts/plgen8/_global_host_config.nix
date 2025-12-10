@@ -1,0 +1,5 @@
+{ ... }: {
+
+  hostCfg.username = "kube";
+
+}

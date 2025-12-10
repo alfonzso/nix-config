@@ -1,8 +1,5 @@
 { pkgs, ... }:
-
 {
-  # home.packages = with pkgs; [
-  # packages = with pkgs; [
   home.packages = with pkgs; [
     # busybox
     # fzf
@@ -17,7 +14,6 @@
     dig
     git
     go
-    htop
     htop
     iotop
     kubectl

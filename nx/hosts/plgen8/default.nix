@@ -1,4 +1,4 @@
-{ config, inputs, pkgs, lib, ... }:
+{ config, lib, pkgs, ... }:
 let
   _hostCfg = config.hostCfg;
   _common = _hostCfg.root + "/nx/common";
@@ -11,13 +11,14 @@ in {
     ./modules/config.nix
     # ./modules/mergerfs_4_samba.nix
     # ./modules/samba.nix
-    ./modules/nfs.nix
-    ./modules/mergerfs_4_nfs.nix
+    # ./modules/nfs.nix
+    # ./modules/mergerfs_4_nfs.nix
     ./modules/sops.nix
 
-    ./modules/mounts.nix
+    # ./modules/mounts.nix
 
-    "${_common}/_default_config.nix"
+    "${_common}/_nix_conf.nix"
+    "${_common}/_common_and_sys_env.nix"
     "${_common}/_sops.nix"
     "${_common}/_ssh.nix"
     "${_common}/_networking.nix"
@@ -25,6 +26,8 @@ in {
 
   ];
 
-  system.stateVersion = "25.05";
+  config = { environment.systemPackages = with pkgs; [ zfs ]; };
+
+  system.stateVersion = "25.11";
 
 }
