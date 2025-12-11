@@ -2,32 +2,54 @@
 
 {
   home.packages = with pkgs; [
-    # busybox
-    # mergerfs
+
+    kubectl
+    kubernetes-helm
     podman
 
+    # needed by nvim
+    neovim
+    python312
+    poetry
+    lua-language-server
+    go
+    nodejs_24
+    rustc
+    cargo
+    ripgrep
     fzf
-    git
-    # go
+    fd
+    ripgrep-all
+
+    sops
+    age
+
+    dig
     htop
     iotop
-    # kubectl
-    # kubernetes-helm
-    # lynx
-    mc
-    neofetch
-    # neovim
+    ncdu
     nmon
-    ripgrep # needed by neovim telescope grep
-    # python3
-    # nodejs_23
-    rsync
+    pciutils # lspci
+    ps # ps aux
+    socat
+    # unixtools.net-tools
+    nettools
+    usbutils # lsusb
+
+    bat
+    git
+    mc
+    direnv
+    neofetch
     rclone
-    sops
+    rename
     starship
-    # sublime4
+    tldr
     tmux
-    # vscode
-    # x11vnc
+    unzip
+
+    yq
+    jq
+
   ];
 }

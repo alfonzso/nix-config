@@ -47,12 +47,14 @@ in {
         path = "/home/${hostCfg.username}/.config/rclone/b2.storage.conf";
       };
     };
-
   };
 
   systemd.tmpfiles.rules = [
-    "d /mnt/b2-storage 0755 ${hostCfg.username} users -"
-    "d /mnt/restic 0755 ${hostCfg.username} users -"
+    "d /mnt/b2-storage                          0755 ${hostCfg.username} users -"
+    "d /mnt/restic                              0755 ${hostCfg.username} users -"
+    # first create .config if not exists
+    # then create rclone folder, this way .config folder has correct user rights
+    "d /home/${hostCfg.username}/.config        0755 ${hostCfg.username} users -"
     "d /home/${hostCfg.username}/.config/rclone 0755 ${hostCfg.username} users -"
   ];
 
@@ -75,22 +77,47 @@ in {
 
       home.packages = [ b2_rclone_wrapper restic_wrapper ];
 
-      systemd.user.services.b2-mounts = {
-        Unit = {
-          Description =
-            "Example programmatic mount configuration with nix and home-manager.";
-          After = [ "network-online.target" ];
+      # mkdir -p /home/${hostCfg.username}/.config/rclone || true
+      # cat ${
+      #   config.sops.templates."b2.storage.rclone.conf".path
+      # } > /home/${hostCfg.username}/.config/rclone/b2.storage.conf";
+      systemd.user.services = let
+        b2Script = pkgs.writeShellScript "b2" ''
+          set -ex
+          # mkdir -p /home/${hostCfg.username}/.config/rclone || true
+          cat ${
+            config.sops.templates."b2.storage.rclone.conf".path
+          } > /home/${hostCfg.username}/.config/rclone/b2.storage.conf
+
+        '';
+      in {
+        # b2-rclone-config = {
+        #   Unit = {
+        #     Description = "Copy rclone config to home/.config/rclone";
+        #     After = [ "network-online.target" ];
+        #   };
+        #   Service = {
+        #     Type = "oneshot";
+        #     ExecStart = "${b2Script}";
+        #   };
+        #   Install.WantedBy = [ "default.target" ];
+        # };
+        b2-mounts = {
+          Unit = {
+            Description =
+              "Example programmatic mount configuration with nix and home-manager.";
+            After = [ "network-online.target" ];
+          };
+          Service = {
+            Type = "notify";
+            ExecStart = ''
+              ${pkgs.rclone}/bin/rclone --config=%h/.config/rclone/b2.storage.conf --vfs-cache-mode writes --ignore-checksum mount b2-storage: /mnt/b2-storage ;
+            '';
+            ExecStop = "/run/wrappers/bin/fusermount -u /mnt/b2-storage ";
+          };
+          Install.WantedBy = [ "default.target" ];
         };
-        Service = {
-          Type = "notify";
-          ExecStart = ''
-            ${pkgs.rclone}/bin/rclone --config=%h/.config/rclone/b2.storage.conf --vfs-cache-mode writes --ignore-checksum mount b2-storage: /mnt/b2-storage ;
-          '';
-          ExecStop = "/run/wrappers/bin/fusermount -u /mnt/b2-storage ";
-        };
-        Install.WantedBy = [ "default.target" ];
       };
     };
   };
 }
-

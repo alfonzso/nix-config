@@ -1,42 +1,32 @@
+# { config, ProjectRoot, ... }:
+# let
+#   hostCfg = config.hostCfg;
+#   _hm_programs = ProjectRoot + "/nx/common/hm_programs";
+# in {
+#   home-manager = {
+#     users.${hostCfg.username} = {
+#
+#       imports =
+#         [ ./systemdUser/clone_my_stuff.nix "${_hm_programs}" ./packages.nix ];
+#       home = { stateVersion = "24.11"; };
+#     };
+#   };
+#
+# }
 { config, ProjectRoot, ... }:
 let
   hostCfg = config.hostCfg;
-  homeDir = "/home/${hostCfg.username}";
-  vimTMP = "${homeDir}/.vim-tmp";
-  _hm_programs = ProjectRoot + "/nx/common/hm_programs";
-
+  _common = ProjectRoot + "/nx/common";
 in {
-
-  systemd.user.tmpfiles.rules = [ "d ${vimTMP} 0755 ${hostCfg.username} users -" ];
-
   home-manager = {
-    extraSpecialArgs = {
-      # inherit pkgs inputs;
-      hostCfg = config.hostCfg;
-    };
-
-    useUserPackages = true;
-    useGlobalPkgs = true;
-
     users.${hostCfg.username} = {
 
-      imports = [ "${_hm_programs}" ./packages.nix ./sysdUserSvc/clone_my_stuff.nix ];
-
-      programs.home-manager.enable = true;
-
-      xdg.enable = true;
-
-      home = {
-
-        username = hostCfg.username;
-        # This needs to actually be set to your username
-        homeDirectory = homeDir;
-        # You do not need to change this if you're reading this in the future.
-        # Don't ever change this after the first build.  Don't ask questions.
-        stateVersion = "24.11";
-
-        sessionVariables = { POETRY_VIRTUALENVS_IN_PROJECT = "true"; };
-      };
+      imports = [
+        "${_common}/hm/systemdUser/clone_my_stuff.nix"
+        "${_common}/hm_programs"
+        ./packages.nix
+      ];
+      home = { stateVersion = "24.11"; };
     };
   };
 

@@ -9,22 +9,34 @@ in {
 
   imports = lib.flatten [
     ./hm
+    "${_common}/hm"
+
+    ./modules/disko.nix
+
     ./hardware-configuration.nix
     ./_global_host_config.nix
 
     "${_activations}/deploy_ssh_files.nix"
     "${_desktop}/gnome.gdm.nix"
 
-    "${_common}/_nix_conf.nix"
-    "${_common}/_common_and_sys_env.nix"
-    "${_common}/_bluetooth.nix"
-    "${_common}/_printer.nix"
+    "${_common}/sops"
+    "${_common}/sops/ssh.nix"
+    "${_common}/sops/wifi.nix"
+
+    "${_common}/nix/common.nix"
+    "${_common}/nix/config_nix.nix"
+    "${_common}/nix/env_sys_pack.nix"
+
+    "${_common}/networking/bluetooth.nix"
+    "${_common}/networking/networking.nix"
+    "${_common}/networking/ssh.nix"
+
+    "${_common}/hardware/printer.nix"
+
     "${_common}/_virtualisation.nix"
-    "${_common}/_sops.nix"
-    "${_common}/_ssh.nix"
-    "${_common}/_networking.nix"
     "${_common}/_user.nix"
-    "${_common}/_b2_rclone.nix"
+
+    "${_common}/_b2_restic.nix"
 
   ];
 

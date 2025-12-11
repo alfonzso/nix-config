@@ -1,5 +1,6 @@
 { ... }: {
 
-  hostCfg.username = "kube";
+  hostCfg.username = "cube";
+  hostCfg.network.wifiNames = [ ];
 
 }

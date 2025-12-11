@@ -1,8 +1,6 @@
 { pkgs, ... }:
 {
   home.packages = with pkgs; [
-    # busybox
-    # fzf
     ncdu
     ps # ps aux
     usbutils # lsusb
@@ -10,7 +8,6 @@
     jq
     yq
     unzip
-    # fzf
     dig
     git
     go
@@ -25,10 +22,7 @@
     nmon
     ripgrep # needed by neovim telescope grep
     python3
-    # nodejs_23
     nodejs_24
-    # toybox
-    # rsync # installed as systemPackage
     rclone
     sops
     starship

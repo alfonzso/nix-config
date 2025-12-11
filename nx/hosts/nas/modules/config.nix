@@ -1,13 +1,8 @@
-# { config, lib, HostName, ProjectRoot, NixSecrets, ... }:
-{ config, lib, ProjectRoot, NixSecrets, ... }:
-let personal = import NixSecrets + "/personal";
-in {
+{ ProjectRoot, ... }: {
 
   hostCfg.root = ProjectRoot;
   hostCfg.username = "nxadmin";
-  # hostCfg.sambaUser = "smbAdmin";
   hostCfg.NASUser = "nasadmin";
-  # hostCfg.machineHostName = machineHostName;
 
   hostCfg.storage.disksUUID = [
     "d8fd4b40-38c2-4ef3-b8e3-d383f9a1470e"

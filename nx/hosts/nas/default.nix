@@ -1,27 +1,33 @@
-{ config, inputs, pkgs, lib, ... }:
+{ lib, ProjectRoot, ... }:
 let
-  _hostCfg = config.hostCfg;
-  _common = _hostCfg.root + "/nx/common";
+  _common = ProjectRoot + "/nx/common";
+  _desktop = ProjectRoot + "/nx/desktop";
+  _activations = _common + "/activations";
 in {
   imports = lib.flatten [
     ./hm
+    "${_common}/hm"
+
     ./hardware-configuration.nix
     ./_global_host_config.nix
 
-    ./modules/config.nix
-    # ./modules/mergerfs_4_samba.nix
-    # ./modules/samba.nix
-    ./modules/nfs.nix
-    ./modules/mergerfs_4_nfs.nix
-    ./modules/sops.nix
+    "${_activations}/deploy_ssh_files.nix"
 
-    ./modules/mounts.nix
+    "${_common}/sops"
+    "${_common}/sops/ssh.nix"
+    "${_common}/sops/wifi.nix"
 
-    "${_common}/_default_config.nix"
-    "${_common}/_sops.nix"
-    "${_common}/_ssh.nix"
-    "${_common}/_networking.nix"
+    "${_common}/nix/common.nix"
+    "${_common}/nix/config_nix.nix"
+    "${_common}/nix/env_sys_pack.nix"
+
+    "${_common}/networking/networking.nix"
+    "${_common}/networking/ssh.nix"
+
+    "${_common}/_virtualisation.nix"
     "${_common}/_user.nix"
+
+    "${_common}/_b2_restic.nix"
 
   ];
 

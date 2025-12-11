@@ -1,4 +1,4 @@
-{ inputs, config, lib, ... }:
+{ config, ... }:
 let hostCfg = config.hostCfg;
 in {
 

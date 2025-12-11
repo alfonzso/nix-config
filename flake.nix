@@ -48,8 +48,9 @@
 
           };
           modules = [
-            ./nx/common/_host.cfg.nix
+            ./nx/common/host_cfg.nix
             ./nx/hosts/${flakeConfigName}
+
             home-manager.nixosModules.home-manager
             disko.nixosModules.disko
             sops-nix.nixosModules.sops
@@ -57,10 +58,6 @@
               hostCfg.machineHostName = flakeConfigName + "Nix";
               hostCfg.currentConfigName = flakeConfigName;
               hostCfg.root = ./.;
-            }
-            {
-              disko.rootMountPoint = "/mnt";
-              disko.devices = import ./nx/disko/${flakeConfigName}.nix;
             }
             ({ config, lib, ... }: {
               config._module.args.personal =
