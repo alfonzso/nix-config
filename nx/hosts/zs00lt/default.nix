@@ -27,8 +27,8 @@ in {
     "${_common}/nix/config_nix.nix"
     "${_common}/nix/env_sys_pack.nix"
 
+    "${_common}/networking"
     "${_common}/networking/bluetooth.nix"
-    "${_common}/networking/networking.nix"
     "${_common}/networking/ssh.nix"
 
     "${_common}/hardware/printer.nix"

@@ -15,6 +15,7 @@ target=$1
 }
 
 _ssh_host="admin@nix-$target-iso"
+# _ssh_host="admin@nix-plgen8-iso"
 _uptime_test=$(ssh $_ssh_host -- "uptime")
 [[ -z "$_uptime_test" ]] && {
   echo "cannot access the host: $_ssh_host"

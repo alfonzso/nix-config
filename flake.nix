@@ -22,10 +22,10 @@
       #
       # ========= Architectures =========
       #
-      forAllSystems = nixpkgs.lib.genAttrs [
-        "x86_64-linux"
-        #"aarch64-darwin"
-      ];
+      # forAllSystems = nixpkgs.lib.genAttrs [
+      #   "x86_64-linux"
+      #   #"aarch64-darwin"
+      # ];
 
       #
       # ========= flakeConfigName Config Functions =========
@@ -38,6 +38,7 @@
         in systemFunc {
           specialArgs = {
             ProjectRoot = ./.;
+            DiskoTesting = true;
             NixSecrets = builtins.toString inputs.nix-secrets;
             inherit inputs outputs;
 

@@ -1,15 +1,51 @@
-{ pkgs, ... }:
+{ pkgs, DiskoTesting, ... }:
 let
   zfsCommon = {
     atime = "off";
     compression = "lz4";
   };
-  vbDisks = {
-    root = "/dev/disk/by-id/ata-VBOX_HARDDISK_VB1186e23e-adb5874c";
-    hdd1 = "/dev/disk/by-id/ata-VBOX_HARDDISK_VBe9893aaa-41c6b093";
-    hdd2 = "/dev/disk/by-id/ata-VBOX_HARDDISK_VB18421013-462a44a1";
-    ssd0 = "/dev/disk/by-id/ata-VBOX_HARDDISK_VB0921d2c6-f8aeae52";
+
+  test = {
+    root = {
+      diskById = "/dev/disk/by-id/ata-VBOX_HARDDISK_VB1186e23e-adb5874c";
+    };
+    hdd1 = {
+      diskById = "/dev/disk/by-id/ata-VBOX_HARDDISK_VBe9893aaa-41c6b093";
+      mirror.size = "25G";
+    };
+    hdd2 = {
+      diskById = "/dev/disk/by-id/ata-VBOX_HARDDISK_VB18421013-462a44a1";
+      mirror.size = "25G";
+    };
+    ssd0 = {
+      diskById = "/dev/disk/by-id/ata-VBOX_HARDDISK_VB0921d2c6-f8aeae52";
+    };
   };
+
+  prod = {
+    root = {
+      diskById =
+        "/dev/disk/by-id/ata-Samsung_SSD_870_EVO_500GB_S6PYNL0XB06332K";
+    };
+    hdd1 = {
+      diskById = "/dev/disk/by-id/..............";
+      mirror.size = "1T";
+    };
+    hdd2 = {
+      diskById = "/dev/disk/by-id/..............";
+      mirror.size = "1T";
+    };
+    ssd0 = { diskById = "/dev/disk/by-id/................"; };
+
+  };
+
+  myDevice = {
+    root = if DiskoTesting then test.root else prod.root;
+    hdd1 = if DiskoTesting then test.hdd1 else prod.hdd1;
+    hdd2 = if DiskoTesting then test.hdd2 else prod.hdd2;
+    ssd0 = if DiskoTesting then test.ssd0 else prod.ssd0;
+  };
+
 in {
 
   networking.hostId =
@@ -25,13 +61,12 @@ in {
       # HDD 1 (2TiB) - split 50%/50%
       hdd1 = {
         type = "disk";
-        device = vbDisks.hdd1;
+        device = myDevice.hdd1.diskById;
         content = {
           type = "gpt";
           partitions = {
             mirror = {
-              # size = "1T";  # First 1TB (adjust based on your actual disk size)
-              size = "25G"; # First 1TB (adjust based on your actual disk size)
+              size = myDevice.hdd1.mirror.size;
               name = "mirror";
               content = {
                 type = "zfs";
@@ -53,13 +88,12 @@ in {
       # HDD 2 (2TiB) - split 50%/50%
       hdd2 = {
         type = "disk";
-        device = vbDisks.hdd2;
+        device = myDevice.hdd2.diskById;
         content = {
           type = "gpt";
           partitions = {
             mirror = {
-              # size = "1T";  # First 1TB (adjust based on your actual disk size)
-              size = "25G"; # First 1TB (adjust based on your actual disk size)
+              size = myDevice.hdd2.mirror.size;
               name = "mirror";
               content = {
                 type = "zfs";
@@ -81,7 +115,7 @@ in {
       # SSD used as L2ARC cache
       ssdcache = {
         type = "disk";
-        device = vbDisks.ssd0;
+        device = myDevice.ssd0.diskById;
         content = {
           type = "gpt";
           partitions = {
@@ -100,7 +134,7 @@ in {
       # Root SSD (single device rpool)
       ssdroot = {
         type = "disk";
-        device = vbDisks.root;
+        device = myDevice.root.diskById;
         content = {
           type = "gpt";
           partitions = {
