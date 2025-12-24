@@ -1,4 +1,4 @@
-{ config, lib, personal, ... }:
+{ config, personal, ... }:
 let
   hostCfg = config.hostCfg;
   _hashedPasswordFile = config.sops.secrets.${hostCfg.username}.path;
