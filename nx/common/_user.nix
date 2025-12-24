@@ -10,11 +10,7 @@ in {
         isNormalUser = true;
         hashedPasswordFile =
           builtins.trace _hashedPasswordFile _hashedPasswordFile;
-        extraGroups = [ "wheel" ]
-          ++ (if config.virtualisation.podman.enable then [ "podman" ] else [])
-          ++ (if config.services.samba.enable then [ "nasusers" ] else [] )
-          ++ (if config.services.printing.enable then [ "scanner" "lp" ] else [] )
-          ;
+        extraGroups = [ "wheel" ];
         openssh.authorizedKeys.keys = personal.ssh.public;
       };
       root = {

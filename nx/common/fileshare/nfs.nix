@@ -12,14 +12,14 @@
 
     # Recommended exports configuration
     exports = ''
-      # /storage 192.168.1.0/24(rw,sync,no_subtree_check,fsid=0) 172.0.0.0/8(rw,sync,no_subtree_check,fsid=0) 
+      # /storage 192.168.1.0/24(rw,sync,no_subtree_check,fsid=0) 172.0.0.0/8(rw,sync,no_subtree_check,fsid=0)
 
       # Public read-only share example
       # /srv/public *(ro,insecure,no_subtree_check,all_squash,anonuid=65534,anongid=65534)
       # ,anonuid=65534,anongid=65534
       # ,anonuid=65534,anongid=65534
-      /storage 192.0.0.0/8(rw,sync,no_subtree_check,fsid=0,insecure) 
-      /storage 172.0.0.0/8(rw,sync,no_subtree_check,fsid=0,insecure) 
+      /storage 192.0.0.0/8(rw,sync,no_subtree_check,fsid=0,insecure)
+      /storage 172.0.0.0/8(rw,sync,no_subtree_check,fsid=0,insecure)
     '';
 
     # Enable NFSv4 with Kerberos support
@@ -45,18 +45,8 @@
     allowedUDPPorts = [ 2049 4001 111 ];
   };
 
-  # Create system users and groups
-  users.groups.nasusers = { };
-
-  users.users.${config.hostCfg.NASUser} = {
-    isNormalUser = true;
-    group = "nasusers";
-    extraGroups = [ "nasusers" ];
-    uid = 1010;
-  };
-
   # system.activationScripts.sambaDirs = let
-  #   user = config.hostCfg.NASUser;
+  #   user = config.hostCfg.nasUser;
   # in {
   #   text = ''
   #     torrent=/storage/media/transmission_downloads

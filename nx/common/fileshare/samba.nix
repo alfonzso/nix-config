@@ -1,9 +1,4 @@
-{ config, pkgs, personal, ... }:
-
-let
-  hostCfg = config.hostCfg;
-  sambaPassPath = config.sops.secrets.samba_user_pwd.path;
-in {
+{ config, pkgs, ... }: {
 
   # Enable Samba service
   services.samba = {
@@ -25,13 +20,13 @@ in {
 
       # Private share (requires authentication)
       storage = {
-        path = "//storage";
+        path = "/storage";
         browseable = "yes";
         writable = "yes";
         "read only" = "no";
         "guest ok" = "no";
-        "valid users" = "${config.hostCfg.NASUser}";
-        "write list" = "${config.hostCfg.NASUser}";
+        "valid users" = "${config.hostCfg.nasUser}";
+        "write list" = "${config.hostCfg.nasUser}";
         "create mask" = "0755";
         "directory mask" = "0755";
       };
@@ -42,27 +37,18 @@ in {
         writable = "yes";
         "read only" = "no";
         "guest ok" = "no";
-        "valid users" = "${config.hostCfg.NASUser}";
-        "write list" = "${config.hostCfg.NASUser}";
+        "valid users" = "${config.hostCfg.nasUser}";
+        "write list" = "${config.hostCfg.nasUser}";
         "create mask" = "0755";
         "directory mask" = "0755";
       };
     };
   };
 
-  # Create system users and groups
-  users.groups.nasusers = { };
-
-  users.users.${config.hostCfg.NASUser} = {
-    isNormalUser = true;
-    group = "nasusers";
-    extraGroups = [ "nasusers" ];
-  };
-
   # Add Samba user and set password
   system.activationScripts.sambaPasswords = let
     samba = config.services.samba.package;
-    user = config.hostCfg.NASUser;
+    user = config.hostCfg.nasUser;
     pass = config.sops.secrets.samba_user_pwd.path;
   in {
     text = ''
@@ -77,7 +63,7 @@ in {
 
   # Create share directories with correct permissions
   # system.activationScripts.sambaDirs = let
-  #   user = config.hostCfg.NASUser;
+  #   user = config.hostCfg.nasUser;
   # in {
   #   text = ''
   #     torrent=/storage/media/transmission_downloads

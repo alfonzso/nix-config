@@ -18,7 +18,8 @@
     };
   };
 
-  outputs = { self, nixpkgs, disko, sops-nix, home-manager, rust-overlay, ... }@inputs:
+  outputs =
+    { self, nixpkgs, disko, sops-nix, home-manager, rust-overlay, ... }@inputs:
     let
       inherit (self) outputs;
       inherit (nixpkgs) lib;
@@ -68,11 +69,11 @@
             {
               hostCfg.machineHostName = flakeConfigName + "Nix";
               hostCfg.currentConfigName = flakeConfigName;
+              # hostCfg.nasUser = "nasadmin";
+              # hostCfg.nasGroup = "nasuser";
               hostCfg.root = ./.;
             }
-                      {
-            nixpkgs.overlays = [ rust-overlay.overlays.default ];
-          }
+            { nixpkgs.overlays = [ rust-overlay.overlays.default ]; }
             ({ config, lib, ... }: {
               config._module.args.personal =
                 import "${inputs.nix-secrets}/personal" { };

@@ -14,10 +14,15 @@ in {
         default = "admin";
         description = "User of the machine";
       };
-      NASUser = lib.mkOption {
+      nasUser = lib.mkOption {
         type = lib.types.str;
-        default = "admin";
+        default = "nasadmin";
         description = "User of samba/nfs";
+      };
+      nasGroup = lib.mkOption {
+        type = lib.types.str;
+        default = "nasuser";
+        description = "Group of samba/nfs";
       };
 
       currentConfigName = lib.mkOption {

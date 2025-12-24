@@ -2,7 +2,6 @@
 let hostCfg = config.hostCfg;
 in {
   services.k3s.enable = true;
-  # services.k3s.enable = false;
   users.users.${hostCfg.username} = { extraGroups = [ "k3s" ]; };
   users.groups.k3s = {};
 
