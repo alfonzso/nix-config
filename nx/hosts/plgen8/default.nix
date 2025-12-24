@@ -34,6 +34,7 @@ in {
     "${_common}/hm"
 
     ./modules/disko.nix
+    ./modules/k8s.nix
 
     ./hardware-configuration.nix
     ./_global_host_config.nix

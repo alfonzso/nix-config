@@ -12,12 +12,22 @@
         "git+ssh://git@github.com/alfonzso/nix-secrets.git?ref=main&shallow=1";
       inputs = { };
     };
+    rust-overlay = {
+      url = "github:oxalica/rust-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, disko, sops-nix, home-manager, ... }@inputs:
+  outputs = { self, nixpkgs, disko, sops-nix, home-manager, rust-overlay, ... }@inputs:
     let
       inherit (self) outputs;
       inherit (nixpkgs) lib;
+
+      # system = "x86_64-linux";
+      # pkgs = import nixpkgs {
+      #   inherit system;
+      #   overlays = [ rust-overlay.overlays.default ];
+      # };
 
       #
       # ========= Architectures =========
@@ -60,6 +70,9 @@
               hostCfg.currentConfigName = flakeConfigName;
               hostCfg.root = ./.;
             }
+                      {
+            nixpkgs.overlays = [ rust-overlay.overlays.default ];
+          }
             ({ config, lib, ... }: {
               config._module.args.personal =
                 import "${inputs.nix-secrets}/personal" { };

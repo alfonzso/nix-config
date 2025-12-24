@@ -18,6 +18,9 @@
       trash-cli
       wl-clipboard
 
+      wget
+      curl
+
       restic
       wireguard-tools
 
