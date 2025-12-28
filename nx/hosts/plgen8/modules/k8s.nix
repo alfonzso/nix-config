@@ -1,9 +1,15 @@
-{ config, pkgs, NixSecrets, lib, ... }:
+{ config, pkgs, NixSecrets, ... }:
 let
   hostCfg = config.hostCfg;
   sopsFolder = NixSecrets + "/sops";
 in {
-  services.k3s.enable = true;
+  services.k3s = {
+    enable = true;
+    extraFlags = toString [
+      "--disable traefik" # Optional: disable if you don't need it
+    ];
+  };
+
   users.users.${hostCfg.username} = { extraGroups = [ "k3s" ]; };
   users.groups.k3s = { };
 

@@ -3,6 +3,7 @@
 
     kubectl
     kubernetes-helm
+    kustomize
     podman
 
     # needed by nvim

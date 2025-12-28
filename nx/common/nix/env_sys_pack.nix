@@ -20,6 +20,7 @@
 
       wget
       curl
+      tree
 
       restic
       wireguard-tools
