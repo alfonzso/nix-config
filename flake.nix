@@ -49,7 +49,7 @@
         in systemFunc {
           specialArgs = {
             ProjectRoot = ./.;
-            DiskoTesting = true;
+            DiskoTesting = false;
             NixSecrets = builtins.toString inputs.nix-secrets;
             inherit inputs outputs;
 
