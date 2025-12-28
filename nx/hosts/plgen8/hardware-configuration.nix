@@ -13,8 +13,11 @@
   boot.extraModulePackages = [ ];
 
   # Bootloader
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  ##############
+  # first two enable (U)EFI mode 
+  ##############
+  # boot.loader.systemd-boot.enable = true;
+  # boot.loader.efi.canTouchEfiVariables = true;
   boot.supportedFilesystems = [ "zfs" ];
 
   networking.useDHCP = lib.mkDefault true;

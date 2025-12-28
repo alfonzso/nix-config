@@ -8,6 +8,7 @@
       stylua
 
       rsync
+      screen
       openssh
       bash-completion
       gcc

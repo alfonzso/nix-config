@@ -21,7 +21,7 @@ in {
     ./hardware-configuration.nix
     ./_global_host_config.nix
 
-    "${_activations}/deploy_ssh_files.nix"
+    "${_activations}/manage_ssh.nix"
 
     "${_common}/sops"
     "${_common}/sops/ssh.nix"

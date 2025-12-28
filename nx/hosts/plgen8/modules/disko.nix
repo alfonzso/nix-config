@@ -25,17 +25,21 @@ let
   prod = {
     root = {
       diskById =
-        "/dev/disk/by-id/ata-Samsung_SSD_870_EVO_500GB_S6PYNL0XB06332K";
+        "/dev/disk/by-id/ata-Samsung_SSD_840_PRO_Series_S1ANNSAF414709B";
     };
     hdd1 = {
-      diskById = "/dev/disk/by-id/..............";
-      mirror.size = "1T";
+      diskById = "/dev/disk/by-id/ata-WDC_WD20EFZX-68AWUN0_WD-WX12DB0DPS74";
+      # mirror.size = "1T";
+      mirror.size = "922G";
+      # mirror.size = "50%";
     };
     hdd2 = {
-      diskById = "/dev/disk/by-id/..............";
-      mirror.size = "1T";
+      diskById = "/dev/disk/by-id/ata-WDC_WD20EFZX-68AWUN0_WD-WX22DB0AD5AP";
+      # mirror.size = "1T";
+      mirror.size = "922G";
+      # mirror.size = "50%";
     };
-    ssd0 = { diskById = "/dev/disk/by-id/................"; };
+    ssd0 = { diskById = "/dev/disk/by-id/ata-ADATA_SU800_2G4620087298"; };
 
   };
 
@@ -67,7 +71,7 @@ in {
           partitions = {
             mirror = {
               size = myDevice.hdd1.mirror.size;
-              name = "mirror";
+              # name = "mirror";
               content = {
                 type = "zfs";
                 pool = "securepool";
@@ -75,7 +79,7 @@ in {
             };
             stripe = {
               size = "100%"; # Remaining space (should be ~1TB)
-              name = "stripe";
+              # name = "stripe";
               content = {
                 type = "zfs";
                 pool = "fastpool";
@@ -94,7 +98,7 @@ in {
           partitions = {
             mirror = {
               size = myDevice.hdd2.mirror.size;
-              name = "mirror";
+              # name = "mirror";
               content = {
                 type = "zfs";
                 pool = "securepool";
@@ -102,7 +106,7 @@ in {
             };
             stripe = {
               size = "100%"; # Remaining space (should be ~1TB)
-              name = "stripe";
+              # name = "stripe";
               content = {
                 type = "zfs";
                 pool = "fastpool";
@@ -138,13 +142,31 @@ in {
         content = {
           type = "gpt";
           partitions = {
-            efi = {
+            ##############
+            # first (u)efi mode
+            # biosboot and boot is for legacy (like gen8 only supports legacy)
+            ##############
+            # efi = {
+            #   size = "512M";
+            #   type = "EF00";
+            #   name = "boot";
+            #   content = {
+            #     type = "filesystem";
+            #     format = "vfat";
+            #     mountpoint = "/boot";
+            #   };
+            # };
+            biosboot = {
+              size = "1M";
+              type = "EF02"; # BIOS boot partition type
+              name = "biosboot";
+            };
+            boot = {
               size = "512M";
-              type = "EF00";
               name = "boot";
               content = {
                 type = "filesystem";
-                format = "vfat";
+                format = "ext4"; # or ext2/ext3
                 mountpoint = "/boot";
               };
             };
@@ -166,7 +188,19 @@ in {
       # securepool: mirror of the two 'mirror' partitions (1TiB usable)
       securepool = {
         type = "zpool";
-        mode = "mirror";
+        # mode = "mirror";
+        mode = {
+          topology = {
+            type = "topology";
+            vdev = [{
+              mode = "mirror";
+              members = [
+                "/dev/disk/by-partlabel/disk-hdd1-mirror"
+                "/dev/disk/by-partlabel/disk-hdd2-mirror"
+              ];
+            }];
+          };
+        };
         rootFsOptions = zfsCommon // {
           # ashift = "12";
           mountpoint = "none";
@@ -179,6 +213,11 @@ in {
             mountpoint = "/mnt/secure";
             options = zfsCommon // { mountpoint = "legacy"; };
           };
+          nix = { # Add nix here!
+            type = "zfs_fs";
+            mountpoint = "/nix";
+            options = zfsCommon // { mountpoint = "legacy"; };
+          };
         };
       };
 
@@ -186,10 +225,20 @@ in {
       fastpool = {
         type = "zpool";
         # For stripe, just list the devices without mode - ZFS will stripe automatically
-        rootFsOptions = zfsCommon // {
-          # ashift = "12";
-          mountpoint = "none";
+        mode = {
+          topology = {
+            type = "topology";
+            vdev = [{
+              mode = ""; # empty string = stripe
+              members = [
+                "/dev/disk/by-partlabel/disk-hdd1-stripe"
+                "/dev/disk/by-partlabel/disk-hdd2-stripe"
+              ];
+            }];
+            cache = [ "/dev/disk/by-partlabel/disk-ssdcache-cache" ];
+          };
         };
+        rootFsOptions = zfsCommon // { mountpoint = "none"; };
         options = { ashift = "12"; };
 
         datasets = {
@@ -221,11 +270,11 @@ in {
             mountpoint = "/home";
             options = zfsCommon;
           };
-          nix = {
-            type = "zfs_fs";
-            mountpoint = "/nix";
-            options = zfsCommon;
-          };
+          # nix = {
+          #   type = "zfs_fs";
+          #   mountpoint = "/nix";
+          #   options = zfsCommon;
+          # };
         };
       };
     };
