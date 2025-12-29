@@ -42,6 +42,7 @@ in {
 
     "${_activations}/manage_ssh.nix"
 
+    "${_common}/fileshare/user.nix"
     "${_common}/fileshare/samba.nix"
     {
       services.samba.settings = lib.mkForce {
@@ -76,6 +77,13 @@ in {
           "directory mask" = "0755";
         };
       };
+
+      users.groups.zfs-storage = { };
+      users.users.${config.hostCfg.nasUser}.extraGroups = [ "zfs-storage" ];
+      systemd.tmpfiles.rules = [
+        "d /mnt/fast   2775 root zfs-storage - -"
+        "d /mnt/secure 2775 root zfs-storage - -"
+      ];
     }
 
     "${_common}/sops"

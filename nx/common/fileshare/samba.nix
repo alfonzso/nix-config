@@ -4,7 +4,6 @@
   services.samba = {
     enable = true;
     package = pkgs.sambaFull;
-    securityType = "user";
     openFirewall = true;
     settings = {
       global = {
@@ -52,6 +51,7 @@
     pass = config.sops.secrets.samba_user_pwd.path;
   in {
     text = ''
+      set -e
       pass_to_shell=$(cat ${pass})
       echo "#################################"
       echo "Setting Samba passwords..."

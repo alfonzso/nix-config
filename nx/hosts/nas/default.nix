@@ -7,13 +7,6 @@ in {
 
   users.users.${config.hostCfg.username} = { extraGroups = [ "${config.hostCfg.nasGroup}" ]; };
 
-  users.groups."${config.hostCfg.nasGroup}" = { };
-  users.users.${config.hostCfg.nasUser} = {
-    isNormalUser = true;
-    group = "${config.hostCfg.nasGroup}";
-    extraGroups = [ "${config.hostCfg.nasGroup}" ];
-  };
-
   imports = lib.flatten [
     ./hm
     "${_common}/hm"
@@ -29,6 +22,7 @@ in {
 
     "${_common}/fileshare/mergerfs_4_samba.nix"
     "${_common}/fileshare/samba.nix"
+    "${_common}/fileshare/user.nix"
     # ./modules/mergerfs_4_samba.nix
     # ./modules/samba.nix
     # ./modules/nfs.nix
