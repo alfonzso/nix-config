@@ -1,4 +1,4 @@
-{ lib, ProjectRoot, ... }:
+{ config, lib, ProjectRoot, ... }:
 let
   _common = ProjectRoot + "/nx/common";
   _activations = _common + "/activations";
@@ -35,11 +35,48 @@ in {
 
     ./modules/disko.nix
     ./modules/k8s.nix
+    ./modules/sops.nix
 
     ./hardware-configuration.nix
     ./_global_host_config.nix
 
     "${_activations}/manage_ssh.nix"
+
+    "${_common}/fileshare/samba.nix"
+    {
+      services.samba.settings = lib.mkForce {
+        global = {
+          "workgroup" = "WORKGROUP";
+          "server string" = "smbnix";
+          "netbios name" = "smbnix";
+          "security" = "user";
+          "guest account" = "nobody";
+          "map to guest" = "bad user";
+        };
+        secure = {
+          path = "/mnt/secure";
+          browseable = "yes";
+          writable = "yes";
+          "read only" = "no";
+          "guest ok" = "no";
+          "valid users" = "${config.hostCfg.nasUser}";
+          "write list" = "${config.hostCfg.nasUser}";
+          "create mask" = "0755";
+          "directory mask" = "0755";
+        };
+        fast = {
+          path = "/mnt/fast";
+          browseable = "yes";
+          writable = "yes";
+          "read only" = "no";
+          "guest ok" = "no";
+          "valid users" = "${config.hostCfg.nasUser}";
+          "write list" = "${config.hostCfg.nasUser}";
+          "create mask" = "0755";
+          "directory mask" = "0755";
+        };
+      };
+    }
 
     "${_common}/sops"
     "${_common}/sops/ssh.nix"

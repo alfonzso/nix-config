@@ -24,8 +24,6 @@ in {
 
   sops = {
 
-    # age.keyFile = "/home/${hostCfg.username}/.config/sops/age/keys.txt";
-
     secrets = {
       "b2/storage-bucket/account" = { sopsFile = "${sopsFolder}/b2.yaml"; };
       "b2/storage-bucket/key" = { sopsFile = "${sopsFolder}/b2.yaml"; };
@@ -77,47 +75,31 @@ in {
 
       home.packages = [ b2_rclone_wrapper restic_wrapper ];
 
-      # mkdir -p /home/${hostCfg.username}/.config/rclone || true
-      # cat ${
-      #   config.sops.templates."b2.storage.rclone.conf".path
-      # } > /home/${hostCfg.username}/.config/rclone/b2.storage.conf";
-      systemd.user.services = let
-        b2Script = pkgs.writeShellScript "b2" ''
-          set -ex
-          # mkdir -p /home/${hostCfg.username}/.config/rclone || true
-          cat ${
-            config.sops.templates."b2.storage.rclone.conf".path
-          } > /home/${hostCfg.username}/.config/rclone/b2.storage.conf
-
-        '';
-      in {
-        # b2-rclone-config = {
-        #   Unit = {
-        #     Description = "Copy rclone config to home/.config/rclone";
-        #     After = [ "network-online.target" ];
-        #   };
-        #   Service = {
-        #     Type = "oneshot";
-        #     ExecStart = "${b2Script}";
-        #   };
-        #   Install.WantedBy = [ "default.target" ];
-        # };
-        b2-mounts = {
-          Unit = {
-            Description =
-              "Example programmatic mount configuration with nix and home-manager.";
-            After = [ "network-online.target" ];
-          };
-          Service = {
-            Type = "notify";
-            ExecStart = ''
-              ${pkgs.rclone}/bin/rclone --config=%h/.config/rclone/b2.storage.conf --vfs-cache-mode writes --ignore-checksum mount b2-storage: /mnt/b2-storage ;
-            '';
-            ExecStop = "/run/wrappers/bin/fusermount -u /mnt/b2-storage ";
-          };
-          Install.WantedBy = [ "default.target" ];
-        };
-      };
+      # systemd.user.services = let
+      #   b2Script = pkgs.writeShellScript "b2" ''
+      #     set -ex
+      #     cat ${
+      #       config.sops.templates."b2.storage.rclone.conf".path
+      #     } > /home/${hostCfg.username}/.config/rclone/b2.storage.conf
+      #
+      #   '';
+      # in {
+      #   b2-mounts = {
+      #     Unit = {
+      #       Description =
+      #         "Example programmatic mount configuration with nix and home-manager.";
+      #       After = [ "network-online.target" ];
+      #     };
+      #     Service = {
+      #       Type = "notify";
+      #       ExecStart = ''
+      #         ${pkgs.rclone}/bin/rclone --config=%h/.config/rclone/b2.storage.conf --vfs-cache-mode writes --ignore-checksum mount b2-storage: /mnt/b2-storage ;
+      #       '';
+      #       ExecStop = "/run/wrappers/bin/fusermount -u /mnt/b2-storage ";
+      #     };
+      #     Install.WantedBy = [ "default.target" ];
+      #   };
+      # };
     };
   };
 }
