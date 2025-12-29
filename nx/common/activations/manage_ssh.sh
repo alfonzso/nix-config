@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -e
+set -ex
 ############### How ?
 # ./deploy_ssh.sh /home/cube/.ssh /run/secrets/ cube
 ###############

@@ -14,6 +14,9 @@ in {
     logFile = "/var/log/manage_ssh.log";
   in {
     text = ''
+      function rsync(){
+        ${pkgs.rsync} "$@"
+      }
       ${manageScript} ${sshFolder} ${secretSshFolderPath} ${hostCfg.username} &>> ${logFile}
     '';
     deps = [ "setupSecrets" ];
