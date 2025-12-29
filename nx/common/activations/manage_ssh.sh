@@ -11,7 +11,7 @@ USERNAME="$3"
 export PATH=$PATH:/run/current-system/sw/bin/
 
 function md5FolderSum(){
-  find "$1" -type f -exec md5sum {} \; 2>/dev/null | sort | cut -d" " -f1 | md5sum || echo "none"
+  find "$1" -type f -exec md5sum {} \; 2>/dev/null | sort | cut -d" " -f1 | md5sum | cut -d" " -f1 || echo "none"
 }
 
 ssh_now=$(md5FolderSum "$SSH_FOLDER")
@@ -24,6 +24,7 @@ if [[ -d "$SSH_FOLDER" ]] && [[ "$ssh_now" != "$ssh_backup" ]]; then
   chown -R "$USERNAME:users" /backup/ssh_$now
   rm -f /backup/latest
   ln -s /backup/ssh_$now /backup/latest
+  chown -R "$USERNAME:users" /backup/latest
   echo "~/.ssh folder saved to: /backup/ssh_$now"
 fi
 
