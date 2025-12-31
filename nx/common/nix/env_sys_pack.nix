@@ -22,6 +22,7 @@
       wget
       curl
       tree
+      inetutils # telnet
 
       restic
       wireguard-tools

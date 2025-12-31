@@ -5,6 +5,7 @@
     kubernetes-helm
     kustomize
     podman
+    k9s
 
     # needed by nvim
     neovim
