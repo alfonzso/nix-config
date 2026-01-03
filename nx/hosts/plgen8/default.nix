@@ -78,11 +78,16 @@ in {
         };
       };
 
-      users.groups.zfs-storage = { };
+      users.groups.zfs-storage = { gid = 990; };
       users.users.${config.hostCfg.nasUser}.extraGroups = [ "zfs-storage" ];
       systemd.tmpfiles.rules = [
         "d /mnt/fast   2775 root zfs-storage - -"
         "d /mnt/secure 2775 root zfs-storage - -"
+
+        # # More explicit ACLs (Default ACLs (Access Control Lists))
+        # # with this setup zfs-storage 775 permission will intherit to all files/folders
+        # "a+ /mnt/fast    - - - - default:user::rwx,default:group:zfs-storage:rwx,default:other::rx"
+        # "a+ /mnt/secure  - - - - default:user::rwx,default:group:zfs-storage:rwx,default:other::rx"
       ];
     }
 
