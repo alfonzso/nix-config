@@ -26,11 +26,14 @@
 
     nodejs_24
 
-    # Rust nightly with rust-src
-    (rust-bin.selectLatestNightlyWith (toolchain:
-      toolchain.default.override {
-        extensions = [ "rust-src" "rust-analyzer" ];
-      }))
+    ###########
+    # Rust not needed if blink is used from prebuilt binary
+    ###########
+    # # Rust nightly with rust-src
+    # (rust-bin.selectLatestNightlyWith (toolchain:
+    #   toolchain.default.override {
+    #     extensions = [ "rust-src" "rust-analyzer" ];
+    #   }))
 
     ripgrep
     fzf
