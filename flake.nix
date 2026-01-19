@@ -58,7 +58,9 @@
           systemFunc {
             specialArgs = {
               ProjectRoot = ./.;
-              DiskoTesting = false;
+              # HostCfg = config.hostCfg;
+              # DiskoTesting = false;
+              DiskoTesting = true;
               NixSecrets = builtins.toString inputs.nix-secrets;
               inherit inputs outputs;
 

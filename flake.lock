@@ -44,10 +44,10 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1766594851,
-        "narHash": "sha256-N1nO95uoZyNrs47DG0LgNJ0cfjPDsAk457CV4ca9Mnk=",
+        "lastModified": 1768846838,
+        "narHash": "sha256-vCqn6nrVHkbkuG8anruKYDaurvr176eGvoOc2U1HTQw=",
         "ref": "main",
-        "rev": "5d82bf20a1d5c10eb77ff1eab56b8344bd480d04",
+        "rev": "b51f83180b75b163e85947aec18c01635c99ee52",
         "shallow": true,
         "type": "git",
         "url": "ssh://git@github.com/alfonzso/nix-secrets.git"
@@ -127,28 +127,7 @@
         "home-manager": "home-manager",
         "nix-secrets": "nix-secrets",
         "nixpkgs": "nixpkgs_3",
-        "rust-overlay": "rust-overlay",
         "sops-nix": "sops-nix"
-      }
-    },
-    "rust-overlay": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1767322002,
-        "narHash": "sha256-yHKXXw2OWfIFsyTjduB4EyFwR0SYYF0hK8xI9z4NIn0=",
-        "owner": "oxalica",
-        "repo": "rust-overlay",
-        "rev": "03c6e38661c02a27ca006a284813afdc461e9f7e",
-        "type": "github"
-      },
-      "original": {
-        "owner": "oxalica",
-        "repo": "rust-overlay",
-        "type": "github"
       }
     },
     "sops-nix": {

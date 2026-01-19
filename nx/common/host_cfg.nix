@@ -1,7 +1,4 @@
-{ NixSecrets, pkgs, lib, ... }:
-let
-in {
-
+{ lib, ... }: {
   options = {
     hostCfg = {
       root = lib.mkOption {

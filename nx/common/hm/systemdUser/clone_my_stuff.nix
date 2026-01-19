@@ -1,4 +1,8 @@
-{ lib, pkgs, vars, ... }: {
+{ lib, pkgs, hostCfg, ... }:
+# let
+#   hostCfg = config.hostCfg;
+# in
+{
   systemd.user.services = {
 
     my-worker = {
@@ -23,7 +27,7 @@
               #     extensions = [ "rust-src" "rust-analyzer" ];
               #   }))
             ]
-          }:/home/${vars.username}/.nix-profile/bin:/run/current-system/sw/bin:/usr/bin:$PATH";
+          }:/home/${hostCfg.username}/.nix-profile/bin:/run/current-system/sw/bin:/usr/bin:$PATH";
         StandardOutput = "journal";
         StandardError = "journal";
         ExecStart = pkgs.writeShellScript "init-nvim" ''
