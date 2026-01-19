@@ -20,7 +20,7 @@
       Service = {
         Type = "simple";
         Environment = "PATH=${
-          lib.string.concatStringsSep ":" [
+          lib.strings.concatStringsSep ":" [
             "/etc/profiles/per-user/${hostCfg.username}/bin"
             "/home/${hostCfg.username}/.local/state/nix/profile/bin"
             "/home/${hostCfg.username}/.nix-profile/bin"

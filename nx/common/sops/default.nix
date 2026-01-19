@@ -10,6 +10,10 @@ in {
 
   sops.age.keyFile = "/persist/sops/age/keys.txt";
 
+  environment.variables = {
+    SOPS_AGE_KEY_FILE = "/persist/sops/age/keys.txt";
+  };
+
   sops = {
 
     defaultSopsFile = "${sopsFolder}/${hostCfg.currentConfigName}.yaml";
