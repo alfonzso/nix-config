@@ -14,7 +14,8 @@ target=$1
   exit 1
 }
 
-_ssh_host="admin@nix-$target-iso"
+__ssh_host="admin@nix-$target-iso"
+_ssh_host=${SSH_HOST:-$__ssh_host}
 # _ssh_host="admin@nix-plgen8-iso"
 _uptime_test=$(ssh $_ssh_host -- "uptime")
 [[ -z "$_uptime_test" ]] && {
@@ -22,8 +23,8 @@ _uptime_test=$(ssh $_ssh_host -- "uptime")
   exit 1
 }
 
-# extras="--phases kexec,disko"
-extras="--phases kexec,disko,install"
+_extras="kexec,disko,install"
+extras="--phases ${PHASES:-$_extras}"
 
 keys_src="/home/${USER}/.config/sops/age/keys.txt"
 root=$(mktemp -d)

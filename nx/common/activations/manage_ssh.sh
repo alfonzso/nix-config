@@ -1,5 +1,3 @@
-#!/usr/bin/env bash
-set -ex
 ############### How ?
 # ./deploy_ssh.sh /home/cube/.ssh /run/secrets/ cube
 ###############
@@ -8,7 +6,6 @@ SSH_FOLDER="$1"
 SECRET_FOLDER="$2"
 USERNAME="$3"
 
-export PATH=$PATH:/run/current-system/sw/bin/
 
 function md5FolderSum(){
   find "$1" -type f -exec md5sum {} \; 2>/dev/null | sort | cut -d" " -f1 | md5sum | cut -d" " -f1 || echo "none"

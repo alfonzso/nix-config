@@ -5,6 +5,7 @@
       Unit = {
         Description = "Init nvim --headless";
         After = [ "clone-my-stuff.service" ];
+        Requires = [ "clone-my-stuff.service" ];
       };
 
       Service = {
@@ -34,7 +35,6 @@
     clone-my-stuff = {
       Unit = {
         Description = "Clone my github configuration if missing";
-        After = [ "default.target" ];
       };
 
       Service = {

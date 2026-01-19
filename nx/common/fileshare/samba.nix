@@ -46,19 +46,25 @@
 
   # Add Samba user and set password
   system.activationScripts.sambaPasswords = let
-    samba = config.services.samba.package;
     user = config.hostCfg.nasUser;
     pass = config.sops.secrets.samba_user_pwd.path;
+    _PATH = with pkgs;
+      "PATH=${lib.makeBinPath [ samba ]}:/run/current-system/sw/bin";
   in {
     text = ''
       set -e
+      export PATH=$PATH:${_PATH}
+
       pass_to_shell=$(cat ${pass})
       echo "#################################"
       echo "Setting Samba passwords..."
       echo "#################################"
-      printf "$pass_to_shell\n$pass_to_shell\n" | ${samba}/bin/smbpasswd -a -s ${user}
+
+      # added || true cuz when installed with nx anywhere its fails and
+      # breaks the whole install process
+      printf "$pass_to_shell\n$pass_to_shell\n" | ${pkgs.samba}/bin/smbpasswd -a -s ${user} || true
     '';
-    deps = [ "users" "groups" ];
+    deps = [ "users" "groups" "setupSecrets" ];
   };
 
   # Create share directories with correct permissions
