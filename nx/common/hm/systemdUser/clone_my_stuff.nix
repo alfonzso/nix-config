@@ -1,4 +1,9 @@
-{ lib, pkgs, hostCfg, ... }:
+{
+  lib,
+  pkgs,
+  hostCfg,
+  ...
+}:
 # let
 #   hostCfg = config.hostCfg;
 # in
@@ -14,20 +19,17 @@
 
       Service = {
         Type = "simple";
-        Environment = with pkgs;
-          "PATH=${
-            lib.makeBinPath [
-              git
-              neovim
-              ###########
-              # Rust not needed if blink is used from prebuilt binary
-              ###########
-              # (rust-bin.selectLatestNightlyWith (toolchain:
-              #   toolchain.default.override {
-              #     extensions = [ "rust-src" "rust-analyzer" ];
-              #   }))
-            ]
-          }:/home/${hostCfg.username}/.nix-profile/bin:/run/current-system/sw/bin:/usr/bin:$PATH";
+        Environment = "PATH=${
+          lib.string.concatStringsSep ":" [
+            "/etc/profiles/per-user/${hostCfg.username}/bin"
+            "/home/${hostCfg.username}/.local/state/nix/profile/bin"
+            "/home/${hostCfg.username}/.nix-profile/bin"
+            "/nix/profile/bin"
+            "/nix/var/nix/profiles/default/bin"
+            "/run/current-system/sw/bin"
+            "/run/wrappers/bin"
+          ]
+        }";
         StandardOutput = "journal";
         StandardError = "journal";
         ExecStart = pkgs.writeShellScript "init-nvim" ''
@@ -36,7 +38,9 @@
         '';
         Restart = "no";
       };
-      Install = { WantedBy = [ "default.target" ]; };
+      Install = {
+        WantedBy = [ "default.target" ];
+      };
     };
 
     clone-my-stuff = {
@@ -46,9 +50,15 @@
 
       Service = {
         Type = "oneshot";
-        Environment = with pkgs;
+        Environment =
+          with pkgs;
           "PATH=${
-            lib.makeBinPath [ curl git openssh coreutils ]
+            lib.makeBinPath [
+              curl
+              git
+              openssh
+              coreutils
+            ]
           }:/run/current-system/sw/bin:$PATH";
         ExecStart = pkgs.writeShellScript "clone-my-stuff" ''
           set -ex
