@@ -4,6 +4,10 @@
 
     environment.systemPackages = with pkgs; [
 
+      # for neovim to x11 clipboard sync
+      # or not just neovim ...
+      xclip
+
       lua-language-server
       stylua
 

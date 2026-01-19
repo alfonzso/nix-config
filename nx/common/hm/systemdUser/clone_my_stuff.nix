@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }: {
+{ lib, pkgs, vars, ... }: {
   systemd.user.services = {
 
     my-worker = {
@@ -15,17 +15,20 @@
             lib.makeBinPath [
               git
               neovim
-              (rust-bin.selectLatestNightlyWith (toolchain:
-                toolchain.default.override {
-                  extensions = [ "rust-src" "rust-analyzer" ];
-                }))
+              ###########
+              # Rust not needed if blink is used from prebuilt binary
+              ###########
+              # (rust-bin.selectLatestNightlyWith (toolchain:
+              #   toolchain.default.override {
+              #     extensions = [ "rust-src" "rust-analyzer" ];
+              #   }))
             ]
-          }:/run/current-system/sw/bin";
+          }:/home/${vars.username}/.nix-profile/bin:/run/current-system/sw/bin:/usr/bin:$PATH";
         StandardOutput = "journal";
         StandardError = "journal";
         ExecStart = pkgs.writeShellScript "init-nvim" ''
           set -ex
-          nvim --headless "+Lazy! restore" "+MasonToolsInstallSync" +qa
+          nvim --headless "+Lazy! restore" "+MasonToolsInstallSync" +qa 2>&1 > $HOME/nvim.headless.log
         '';
         Restart = "no";
       };
@@ -41,8 +44,8 @@
         Type = "oneshot";
         Environment = with pkgs;
           "PATH=${
-            lib.makeBinPath [ curl git openssh ]
-          }:/run/current-system/sw/bin";
+            lib.makeBinPath [ curl git openssh coreutils ]
+          }:/run/current-system/sw/bin:$PATH";
         ExecStart = pkgs.writeShellScript "clone-my-stuff" ''
           set -ex
           NVIM_DIR="$HOME/.config/nvim"
