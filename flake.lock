@@ -25,16 +25,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1767280655,
-        "narHash": "sha256-YmaYMduV5ko8zURUT1VLGDbVC1L/bxHS0NsiPoZ6bBM=",
+        "lastModified": 1769102673,
+        "narHash": "sha256-/qvRFjn1s3bIJdSKG6IpaE6ML3j9anQKUqGhmt4Qe+E=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "d49d2543f02dbd789ed032188c84570d929223cb",
+        "rev": "b0491fe55680bd19be8e74847969dad9d7784658",
         "type": "github"
       },
       "original": {
         "owner": "nix-community",
-        "ref": "release-25.11",
+        "ref": "master",
         "repo": "home-manager",
         "type": "github"
       }
@@ -91,16 +91,16 @@
     },
     "nixpkgs_3": {
       "locked": {
-        "lastModified": 1767325753,
-        "narHash": "sha256-yA/CuWyqm+AQo2ivGy6PlYrjZBQm7jfbe461+4HF2fo=",
+        "lastModified": 1769104232,
+        "narHash": "sha256-jlSe0PCzJcqExUI8lbDv2XJ/Obi2cteGjjXusWMdZEA=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "64049ca74d63e971b627b5f3178d95642e61cedd",
+        "rev": "09d9627dbc437b93c0f3bdc4b6b241b971b8ca04",
         "type": "github"
       },
       "original": {
         "owner": "nixos",
-        "ref": "nixos-25.11",
+        "ref": "master",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -127,8 +127,7 @@
         "home-manager": "home-manager",
         "nix-secrets": "nix-secrets",
         "nixpkgs": "nixpkgs_3",
-        "sops-nix": "sops-nix",
-        "unstable": "unstable"
+        "sops-nix": "sops-nix"
       }
     },
     "sops-nix": {
@@ -146,22 +145,6 @@
       "original": {
         "owner": "mic92",
         "repo": "sops-nix",
-        "type": "github"
-      }
-    },
-    "unstable": {
-      "locked": {
-        "lastModified": 1768868254,
-        "narHash": "sha256-2Vyid0blxLOEtEaE/0BspyXQJdqudoA1nfUN3wpe2wg=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "aed2d7bd58ad45f2540aef3967d4e876d34a925c",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "master",
-        "repo": "nixpkgs",
         "type": "github"
       }
     }

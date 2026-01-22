@@ -1,11 +1,12 @@
 {
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
-    unstable.url = "github:NixOS/nixpkgs/master";
+    nixpkgs.url = "github:nixos/nixpkgs/master";
+    # unstable.url = "github:NixOS/nixpkgs/master";
     disko.url = "github:nix-community/disko";
     sops-nix.url = "github:mic92/sops-nix";
     home-manager = {
-      url = "github:nix-community/home-manager/release-25.11";
+      # url = "github:nix-community/home-manager/release-25.11";
+      url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-secrets = {
@@ -21,7 +22,7 @@
 
   # rust-overlay
   outputs =
-    { self, nixpkgs, unstable, disko, sops-nix, home-manager, ... }@inputs:
+    { self, nixpkgs, disko, sops-nix, home-manager, ... }@inputs:
     let
       inherit (self) outputs;
       inherit (nixpkgs) lib;
@@ -46,17 +47,17 @@
       #   #"aarch64-darwin"
       # ];
 
-      pkgsUnstable = import unstable {
-        inherit system;
-        config.allowUnfree = true;
-
-        overlays = [
-          (self: super: {
-            # override allowUnfree for the package set
-            config = super.config // { allowUnfree = true; };
-          })
-        ];
-      };
+      # pkgsUnstable = import unstable {
+      #   inherit system;
+      #   config.allowUnfree = true;
+      #
+      #   overlays = [
+      #     (self: super: {
+      #       # override allowUnfree for the package set
+      #       config = super.config // { allowUnfree = true; };
+      #     })
+      #   ];
+      # };
 
       #
       # ========= flakeConfigName Config Functions =========
@@ -72,8 +73,8 @@
             # HostCfg = config.hostCfg;
             # DiskoTesting = false;
             DiskoTesting = true;
-            nixpkgsUnstable = pkgsUnstable;
-            unstableInput = unstable;
+            # nixpkgsUnstable = pkgsUnstable;
+            # unstableInput = unstable;
             NixSecrets = builtins.toString inputs.nix-secrets;
             inherit inputs outputs;
 
