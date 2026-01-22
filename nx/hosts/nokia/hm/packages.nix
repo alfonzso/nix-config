@@ -70,5 +70,8 @@
     yq
     jq
 
+    sublime4
+    vscode
+
   ];
 }

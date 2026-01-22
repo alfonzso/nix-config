@@ -4,7 +4,8 @@ let
   _hashedPasswordFile = config.sops.secrets.${hostCfg.username}.path;
 in {
   users = {
-    mutableUsers = true;
+    # this have to be false to use sops passwords (declarative)
+    mutableUsers = false;
     users = {
       "${hostCfg.username}" = {
         isNormalUser = true;

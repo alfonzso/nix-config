@@ -11,6 +11,7 @@ in {
 
     ./modules/disko.nix
     ./modules/sops.nix
+    ./modules/intune.nix
 
     ./hardware-configuration.nix
     ./_global_host_config.nix

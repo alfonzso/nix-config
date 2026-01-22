@@ -127,7 +127,8 @@
         "home-manager": "home-manager",
         "nix-secrets": "nix-secrets",
         "nixpkgs": "nixpkgs_3",
-        "sops-nix": "sops-nix"
+        "sops-nix": "sops-nix",
+        "unstable": "unstable"
       }
     },
     "sops-nix": {
@@ -145,6 +146,22 @@
       "original": {
         "owner": "mic92",
         "repo": "sops-nix",
+        "type": "github"
+      }
+    },
+    "unstable": {
+      "locked": {
+        "lastModified": 1768868254,
+        "narHash": "sha256-2Vyid0blxLOEtEaE/0BspyXQJdqudoA1nfUN3wpe2wg=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "aed2d7bd58ad45f2540aef3967d4e876d34a925c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "master",
+        "repo": "nixpkgs",
         "type": "github"
       }
     }
