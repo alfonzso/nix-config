@@ -1,22 +1,36 @@
-{ pkgs, config, NixSecrets, ... }:
+{ pkgs, config, NixSecrets, ProjectRoot, ... }:
 let
   sopsFolder = NixSecrets + "/sops";
-
   hostCfg = config.hostCfg;
 
-  b2_rclone_wrapper = (pkgs.writeScriptBin "__b2rclone_o" ''
+  b2RcloneWrapper = (pkgs.writeScriptBin "__b2rclone_o" ''
     function b2-rclone-open() {
-      export RCLONE_CONFIG=/home/${hostCfg.username}/.config/rclone/b2.storage.conf
+      export RCLONE_CONFIG=/home/$USER/.config/rclone/b2.storage.conf
     }
   '');
 
-  restic_wrapper = (pkgs.writeScriptBin "__restic_o" ''
+  resticWrapper = (pkgs.writeScriptBin "__restic_o" ''
     function restic-open(){
       export RESTIC_REPOSITORY=rclone:b2-storage:cnwco-storage/restic
-      export RCLONE_CONFIG=/home/${hostCfg.username}/.config/rclone/b2.storage.conf
+      export RCLONE_CONFIG=/home/$USER/.config/rclone/b2.storage.conf
       export RESTIC_PASSWORD=$(cat ${
         config.sops.secrets."restic/password".path
       })
+    }
+  '');
+
+  resticBackupWrapper = let
+    resticExcludeFiles = ProjectRoot + "/config-files/restic-exclude-files.txt";
+  in (pkgs.writeScriptBin "__restic_backup" ''
+    function restic-backup(){
+      local backup_it_now=''${1:-"--dry-run --verbose=2"}
+      restic backup /home/$USER --exclude-file ${resticExcludeFiles} $backup_it_now
+      if [[ -z "$1" ]]; then
+        echo "!!!! DRY RUN WAS ENABLED WITH RESTIC !!!!!"
+        echo "!!!! DRY RUN WAS ENABLED WITH RESTIC !!!!!"
+        echo "!!!! DRY RUN WAS ENABLED WITH RESTIC !!!!!"
+        echo "To disable dry-run please run: restic-backup 'doit' or give any parameter"
+      fi
     }
   '');
 
@@ -58,48 +72,48 @@ in {
 
   home-manager = {
     users.${hostCfg.username} = {
-
       programs = {
         bash = {
           enable = true;
           initExtra = ''
-            if [ -f ${b2_rclone_wrapper}/bin/__b2rclone_o ]; then
-              . ${b2_rclone_wrapper}/bin/__b2rclone_o
+            _run_sh_completion() {
+              local cur="''${COMP_WORDS[COMP_CWORD]}"
+              local options=""
+
+              [[ ! -f .run.cmpl ]] && return 1
+
+              # First argument: your custom completions
+              if [[ $COMP_CWORD -eq 1 ]]; then
+                local options=$(bash .run.cmpl)
+                COMPREPLY=( $(compgen -W "$options" -- "$cur") )
+                return
+              fi
+            }
+
+            complete -o default -F _run_sh_completion run.sh
+            complete -o default -F _run_sh_completion ./run.sh
+
+            if [ -f ${b2RcloneWrapper}/bin/__b2rclone_o ]; then
+              . ${b2RcloneWrapper}/bin/__b2rclone_o
             fi
-            if [ -f ${restic_wrapper}/bin/__restic_o ]; then
-              . ${restic_wrapper}/bin/__restic_o
+            if [ -f ${resticWrapper}/bin/__restic_o ]; then
+              . ${resticWrapper}/bin/__restic_o
+            fi
+            if [ -f ${resticBackupWrapper}/bin/__restic_backup ]; then
+              . ${resticBackupWrapper}/bin/__restic_backup
             fi
           '';
         };
       };
 
-      home.packages = [ b2_rclone_wrapper restic_wrapper ];
+      home.packages = [
+        pkgs.restic
+        pkgs.rclone
+        b2RcloneWrapper
+        resticWrapper
+        resticBackupWrapper
+      ];
 
-      # systemd.user.services = let
-      #   b2Script = pkgs.writeShellScript "b2" ''
-      #     set -ex
-      #     cat ${
-      #       config.sops.templates."b2.storage.rclone.conf".path
-      #     } > /home/${hostCfg.username}/.config/rclone/b2.storage.conf
-      #
-      #   '';
-      # in {
-      #   b2-mounts = {
-      #     Unit = {
-      #       Description =
-      #         "Example programmatic mount configuration with nix and home-manager.";
-      #       After = [ "network-online.target" ];
-      #     };
-      #     Service = {
-      #       Type = "notify";
-      #       ExecStart = ''
-      #         ${pkgs.rclone}/bin/rclone --config=%h/.config/rclone/b2.storage.conf --vfs-cache-mode writes --ignore-checksum mount b2-storage: /mnt/b2-storage ;
-      #       '';
-      #       ExecStop = "/run/wrappers/bin/fusermount -u /mnt/b2-storage ";
-      #     };
-      #     Install.WantedBy = [ "default.target" ];
-      #   };
-      # };
     };
   };
 }

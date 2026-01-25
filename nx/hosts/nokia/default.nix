@@ -4,8 +4,10 @@ let
   _desktop = ProjectRoot + "/nx/desktop";
   _activations = _common + "/activations";
 in {
-  imports = lib.flatten [
 
+  system.stateVersion = "25.11";
+
+  imports = lib.flatten [
     ./hm
     "${_common}/hm"
 
@@ -37,7 +39,5 @@ in {
 
     "${_common}/_b2_restic.nix"
   ];
-
-  system.stateVersion = "25.11";
 
 }

@@ -1,34 +1,76 @@
 { pkgs, ... }:
 {
   home.packages = with pkgs; [
-    ncdu
-    ps # ps aux
-    usbutils # lsusb
-    pciutils # lspci
-    jq
-    yq
-    unzip
-    dig
-    git
-    go
-    htop
-    iotop
     kubectl
     kubernetes-helm
-    lynx
-    mc
-    neofetch
+    kustomize
+    podman
+    k9s
+
+    # needed by nvim
     neovim
-    nmon
-    ripgrep # needed by neovim telescope grep
-    python3
+    python312
+    poetry
+
+    # LSP servers
+    nil # Nix LSP
+    lua-language-server
+    just-lsp
+
+    # Formatters
+    # nixfmt-rfc-style      # or nixpkgs-fmt
+    # nixfmt
+    nixfmt-classic
+    shfmt
+    nodePackages.prettier
+
     nodejs_24
-    rclone
+
+    ###########
+    # Rust not needed if blink is used from prebuilt binary
+    ###########
+    # # Rust nightly with rust-src
+    # (rust-bin.selectLatestNightlyWith (toolchain:
+    #   toolchain.default.override {
+    #     extensions = [ "rust-src" "rust-analyzer" ];
+    #   }))
+
+    ripgrep
+    fzf
+    fd
+    ripgrep-all
+
     sops
+    age
+
+    dig
+    htop
+    iotop
+    ncdu
+    nmon
+    pciutils # lspci
+    ps # ps aux
+    socat
+    # unixtools.net-tools
+    nettools
+    usbutils # lsusb
+
+    bat
+    git
+    mc
+    direnv
+    neofetch
+    rclone
+    rename
     starship
-    sublime4
+    tldr
     tmux
+    unzip
+
+    yq
+    jq
+
+    sublime4
     vscode
-    x11vnc
   ];
 }
