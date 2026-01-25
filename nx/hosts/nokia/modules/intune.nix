@@ -1,4 +1,4 @@
-{ pkgs, nixpkgsUnstable, ... }: {
+{ pkgs, ... }: {
 
   # disabledModules = [ "services/security/intune.nix" ];
   #
