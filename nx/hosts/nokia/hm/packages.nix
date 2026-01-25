@@ -1,6 +1,6 @@
-{ pkgs, ... }:
-{
+{ pkgs, ... }: {
   home.packages = with pkgs; [
+
     kubectl
     kubernetes-helm
     kustomize
@@ -72,5 +72,6 @@
 
     sublime4
     vscode
+
   ];
 }

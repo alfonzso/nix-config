@@ -10,8 +10,9 @@ in {
         "${_common}/hm/systemdUser/clone_my_stuff.nix"
         "${_common}/hm_programs"
         ./packages.nix
+        ./go.nix
       ];
-      home = { stateVersion = "24.11"; };
+      home = { stateVersion = "25.05"; };
     };
   };
 
