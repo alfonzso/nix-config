@@ -235,7 +235,10 @@ in {
           mountpoint = "none";
           reservation = "10G";
         };
-        options = { ashift = "12"; };
+        options = {
+          ashift = "12";
+          autotrim = "on";
+        };
 
         datasets = {
           data = {
@@ -276,7 +279,10 @@ in {
           mountpoint = "none";
           reservation = "10G";
         };
-        options = { ashift = "12"; };
+        options = {
+          ashift = "12";
+          autotrim = "on";
+        };
 
         datasets = {
           data = {
