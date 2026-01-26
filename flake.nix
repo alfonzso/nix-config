@@ -1,12 +1,13 @@
 {
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/master";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
+    # nixpkgs.url = "github:nixos/nixpkgs/master";
     # unstable.url = "github:NixOS/nixpkgs/master";
     disko.url = "github:nix-community/disko";
     sops-nix.url = "github:mic92/sops-nix";
     home-manager = {
-      # url = "github:nix-community/home-manager/release-25.11";
-      url = "github:nix-community/home-manager/master";
+      url = "github:nix-community/home-manager/release-25.11";
+      # url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-secrets = {
@@ -72,7 +73,7 @@
             ProjectRoot = ./.;
             # HostCfg = config.hostCfg;
             # DiskoTesting = false;
-            DiskoTesting = true;
+            DiskoTesting = false;
             # nixpkgsUnstable = pkgsUnstable;
             # unstableInput = unstable;
             NixSecrets = builtins.toString inputs.nix-secrets;
