@@ -16,16 +16,16 @@ in {
 
   environment.etc = {
     "ssl/nokia/NOKIA_Root_CA.crt".source =
-      "${sopsFolder}/certs/NOKIA_Root_CA.crt";
+      "${NixSecrets}/certs/NOKIA_Root_CA.crt";
     "ssl/nokia/client.crt".source =
-      "${sopsFolder}/certs/alfoldi.ipa.nsn-net.net.crt";
+      "${NixSecrets}/certs/alfoldi.ipa.nsn-net.net.crt";
   };
 
   networking.networkmanager = {
     enable = true;
     plugins = [ pkgs.networkmanager-openconnect ];
     ensureProfiles = {
-      environmentFiles = [ config.sops.secrets."network-secrets.env".path ];
+      environmentFiles = [ config.sops.templates."network-secrets.env".path ];
       profiles = {
         nokia-wifi = {
           connection = {
@@ -48,31 +48,40 @@ in {
           ipv4.method = "auto";
           ipv6.method = "auto";
         };
+
         nokia-vpn = {
           connection = {
-            id = "Nokia VPN";
+            id = "NokiaVPN";
             type = "vpn";
             autoconnect = false;
           };
+
           vpn = {
-            service-type = "org.freedesktop.NetworkManager.openconnect";
-            data = {
-              protocol = "anyconnect";
-              gateway = "nra-emea-fr-gre-vip.alcatel-lucent.com";
-              authtype = "cert";
-              cacert = "/etc/ssl/nokia/NOKIA_Root_CA.crt";
-              usercert = "/etc/ssl/nokia/client.crt";
-              userkey = "/etc/ssl/nokia/client.key";
-              disable_udp = "no";
-              pem_passphrase_fsid = "no";
-              prevent_invalid_cert = "no";
-            };
+            "service-type" = "org.freedesktop.NetworkManager.openconnect";
+
+            protocol = "anyconnect";
+            gateway = "nra-emea-fr-gre-vip.alcatel-lucent.com";
+            authtype = "cert";
+            cacert = "/etc/ssl/nokia/NOKIA_Root_CA.crt";
+            usercert = "/etc/ssl/nokia/client.crt";
+            userkey = "/etc/ssl/nokia/client.key";
+
+            # Plugin specific settings (underscores + strings)
+            disable_udp = "no";
+            pem_passphrase_fsid = "no";
+            prevent_invalid_cert = "no";
+
+            # Flags as strings
+            "cookie-flags" = "2";
+            "gateway-flags" = "2";
           };
+
           ipv4 = {
             method = "auto";
-            never-default = true; # split tunnel
+            never-default = true;
             dns-search = "cci.nokia.net;int.net.nokia.com;nsn-rdnet.net";
           };
+
           ipv6 = { method = "disabled"; };
         };
       };

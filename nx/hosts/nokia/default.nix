@@ -13,7 +13,10 @@ in {
 
     ./modules/disko.nix
     ./modules/sops.nix
-    ./modules/intune.nix
+    ./modules/networking.nix
+
+    # not working/needed
+    # ./modules/microsoft.nix
 
     ./hardware-configuration.nix
     ./_global_host_config.nix
