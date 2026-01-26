@@ -2,7 +2,6 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
     # nixpkgs.url = "github:nixos/nixpkgs/master";
-    # unstable.url = "github:NixOS/nixpkgs/master";
     disko.url = "github:nix-community/disko";
     sops-nix.url = "github:mic92/sops-nix";
     home-manager = {

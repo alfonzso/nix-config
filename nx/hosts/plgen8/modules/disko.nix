@@ -3,6 +3,8 @@ let
   zfsCommon = {
     atime = "off";
     compression = "lz4";
+    xattr = "sa";
+    dnodesize = "auto";
   };
 
   test = {
@@ -19,6 +21,10 @@ let
     };
     ssd0 = {
       diskById = "/dev/disk/by-id/ata-VBOX_HARDDISK_VB0921d2c6-f8aeae52";
+      slogSecure.size = "2G";
+      slogFast.size = "2G";
+      cacheSecure.size = "10G";
+      # cacheFast gets the rest
     };
   };
 
@@ -29,18 +35,19 @@ let
     };
     hdd1 = {
       diskById = "/dev/disk/by-id/ata-WDC_WD20EFZX-68AWUN0_WD-WX12DB0DPS74";
-      # mirror.size = "1T";
       mirror.size = "922G";
-      # mirror.size = "50%";
     };
     hdd2 = {
       diskById = "/dev/disk/by-id/ata-WDC_WD20EFZX-68AWUN0_WD-WX22DB0AD5AP";
-      # mirror.size = "1T";
       mirror.size = "922G";
-      # mirror.size = "50%";
     };
-    ssd0 = { diskById = "/dev/disk/by-id/ata-ADATA_SU800_2G4620087298"; };
-
+    ssd0 = {
+      diskById = "/dev/disk/by-id/ata-ADATA_SU800_2G4620087298";
+      slogSecure.size = "2G";
+      slogFast.size = "2G";
+      cacheSecure.size = "56G";
+      # cacheFast gets remaining ~56G
+    };
   };
 
   myDevice = {
@@ -52,17 +59,19 @@ let
 
 in {
 
-  networking.hostId =
-    "04bf88b0"; # Generate with: head -c4 /dev/urandom | od -A none -t x4
+  networking.hostId = "04bf88b0";
 
   environment.systemPackages = with pkgs; [ zfs ];
 
+  # ZFS tuning for less HDD noise
+  boot.extraModprobeConfig = ''
+    options zfs zfs_txg_timeout=300
+  '';
+
   disko.rootMountPoint = "/mnt";
 
-  # Define physical disks and their partitions
   disko.devices = {
     disk = {
-      # HDD 1 (2TiB) - split 50%/50%
       hdd1 = {
         type = "disk";
         device = myDevice.hdd1.diskById;
@@ -89,7 +98,6 @@ in {
         };
       };
 
-      # HDD 2 (2TiB) - split 50%/50%
       hdd2 = {
         type = "disk";
         device = myDevice.hdd2.diskById;
@@ -105,8 +113,7 @@ in {
               };
             };
             stripe = {
-              size = "100%"; # Remaining space (should be ~1TB)
-              # name = "stripe";
+              size = "100%";
               content = {
                 type = "zfs";
                 pool = "fastpool";
@@ -116,16 +123,40 @@ in {
         };
       };
 
-      # SSD used as L2ARC cache
+      # SSD split: SLOGs + L2ARC caches for both pools
       ssdcache = {
         type = "disk";
         device = myDevice.ssd0.diskById;
         content = {
           type = "gpt";
           partitions = {
-            cache = {
+            slogSecure = {
+              size = myDevice.ssd0.slogSecure.size;
+              name = "slog-secure";
+              content = {
+                type = "zfs";
+                pool = "securepool";
+              };
+            };
+            slogFast = {
+              size = myDevice.ssd0.slogFast.size;
+              name = "slog-fast";
+              content = {
+                type = "zfs";
+                pool = "fastpool";
+              };
+            };
+            cacheSecure = {
+              size = myDevice.ssd0.cacheSecure.size;
+              name = "cache-secure";
+              content = {
+                type = "zfs";
+                pool = "securepool";
+              };
+            };
+            cacheFast = {
               size = "100%";
-              name = "cache";
+              name = "cache-fast";
               content = {
                 type = "zfs";
                 pool = "fastpool";
@@ -158,7 +189,7 @@ in {
             # };
             biosboot = {
               size = "1M";
-              type = "EF02"; # BIOS boot partition type
+              type = "EF02";
               name = "biosboot";
             };
             boot = {
@@ -166,7 +197,7 @@ in {
               name = "boot";
               content = {
                 type = "filesystem";
-                format = "ext4"; # or ext2/ext3
+                format = "ext4";
                 mountpoint = "/boot";
               };
             };
@@ -183,12 +214,9 @@ in {
       };
     };
 
-    # Define ZFS pools
     zpool = {
-      # securepool: mirror of the two 'mirror' partitions (1TiB usable)
       securepool = {
         type = "zpool";
-        # mode = "mirror";
         mode = {
           topology = {
             type = "topology";
@@ -199,21 +227,29 @@ in {
                 "/dev/disk/by-partlabel/disk-hdd2-mirror"
               ];
             }];
+            log = [ "/dev/disk/by-partlabel/disk-ssdcache-slog-secure" ];
+            cache = [ "/dev/disk/by-partlabel/disk-ssdcache-cache-secure" ];
           };
         };
         rootFsOptions = zfsCommon // {
-          # ashift = "12";
           mountpoint = "none";
+          reservation = "10G";
         };
-        options = { ashift = "12"; };
+        options = {
+          ashift = "12";
+          autotrim = "on";
+        };
 
         datasets = {
           data = {
             type = "zfs_fs";
             mountpoint = "/mnt/secure";
-            options = zfsCommon // { mountpoint = "legacy"; };
+            options = zfsCommon // {
+              mountpoint = "legacy";
+              recordsize = "64K";
+            };
           };
-          nix = { # Add nix here!
+          nix = {
             type = "zfs_fs";
             mountpoint = "/nix";
             options = zfsCommon // { mountpoint = "legacy"; };
@@ -229,23 +265,33 @@ in {
           topology = {
             type = "topology";
             vdev = [{
-              mode = ""; # empty string = stripe
+              mode = "";
               members = [
                 "/dev/disk/by-partlabel/disk-hdd1-stripe"
                 "/dev/disk/by-partlabel/disk-hdd2-stripe"
               ];
             }];
-            cache = [ "/dev/disk/by-partlabel/disk-ssdcache-cache" ];
+            log = [ "/dev/disk/by-partlabel/disk-ssdcache-slog-fast" ];
+            cache = [ "/dev/disk/by-partlabel/disk-ssdcache-cache-fast" ];
           };
         };
-        rootFsOptions = zfsCommon // { mountpoint = "none"; };
-        options = { ashift = "12"; };
+        rootFsOptions = zfsCommon // {
+          mountpoint = "none";
+          reservation = "10G";
+        };
+        options = {
+          ashift = "12";
+          autotrim = "on";
+        };
 
         datasets = {
           data = {
             type = "zfs_fs";
             mountpoint = "/mnt/fast";
-            options = zfsCommon // { mountpoint = "legacy"; };
+            options = zfsCommon // {
+              mountpoint = "legacy";
+              recordsize = "64K";
+            };
           };
         };
       };
@@ -254,10 +300,13 @@ in {
       rpool = {
         type = "zpool";
         rootFsOptions = zfsCommon // {
-          # ashift = "12";
           mountpoint = "none";
+          reservation = "5G";
         };
-        options = { ashift = "12"; };
+        options = {
+          ashift = "12";
+          autotrim = "on";
+        };
 
         datasets = {
           root = {
@@ -270,11 +319,6 @@ in {
             mountpoint = "/home";
             options = zfsCommon;
           };
-          # nix = {
-          #   type = "zfs_fs";
-          #   mountpoint = "/nix";
-          #   options = zfsCommon;
-          # };
         };
       };
     };
