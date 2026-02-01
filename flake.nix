@@ -10,10 +10,15 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-secrets = {
-      url =
-        "git+ssh://git@github.com/alfonzso/nix-secrets.git?ref=main&shallow=1";
+      url = "git+ssh://git@github.com/alfonzso/nix-secrets.git?ref=main&shallow=1";
       inputs = { };
     };
+
+    himmelblau = {
+      url = "github:himmelblau-idm/himmelblau";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # rust-overlay = {
     #   url = "github:oxalica/rust-overlay";
     #   inputs.nixpkgs.follows = "nixpkgs";
@@ -22,7 +27,15 @@
 
   # rust-overlay
   outputs =
-    { self, nixpkgs, disko, sops-nix, home-manager, ... }@inputs:
+    {
+      self,
+      nixpkgs,
+      disko,
+      sops-nix,
+      home-manager,
+      himmelblau,
+      ...
+    }@inputs:
     let
       inherit (self) outputs;
       inherit (nixpkgs) lib;
@@ -64,54 +77,60 @@
       #
       # Handle a given flakeConfigName config based on whether its underlying system is nixos or darwin
       mkHost = flakeConfigName: {
-        ${flakeConfigName} = let
-          systemFunc = lib.nixosSystem;
-          # NixSecrets = builtins.toString inputs.nix-secrets ;
-        in systemFunc {
-          specialArgs = {
-            ProjectRoot = ./.;
-            # HostCfg = config.hostCfg;
-            # DiskoTesting = false;
-            DiskoTesting = false;
-            # nixpkgsUnstable = pkgsUnstable;
-            # unstableInput = unstable;
-            NixSecrets = builtins.toString inputs.nix-secrets;
-            inherit inputs outputs;
+        ${flakeConfigName} =
+          let
+            systemFunc = lib.nixosSystem;
+            # NixSecrets = builtins.toString inputs.nix-secrets ;
+          in
+          systemFunc {
+            specialArgs = {
+              ProjectRoot = ./.;
+              DiskoTesting = false;
+              NixSecrets = builtins.toString inputs.nix-secrets;
+              inherit inputs outputs;
 
-            # ========== Extend lib with lib.custom ==========
-            # NOTE: This approach allows lib.custom to propagate into hm
-            # see: https://github.com/nix-community/home-manager/pull/3454
-            # lib = nixpkgs.lib.extend (self: super: { custom = import ./lib { inherit (nixpkgs) lib; }; });
+              # ========== Extend lib with lib.custom ==========
+              # NOTE: This approach allows lib.custom to propagate into hm
+              # see: https://github.com/nix-community/home-manager/pull/3454
+              # lib = nixpkgs.lib.extend (self: super: { custom = import ./lib { inherit (nixpkgs) lib; }; });
 
+            };
+            modules = [
+              # ./flake-caches/cachix.nix
+              himmelblau.nixosModules.himmelblau
+
+              ./nx/common/host_cfg.nix
+              ./nx/hosts/${flakeConfigName}
+
+              home-manager.nixosModules.home-manager
+              disko.nixosModules.disko
+              sops-nix.nixosModules.sops
+              {
+                hostCfg.machineHostName = flakeConfigName + "Nix";
+                hostCfg.currentConfigName = flakeConfigName;
+                # hostCfg.nasUser = "nasadmin";
+                # hostCfg.nasGroup = "nasuser";
+                hostCfg.root = ./.;
+              }
+              # { nixpkgs.overlays = [ rust-overlay.overlays.default ]; }
+              (
+                { config, lib, ... }:
+                {
+                  config._module.args.personal = import "${inputs.nix-secrets}/personal" { };
+                }
+              )
+            ];
           };
-          modules = [
-            ./nx/common/host_cfg.nix
-            ./nx/hosts/${flakeConfigName}
-
-            home-manager.nixosModules.home-manager
-            disko.nixosModules.disko
-            sops-nix.nixosModules.sops
-            {
-              hostCfg.machineHostName = flakeConfigName + "Nix";
-              hostCfg.currentConfigName = flakeConfigName;
-              # hostCfg.nasUser = "nasadmin";
-              # hostCfg.nasGroup = "nasuser";
-              hostCfg.root = ./.;
-            }
-            # { nixpkgs.overlays = [ rust-overlay.overlays.default ]; }
-            ({ config, lib, ... }: {
-              config._module.args.personal =
-                import "${inputs.nix-secrets}/personal" { };
-            })
-          ];
-        };
       };
       # Invoke mkHost for each flakeConfigName config that is declared for either nixos or darwin
-      mkHostConfigs = hosts:
-        lib.foldl (acc: set: acc // set) { }
-        (lib.map (flakeConfigName: mkHost flakeConfigName) hosts);
+      mkHostConfigs =
+        hosts:
+        lib.foldl (acc: set: acc // set) { } (lib.map (flakeConfigName: mkHost flakeConfigName) hosts);
       # Return the hosts declared in the given directory
       readHosts = lib.attrNames (builtins.readDir ./nx/hosts);
 
-    in { nixosConfigurations = mkHostConfigs (readHosts); };
+    in
+    {
+      nixosConfigurations = mkHostConfigs (readHosts);
+    };
 }
