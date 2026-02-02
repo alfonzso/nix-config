@@ -17,12 +17,13 @@
       set -g @plugin 'tmux-plugins/tpm'
       set -g @plugin 'tmux-plugins/tmux-sensible'
       set -g @plugin 'tmux-plugins/tmux-resurrect'
-      set -sg escape-time 50
+      set -sg escape-time 250
 
       set-window-option -g mode-keys vi
 
       # press <prefix>‑T to toggle between C‑b and C‑a
-      bind-key T run-shell "~/.tmux/toggle-prefix.sh"
+      # bind-key T run-shell "~/.tmux/toggle-prefix.sh"
+
       set-option -g default-shell "${pkgs.bash}/bin/bash"
       set -g default-terminal "screen-256color"
       new -n WindowName bash --login
