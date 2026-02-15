@@ -1,7 +1,7 @@
 {
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
-    # unstable.url = "github:NixOS/nixpkgs/master";
+    # nixpkgs.url = "github:nixos/nixpkgs/master";
     disko.url = "github:nix-community/disko";
     sops-nix.url = "github:mic92/sops-nix";
     home-manager = {
@@ -14,6 +14,12 @@
         "git+ssh://git@github.com/alfonzso/nix-secrets.git?ref=main&shallow=1";
       inputs = { };
     };
+
+    himmelblau = {
+      url = "github:himmelblau-idm/himmelblau";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # rust-overlay = {
     #   url = "github:oxalica/rust-overlay";
     #   inputs.nixpkgs.follows = "nixpkgs";
@@ -22,7 +28,7 @@
 
   # rust-overlay
   outputs =
-    { self, nixpkgs, disko, sops-nix, home-manager, ... }@inputs:
+    { self, nixpkgs, disko, sops-nix, home-manager, himmelblau, ... }@inputs:
     let
       inherit (self) outputs;
       inherit (nixpkgs) lib;
@@ -70,11 +76,7 @@
         in systemFunc {
           specialArgs = {
             ProjectRoot = ./.;
-            # HostCfg = config.hostCfg;
             DiskoTesting = false;
-            # DiskoTesting = true;
-            # nixpkgsUnstable = pkgsUnstable;
-            # unstableInput = unstable;
             NixSecrets = builtins.toString inputs.nix-secrets;
             inherit inputs outputs;
 
@@ -85,6 +87,9 @@
 
           };
           modules = [
+            # ./flake-caches/cachix.nix
+            himmelblau.nixosModules.himmelblau
+
             ./nx/common/host_cfg.nix
             ./nx/hosts/${flakeConfigName}
 
