@@ -71,8 +71,8 @@
           specialArgs = {
             ProjectRoot = ./.;
             # HostCfg = config.hostCfg;
-            # DiskoTesting = false;
-            DiskoTesting = true;
+            DiskoTesting = false;
+            # DiskoTesting = true;
             # nixpkgsUnstable = pkgsUnstable;
             # unstableInput = unstable;
             NixSecrets = builtins.toString inputs.nix-secrets;
