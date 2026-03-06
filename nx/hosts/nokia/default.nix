@@ -56,7 +56,7 @@ in
     ./hardware-configuration.nix
     ./_global_host_config.nix
 
-    # "${_activations}/manage_ssh.nix"
+    "${_activations}/manage_ssh.nix"
 
     "${_desktop}/gnome.gdm.nix"
 
