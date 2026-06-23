@@ -16,12 +16,6 @@
     fsType = "ext4";
   };
 
-  fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/2DE8-0B6F";
-    fsType = "vfat";
-    options = [ "umask=0077" ];
-  };
-
   networking.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";

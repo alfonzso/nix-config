@@ -26,6 +26,17 @@ in {
       content = {
         type = "gpt";
         partitions = {
+          esp = {
+            size = "1G";
+            type = "EF00";
+            content = {
+              type = "filesystem";
+              format = "vfat";
+              mountpoint = "/boot";
+              mountOptions = [ "umask=0077" ];
+            };
+          };
+
           nix = {
             size = myDevice.storage.nixSize;
             content = {
