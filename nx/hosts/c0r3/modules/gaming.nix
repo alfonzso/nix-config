@@ -9,24 +9,27 @@
     gamescope.enable = true;
 
     steam = {
-      enable = true;
-      dedicatedServer.openFirewall = true;
-      gamescopeSession.enable = true;
-      remotePlay.openFirewall = true;
+      # Enable after the base install; Steam forces 32-bit graphics support.
+      enable = false;
+      dedicatedServer.openFirewall = false;
+      gamescopeSession.enable = false;
+      remotePlay.openFirewall = false;
       extraCompatPackages = with pkgs; [ proton-ge-bin ];
     };
   };
 
   environment.systemPackages = with pkgs; [
-    bottles
     gamescope
     goverlay
-    heroic
-    lutris
     mangohud
-    protonup-qt
     vulkan-tools
-    wineWow64Packages.staging
-    winetricks
+
+    # Enable after the base install; these pull in Wine/32-bit compatibility.
+    # bottles
+    # heroic
+    # lutris
+    # protonup-qt
+    # winePackages.staging
+    # winetricks
   ];
 }
