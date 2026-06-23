@@ -3,8 +3,7 @@
 
   hardware.graphics = {
     enable = true;
-    # Enable later for full Steam/Wine 32-bit game compatibility.
-    enable32Bit = false;
+    enable32Bit = true;
   };
 
   hardware.nvidia = {
