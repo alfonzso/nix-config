@@ -1,4 +1,5 @@
 name=$1
-[[ -z "$name" ]] && { ls -la nx/hosts; exit 1; }
 shift
-sudo nixos-rebuild --flake .#$name "$@"
+[[ -z "$name" ]] && { ls -la hm/hosts; exit 1; }
+sudo nixos-rebuild --flake .#$name $@
+

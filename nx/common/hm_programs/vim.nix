@@ -17,7 +17,7 @@
       vim-automkdir
       vim-nix # Syntax highlighting for Nix
       nerdtree # File explorer
-      fugitive # Git integration
+      vim-fugitive # Git integration
     ];
 
     extraConfig = ''
