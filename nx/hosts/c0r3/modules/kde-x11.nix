@@ -17,7 +17,16 @@ in
   services.flatpak.enable = true;
   programs.kdeconnect.enable = true;
 
-  environment.plasma6.excludePackages = with pkgs.kdePackages; [ spectacle ];
+  services.xrdp = {
+    enable = true;
+    openFirewall = true;
+    defaultWindowManager = "dbus-run-session startplasma-x11";
+  };
+
+  services.logind.settings.Login.IdleAction = "ignore";
+
+  # NOTE: was disabled cuz of openblas slow building
+  # environment.plasma6.excludePackages = with pkgs.kdePackages; [ spectacle ];
 
   environment.systemPackages = with pkgs; [
     kdePackages.dolphin
@@ -32,7 +41,7 @@ in
       google-chrome
     ];
 
-    home.activation.setPlasmaDarkTheme = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    home.activation.setPlasmaDefaults = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       ${pkgs.kdePackages.kconfig}/bin/kwriteconfig6 --file kdeglobals --group General --key ColorScheme BreezeDark
       ${pkgs.kdePackages.kconfig}/bin/kwriteconfig6 --file kdeglobals --group General --key Name "Breeze Dark"
       ${pkgs.kdePackages.kconfig}/bin/kwriteconfig6 --file kdeglobals --group Icons --key Theme breeze-dark
@@ -40,6 +49,11 @@ in
       ${pkgs.kdePackages.kconfig}/bin/kwriteconfig6 --file kdeglobals --group UiSettings --key ColorScheme BreezeDark
       ${pkgs.kdePackages.kconfig}/bin/kwriteconfig6 --file kdeglobals --group WM --key colorScheme BreezeDark
       ${pkgs.kdePackages.kconfig}/bin/kwriteconfig6 --file plasmarc --group Theme --key name breeze-dark
+
+      for profile in AC Battery LowBattery; do
+        ${pkgs.kdePackages.kconfig}/bin/kwriteconfig6 --file powerdevilrc --group "$profile" --group SuspendAndShutdown --key AutoSuspendAction 0
+        ${pkgs.kdePackages.kconfig}/bin/kwriteconfig6 --file powerdevilrc --group "$profile" --group SuspendAndShutdown --key AutoSuspendIdleTimeoutSec 0
+      done
     '';
   };
 }
