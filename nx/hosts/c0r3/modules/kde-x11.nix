@@ -15,6 +15,8 @@ in {
   services.flatpak.enable = true;
   programs.kdeconnect.enable = true;
 
+  environment.plasma6.excludePackages = with pkgs.kdePackages; [ spectacle ];
+
   environment.systemPackages = with pkgs; [
     kdePackages.dolphin
     kdePackages.kate
