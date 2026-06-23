@@ -36,4 +36,6 @@ in {
 
   system.stateVersion = "25.11";
 
+  nix.settings.trusted-users = [ "cube" ];
+
 }

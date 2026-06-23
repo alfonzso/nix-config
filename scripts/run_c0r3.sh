@@ -5,7 +5,7 @@ DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null && pwd)"
 ws="$(realpath "$DIR/../")"
 target="c0r3"
 phase="${1:-install}"
-ssh_host="${SSH_HOST:-nixos@192.168.1.100}"
+ssh_host="${SSH_HOST:-root@192.168.1.100}"
 
 usage() {
 	cat <<EOF

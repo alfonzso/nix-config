@@ -1,4 +1,4 @@
 { ... }: {
-  hostCfg.username = "alfoldi";
+  hostCfg.username = "alfonzso";
   hostCfg.network.wifiNames = [ ];
 }
