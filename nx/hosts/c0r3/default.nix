@@ -17,6 +17,7 @@ in {
     ./modules/gaming.nix
     ./modules/kde-x11.nix
     ./modules/nvidia.nix
+    ./modules/samba-client.nix
 
     ./hardware-configuration.nix
     ./_global_host_config.nix

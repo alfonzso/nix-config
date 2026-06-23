@@ -17,7 +17,8 @@ let
   };
 
   myDevice = if DiskoTesting then test else prod;
-in {
+in
+{
   disko.devices = {
     disk.storage = {
       type = "disk";
@@ -38,16 +39,21 @@ in {
           };
 
           nix = {
+            name = "nix";
             size = myDevice.storage.nixSize;
             content = {
               type = "filesystem";
               format = "ext4";
               mountpoint = "/nix";
-              mountOptions = [ "defaults" "noatime" ];
+              mountOptions = [
+                "defaults"
+                "noatime"
+              ];
             };
           };
 
           games = {
+            name = "games";
             size = "100%";
             content = {
               type = "filesystem";

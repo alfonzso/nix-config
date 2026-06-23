@@ -16,6 +16,21 @@
     fsType = "ext4";
   };
 
+  fileSystems."/mnt/windows-c" = {
+    device = "/dev/disk/by-label/C";
+    fsType = "ntfs3";
+    options = [
+      "noauto"
+      "nofail"
+      "ro"
+      "uid=1000"
+      "gid=100"
+      "umask=022"
+      "users"
+      "windows_names"
+    ];
+  };
+
   swapDevices = [
     {
       device = "/swapfile";
