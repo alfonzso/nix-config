@@ -6,6 +6,13 @@
     "d /games/SteamLibrary 0755 ${config.hostCfg.username} users -"
   ];
 
+  services.sunshine = {
+    enable = true;
+    autoStart = true;
+    capSysAdmin = true;
+    openFirewall = true;
+  };
+
   programs = {
     gamemode.enable = true;
     gamescope.enable = true;
@@ -23,6 +30,8 @@
     gamescope
     goverlay
     mangohud
+    moonlight-qt
+    sunshine
     vulkan-tools
 
     bottles

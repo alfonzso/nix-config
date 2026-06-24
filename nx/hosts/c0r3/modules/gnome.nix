@@ -15,7 +15,20 @@ in
     defaultWindowManager = "dbus-run-session gnome-session";
   };
 
-  services.logind.settings.Login.IdleAction = "ignore";
+  services.logind.settings.Login = {
+    IdleAction = "ignore";
+    HandleLidSwitch = "ignore";
+    HandleLidSwitchDocked = "ignore";
+    HandleLidSwitchExternalPower = "ignore";
+  };
+
+  systemd.targets = {
+    sleep.enable = false;
+    suspend.enable = false;
+    hibernate.enable = false;
+    hybrid-sleep.enable = false;
+    suspend-then-hibernate.enable = false;
+  };
 
   systemd.services.c0r3-power-profile-performance = {
     description = "Set c0r3 power profile to performance";
@@ -70,6 +83,13 @@ in
         };
 
         "org/gnome/desktop/session".idle-delay = 0;
+
+        "org/gnome/settings-daemon/plugins/power" = {
+          sleep-inactive-ac-type = "nothing";
+          sleep-inactive-ac-timeout = 0;
+          sleep-inactive-battery-type = "nothing";
+          sleep-inactive-battery-timeout = 0;
+        };
 
         "org/gnome/shell" = {
           enabled-extensions = [
