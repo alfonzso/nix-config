@@ -1,7 +1,10 @@
 { config, pkgs, ... }: {
   hardware.steam-hardware.enable = true;
 
-  systemd.tmpfiles.rules = [ "d /games 0775 ${config.hostCfg.username} users -" ];
+  systemd.tmpfiles.rules = [
+    "d /games 0775 ${config.hostCfg.username} users -"
+    "d /games/SteamLibrary 0755 ${config.hostCfg.username} users -"
+  ];
 
   programs = {
     gamemode.enable = true;

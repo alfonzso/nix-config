@@ -1,12 +1,23 @@
-{ config, lib, ProjectRoot, ... }:
+{
+  config,
+  lib,
+  ProjectRoot,
+  ...
+}:
 let
   _common = ProjectRoot + "/nx/common";
   _activations = _common + "/activations";
-in {
+in
+{
   system.stateVersion = "25.11";
 
-  users.users.${config.hostCfg.username}.extraGroups =
-    [ "audio" "input" "networkmanager" "render" "video" ];
+  users.users.${config.hostCfg.username}.extraGroups = [
+    "audio"
+    "input"
+    "networkmanager"
+    "render"
+    "video"
+  ];
 
   imports = lib.flatten [
     ./hm
@@ -15,7 +26,7 @@ in {
 
     ./modules/disko.nix
     ./modules/gaming.nix
-    ./modules/kde-x11.nix
+    ./modules/gnome.nix
     ./modules/nvidia.nix
     ./modules/samba-client.nix
 

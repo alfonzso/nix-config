@@ -26,7 +26,6 @@ in
 {
   environment.systemPackages = with pkgs; [
     cifs-utils
-    kdePackages.kio-extras
     samba
   ];
 
