@@ -3,6 +3,8 @@ let
   hostCfg = config.hostCfg;
 in
 {
+  imports = [ ./firefox.nix ];
+
   services.xserver.enable = true;
 
   services.displayManager.gdm.enable = true;
@@ -61,8 +63,8 @@ in
 
   home-manager.users.${hostCfg.username} = { lib, ... }: {
     home.packages = with pkgs; [
-      firefox
       google-chrome
+      signal-desktop
       gnomeExtensions.appindicator
       gnomeExtensions.dash-to-panel
       gnomeExtensions.gsconnect
@@ -103,6 +105,9 @@ in
         "org/gnome/shell/extensions/dash-to-panel" = {
           panel-size = 48;
           appicon-margin = 4;
+          multi-monitors = true;
+          panel-element-positions-monitors-sync = true;
+          primary-monitor = "1";
         };
       };
     };

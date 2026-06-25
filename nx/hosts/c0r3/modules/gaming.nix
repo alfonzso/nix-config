@@ -44,10 +44,15 @@
     vulkan-tools
 
     bottles
+    cabextract
+    curl
     heroic
     lutris
+    p7zip
     protonup-qt
+    protontricks
     winePackages.staging
     winetricks
+    yad
   ];
 }
