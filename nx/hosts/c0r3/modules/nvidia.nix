@@ -1,5 +1,7 @@
-{ ... }: {
+{ pkgs, ... }: {
   services.xserver.videoDrivers = [ "nvidia" ];
+
+  hardware.firmware = [ pkgs.edid-generator ];
 
   hardware.graphics = {
     enable = true;
@@ -26,7 +28,8 @@
 
   boot.kernelParams = [
     "nvidia-drm.modeset=1"
-    # Force the HDMI output on so the desktop can stay available without a plugged-in display.
+    # Force HDMI on with a generic 1080p EDID so headless streaming has a real mode.
+    "drm.edid_firmware=HDMI-A-1:edid/1920x1080.bin"
     "video=HDMI-A-1:1920x1080@60e"
   ];
 

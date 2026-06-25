@@ -7,7 +7,13 @@ in
 
   services.xserver.enable = true;
 
-  services.displayManager.gdm.enable = true;
+  services.displayManager = {
+    autoLogin = {
+      enable = true;
+      user = hostCfg.username;
+    };
+    gdm.enable = true;
+  };
   services.desktopManager.gnome.enable = true;
   services.flatpak.enable = true;
 
@@ -67,6 +73,7 @@ in
       signal-desktop
       gnomeExtensions.appindicator
       gnomeExtensions.dash-to-panel
+      gnomeExtensions.desktop-icons-ng-ding
       gnomeExtensions.gsconnect
       gnomeExtensions.system-monitor
     ];
@@ -97,6 +104,7 @@ in
           enabled-extensions = [
             "appindicatorsupport@rgcjonas.gmail.com"
             "dash-to-panel@jderose9.github.com"
+            "ding@rastersoft.com"
             "gsconnect@andyholmes.github.io"
             "system-monitor@gnome-shell-extensions.gcampax.github.com"
           ];

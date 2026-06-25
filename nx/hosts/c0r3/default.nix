@@ -38,7 +38,7 @@ in
 
     ./modules/disko.nix
     ./modules/gaming.nix
-    ./modules/gnome.nix
+    ./modules/kde-wayland.nix
     ./modules/nvidia.nix
     ./modules/samba-client.nix
 
