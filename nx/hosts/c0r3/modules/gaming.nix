@@ -13,6 +13,15 @@
     openFirewall = true;
   };
 
+  home-manager.users.${config.hostCfg.username}.xdg.configFile."sunshine/sunshine.conf" = {
+    force = true;
+    text = ''
+      capture = portal
+      output_name = Meta-0
+    '';
+    onChange = "${pkgs.systemd}/bin/systemctl --user restart sunshine || true";
+  };
+
   programs = {
     gamemode.enable = true;
     gamescope.enable = true;

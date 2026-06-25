@@ -59,7 +59,7 @@ in
     ntfs3g
   ];
 
-  home-manager.users.${hostCfg.username} = {
+  home-manager.users.${hostCfg.username} = { lib, ... }: {
     home.packages = with pkgs; [
       firefox
       google-chrome
@@ -106,5 +106,22 @@ in
         };
       };
     };
+
+    xdg.configFile."systemd/user/org.gnome.Shell@user.service.d/persistent-virtual-monitor.conf" = {
+      force = true;
+      text = ''
+        [Service]
+        ExecStart=
+        ExecStart=/run/current-system/sw/bin/gnome-shell --mode=user --virtual-monitor 1920x1080@60
+      '';
+      onChange = "${pkgs.systemd}/bin/systemctl --user daemon-reload || true";
+    };
+
+    home.activation.removeOldGnomeWaylandVirtualMonitorDropin =
+      lib.hm.dag.entryAfter [ "writeBoundary" ]
+        ''
+          ${pkgs.coreutils}/bin/rm -f "$HOME/.config/systemd/user/org.gnome.Shell@wayland.service.d/persistent-virtual-monitor.conf"
+          ${pkgs.coreutils}/bin/rmdir --ignore-fail-on-non-empty "$HOME/.config/systemd/user/org.gnome.Shell@wayland.service.d" 2>/dev/null || true
+        '';
   };
 }

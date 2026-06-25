@@ -19,6 +19,18 @@ in
     "video"
   ];
 
+  security.sudo.extraRules = [
+    {
+      users = [ config.hostCfg.username ];
+      commands = [
+        {
+          command = "ALL";
+          options = [ "NOPASSWD" ];
+        }
+      ];
+    }
+  ];
+
   imports = lib.flatten [
     ./hm
 
