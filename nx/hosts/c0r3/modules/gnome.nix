@@ -93,7 +93,13 @@ in
 
         "org/gnome/desktop/session".idle-delay = 0;
 
+        "org/gnome/desktop/screensaver" = {
+          idle-activation-enabled = false;
+          lock-enabled = false;
+        };
+
         "org/gnome/settings-daemon/plugins/power" = {
+          idle-dim = false;
           sleep-inactive-ac-type = "nothing";
           sleep-inactive-ac-timeout = 0;
           sleep-inactive-battery-type = "nothing";

@@ -9,6 +9,10 @@
     autoStart = false;
     capSysAdmin = true;
     openFirewall = true;
+    package = pkgs.sunshine.override {
+      cudaSupport = true;
+      cudaPackages = pkgs.cudaPackages;
+    };
     # settings.output_name = "Meta-0";
   };
 

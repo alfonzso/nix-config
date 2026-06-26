@@ -8,6 +8,7 @@
 
     # needed by nvim
     neovim
+    tree-sitter
     python312
     poetry
 
@@ -15,6 +16,7 @@
     nil # Nix LSP
     lua-language-server
     just-lsp
+    bash-language-server
 
     # Formatters
     # nixfmt-rfc-style      # or nixpkgs-fmt
