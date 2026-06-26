@@ -70,26 +70,68 @@ in
     home.packages = with pkgs; [
       google-chrome
       signal-desktop
+      vlc
     ];
 
-    home.activation.setPlasmaDefaults = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-      ${pkgs.kdePackages.kconfig}/bin/kwriteconfig6 --file kdeglobals --group General --key ColorScheme BreezeDark
-      ${pkgs.kdePackages.kconfig}/bin/kwriteconfig6 --file kdeglobals --group General --key Name "Breeze Dark"
-      ${pkgs.kdePackages.kconfig}/bin/kwriteconfig6 --file kdeglobals --group Icons --key Theme breeze-dark
-      ${pkgs.kdePackages.kconfig}/bin/kwriteconfig6 --file kdeglobals --group KDE --key LookAndFeelPackage org.kde.breezedark.desktop
-      ${pkgs.kdePackages.kconfig}/bin/kwriteconfig6 --file kdeglobals --group UiSettings --key ColorScheme BreezeDark
-      ${pkgs.kdePackages.kconfig}/bin/kwriteconfig6 --file kdeglobals --group WM --key colorScheme BreezeDark
-      ${pkgs.kdePackages.kconfig}/bin/kwriteconfig6 --file plasmarc --group Theme --key name breeze-dark
-      ${pkgs.kdePackages.kconfig}/bin/kwriteconfig6 --file kscreenlockerrc --group Daemon --key Autolock false
-      ${pkgs.kdePackages.kconfig}/bin/kwriteconfig6 --file kscreenlockerrc --group Daemon --key LockOnResume false
-      ${pkgs.kdePackages.kconfig}/bin/kwriteconfig6 --file kscreenlockerrc --group Daemon --key Timeout 0
+    programs.plasma = {
+      enable = true;
 
-      for profile in AC Battery LowBattery; do
-        ${pkgs.kdePackages.kconfig}/bin/kwriteconfig6 --file powerdevilrc --group "$profile" --group DimDisplay --key idleTime 0
-        ${pkgs.kdePackages.kconfig}/bin/kwriteconfig6 --file powerdevilrc --group "$profile" --group DPMSControl --key idleTime 0
-        ${pkgs.kdePackages.kconfig}/bin/kwriteconfig6 --file powerdevilrc --group "$profile" --group SuspendAndShutdown --key AutoSuspendAction 0
-        ${pkgs.kdePackages.kconfig}/bin/kwriteconfig6 --file powerdevilrc --group "$profile" --group SuspendAndShutdown --key AutoSuspendIdleTimeoutSec 0
-      done
-    '';
+      configFile = {
+        kdeglobals = {
+          General = {
+            ColorScheme = "BreezeDark";
+            Name = "Breeze Dark";
+          };
+          Icons.Theme = "breeze-dark";
+          KDE.LookAndFeelPackage = "org.kde.breezedark.desktop";
+          UiSettings.ColorScheme = "BreezeDark";
+          WM.colorScheme = "BreezeDark";
+        };
+
+        kscreenlockerrc.Daemon.Lock = false;
+        plasmarc.Theme.name = "breeze-dark";
+
+        powerdevilrc = {
+          "AC/DPMSControl" = {
+            idleTime = 0;
+            turnOffIdle = false;
+          };
+          "Battery/DPMSControl" = {
+            idleTime = 0;
+            turnOffIdle = false;
+          };
+          "LowBattery/DPMSControl" = {
+            idleTime = 0;
+            turnOffIdle = false;
+          };
+        };
+      };
+
+      kscreenlocker = {
+        autoLock = false;
+        lockOnResume = false;
+        lockOnStartup = false;
+        passwordRequired = false;
+        timeout = 0;
+      };
+
+      powerdevil = {
+        AC = {
+          autoSuspend.action = "nothing";
+          dimDisplay.enable = false;
+          turnOffDisplay.idleTimeout = "never";
+        };
+        battery = {
+          autoSuspend.action = "nothing";
+          dimDisplay.enable = false;
+          turnOffDisplay.idleTimeout = "never";
+        };
+        lowBattery = {
+          autoSuspend.action = "nothing";
+          dimDisplay.enable = false;
+          turnOffDisplay.idleTimeout = "never";
+        };
+      };
+    };
   };
 }
