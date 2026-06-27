@@ -19,6 +19,7 @@
       inputs.nixpkgs.follows = "nixpkgs_26_05";
       inputs.home-manager.follows = "home-manager_26_05";
     };
+    nix-flatpak.url = "github:gmodena/nix-flatpak";
     sops_nix_26_05 = {
       url = "github:mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs_26_05";
@@ -122,6 +123,7 @@
 
               hostHomeManager.nixosModules.home-manager
               disko.nixosModules.disko
+              inputs.nix-flatpak.nixosModules.nix-flatpak
               hostSopsNix.nixosModules.sops
               {
                 hostCfg.machineHostName = flakeConfigName + "Nix";

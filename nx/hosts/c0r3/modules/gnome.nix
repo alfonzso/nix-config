@@ -3,8 +3,6 @@ let
   hostCfg = config.hostCfg;
 in
 {
-  imports = [ ./firefox.nix ];
-
   services.xserver.enable = true;
 
   services.displayManager = {
@@ -15,7 +13,6 @@ in
     gdm.enable = true;
   };
   services.desktopManager.gnome.enable = true;
-  services.flatpak.enable = true;
 
   services.xrdp = {
     enable = true;

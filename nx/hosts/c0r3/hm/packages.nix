@@ -27,6 +27,11 @@
 
     nodejs_24
 
+    # Desktop applications
+    google-chrome
+    signal-desktop
+    vlc
+
     ###########
     # Rust not needed if blink is used from prebuilt binary
     ###########

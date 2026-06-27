@@ -37,6 +37,8 @@ in
     "${_common}/hm"
 
     ./modules/disko.nix
+    ./modules/firefox.nix
+    ./modules/flatpak.nix
     ./modules/gaming.nix
     ./modules/kde-wayland.nix
     ./modules/nvidia.nix

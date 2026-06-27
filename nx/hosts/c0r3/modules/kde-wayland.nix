@@ -3,8 +3,6 @@ let
   hostCfg = config.hostCfg;
 in
 {
-  imports = [ ./firefox.nix ];
-
   services.xserver.enable = true;
 
   services.displayManager = {
@@ -20,7 +18,6 @@ in
   };
 
   services.desktopManager.plasma6.enable = true;
-  services.flatpak.enable = true;
   programs.kdeconnect.enable = true;
 
   services.xrdp = {
@@ -66,13 +63,7 @@ in
     samba
   ];
 
-  home-manager.users.${hostCfg.username} = { lib, pkgs, ... }: {
-    home.packages = with pkgs; [
-      google-chrome
-      signal-desktop
-      vlc
-    ];
-
+  home-manager.users.${hostCfg.username} = {
     programs.plasma = {
       enable = true;
 
