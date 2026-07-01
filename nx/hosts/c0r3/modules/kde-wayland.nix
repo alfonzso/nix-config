@@ -33,14 +33,6 @@ in
     HandleLidSwitchExternalPower = "ignore";
   };
 
-  systemd.targets = {
-    sleep.enable = false;
-    suspend.enable = false;
-    hibernate.enable = false;
-    hybrid-sleep.enable = false;
-    suspend-then-hibernate.enable = false;
-  };
-
   systemd.services.c0r3-power-profile-performance = {
     description = "Set c0r3 power profile to performance";
     wantedBy = [ "multi-user.target" ];

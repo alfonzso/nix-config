@@ -28,8 +28,10 @@
     nodejs_24
 
     # Desktop applications
+    gimp
     google-chrome
     signal-desktop
+    veracrypt
     vlc
 
     ###########
@@ -77,6 +79,6 @@
     jq
 
     sublime4
-    vscode
+    # vscode
   ];
 }
