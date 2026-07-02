@@ -1,25 +1,19 @@
 { lib, mkHost, ... }:
 let
-  testHosts = {
-    test-c0r3 = {
-      sourceHost = "c0r3";
-      hostPath = ./hosts/c0r3;
-    };
-  };
+  readTestHosts = lib.attrNames (builtins.readDir ./hosts);
+  sourceHostFromTestHost = outputName: lib.removePrefix "test-" outputName;
 
   mkTestHost =
     outputName:
-    {
-      sourceHost,
-      hostPath,
-    }:
+    let
+      sourceHost = sourceHostFromTestHost outputName;
+    in
     mkHost {
       flakeConfigName = sourceHost;
-      inherit outputName hostPath;
+      inherit outputName;
+      hostPath = ./hosts/${outputName};
       currentConfigName = sourceHost;
       diskoTesting = true;
     };
 in
-lib.foldl (acc: outputName: acc // mkTestHost outputName testHosts.${outputName}) { } (
-  builtins.attrNames testHosts
-)
+lib.foldl (acc: outputName: acc // mkTestHost outputName) { } readTestHosts

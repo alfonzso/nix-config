@@ -37,6 +37,13 @@
 
   services.xserver.videoDrivers = lib.mkForce [ "modesetting" ];
 
+  systemd.services.c0r3-power-profile-performance = {
+    enable = lib.mkForce false;
+    wantedBy = lib.mkForce [ ];
+    wants = lib.mkForce [ ];
+    after = lib.mkForce [ ];
+  };
+
   home-manager.users.${config.hostCfg.username}.systemd.user.services.sunshine.Install.WantedBy =
     lib.mkForce
       [ ];
