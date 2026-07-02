@@ -6,7 +6,7 @@
 }:
 let
   hostCfg = config.hostCfg;
-  wallpaper = "${./../assets/starry-nebula-219.png}";
+  wallpaper = "${../../assets/starry-nebula-219.png}";
   carelinkKdebar = inputs.carelink-tui.packages.${pkgs.stdenv.hostPlatform.system}.carelink-kdebar;
 in
 {

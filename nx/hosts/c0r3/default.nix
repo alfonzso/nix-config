@@ -82,13 +82,22 @@ in
 
     "${_common}/hm"
 
-    ./modules/disko.nix
-    ./modules/firefox.nix
-    ./modules/flatpak.nix
-    ./modules/gaming.nix
-    ./modules/kde-wayland.nix
-    ./modules/nvidia.nix
-    ./modules/samba-client.nix
+    # Storage
+    ./modules/storage/disko.nix
+
+    # Desktop
+    ./modules/desktop/kde-wayland.nix
+
+    # Hardware
+    ./modules/hardware/nvidia.nix
+
+    # Apps and gaming
+    ./modules/apps/firefox.nix
+    ./modules/apps/flatpak.nix
+    ./modules/apps/gaming.nix
+
+    # Network fileshares
+    ./modules/fileshare/samba-client.nix
 
     ./hardware-configuration.nix
     ./_global_host_config.nix
