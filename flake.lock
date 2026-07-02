@@ -7,14 +7,19 @@
         ]
       },
       "locked": {
-        "lastModified": 1783001093,
-        "narHash": "sha256-roBfulf4aupqjhtIF6H3uErGYoLxj3hPKGwx+/BGRzU=",
-        "path": "/home/alfonzso/workspace/home/carelink-tui",
-        "type": "path"
+        "lastModified": 1782950048,
+        "narHash": "sha256-ifjC+fxqm8qK5AA0nzZu4EmmMihIgt75HHTatOWW8Co=",
+        "ref": "main",
+        "rev": "83840f9c39e750221c2a23f620700411dc467916",
+        "shallow": true,
+        "type": "git",
+        "url": "ssh://git@github.com/alfonzso/carelink-tui.git"
       },
       "original": {
-        "path": "/home/alfonzso/workspace/home/carelink-tui",
-        "type": "path"
+        "ref": "main",
+        "shallow": true,
+        "type": "git",
+        "url": "ssh://git@github.com/alfonzso/carelink-tui.git"
       }
     },
     "disko": {

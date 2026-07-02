@@ -17,6 +17,13 @@ let
   myDevice = if DiskoTesting then test else prod;
 in
 {
+  # disko has no native neededForBoot option, but this file is a NixOS module,
+  # so merge the flag onto the /home fileSystem disko generates. Mounting /home
+  # in the initrd (before activation) keeps activation-time writes into the
+  # user's home (manage_ssh -> ~/.ssh, sops rclone config, ...) on the real
+  # /home partition instead of being shadowed by the later stage-2 mount.
+  fileSystems."/home".neededForBoot = true;
+
   disko.devices = {
     disk.ssd = {
       type = "disk";

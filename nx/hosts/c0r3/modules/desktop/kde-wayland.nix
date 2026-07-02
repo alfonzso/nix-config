@@ -102,6 +102,12 @@ in
                   placeInfo = "Budapest, Hungary, HU|3054643";
                   provider = "bbcukmet";
                 };
+                config.Units = {
+                  temperatureUnit = 6001; # Celsius
+                  pressureUnit = 5008; # hPa
+                  speedUnit = 9001; # km/h
+                  visibilityUnit = 2007; # km
+                };
               }
               "org.kde.plasma.systemtray"
               {

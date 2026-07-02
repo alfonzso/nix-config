@@ -17,7 +17,11 @@
       "sr_mod"
       "uhci_hcd"
       "virtio_pci"
+      "virtio_blk"
       "virtio_scsi"
+      # Root/home/games are ext4; mkForce above drops the module NixOS normally
+      # auto-adds, so include it explicitly or /sysroot fails to mount in initrd.
+      "ext4"
     ];
     kernelParams = lib.mkForce [
       "boot.shell_on_fail"
