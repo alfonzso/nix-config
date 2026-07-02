@@ -1,5 +1,4 @@
-# { config, pkgs, ... }:
-{ config, ... }:
+{ config, pkgs, ... }:
 {
   virtualisation = {
     containers.enable = true;
@@ -13,13 +12,8 @@
     extraGroups = [ "podman" ];
   };
 
-  # environment.systemPackages = with pkgs; [
-  #   distrobox
-  #   podman
-  #   fuse-overlayfs
-  #   slirp4netns
-  # ];
-  #
+  environment.systemPackages = with pkgs; [ qemu ];
+
   # # User namespace configuration
   # boot.kernel.sysctl = {
   #   "user.max_user_namespaces" = 28633;

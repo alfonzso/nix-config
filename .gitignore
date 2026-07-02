@@ -4,3 +4,5 @@ tst.nix
 .tmp
 nx/extra-files/
 result
+var/vm/
+var/installer/

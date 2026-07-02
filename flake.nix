@@ -94,64 +94,81 @@
       #
       # ========= flakeConfigName Config Functions =========
       #
-      # Handle a given flakeConfigName config based on whether its underlying system is nixos or darwin
-      mkHost = flakeConfigName: {
-        ${flakeConfigName} =
-          let
-            useNextRelease = flakeConfigName == "c0r3";
-            hostNixpkgs = if useNextRelease then inputs.nixpkgs_26_05 else nixpkgs;
-            hostHomeManager = if useNextRelease then inputs.home-manager_26_05 else home-manager;
-            hostSopsNix = if useNextRelease then inputs.sops_nix_26_05 else sops-nix;
-            systemFunc = hostNixpkgs.lib.nixosSystem;
-            # NixSecrets = builtins.toString inputs.nix-secrets ;
-          in
-          systemFunc {
-            specialArgs = {
-              ProjectRoot = ./.;
-              DiskoTesting = false;
-              NixSecrets = builtins.toString inputs.nix-secrets;
-              inherit inputs outputs;
-
-              # ========== Extend lib with lib.custom ==========
-              # NOTE: This approach allows lib.custom to propagate into hm
-              # see: https://github.com/nix-community/home-manager/pull/3454
-              # lib = nixpkgs.lib.extend (self: super: { custom = import ./lib { inherit (nixpkgs) lib; }; });
-
-            };
-            modules = [
-              # ./flake-caches/cachix.nix
-              himmelblau.nixosModules.himmelblau
-
-              ./nx/common/host_cfg.nix
-              ./nx/hosts/${flakeConfigName}
-
-              hostHomeManager.nixosModules.home-manager
-              disko.nixosModules.disko
-              inputs.nix-flatpak.nixosModules.nix-flatpak
-              hostSopsNix.nixosModules.sops
-              {
-                hostCfg.machineHostName = flakeConfigName + "Nix";
-                hostCfg.currentConfigName = flakeConfigName;
-                # hostCfg.nasUser = "nasadmin";
-                # hostCfg.nasGroup = "nasuser";
-                hostCfg.root = ./.;
-              }
-              # { nixpkgs.overlays = [ rust-overlay.overlays.default ]; }
-              ({ config, lib, ... }: {
-                config._module.args.personal = import "${inputs.nix-secrets}/personal" { };
-              })
-            ];
-          };
+      resolveHostFlakeConfig = import ./lib/host-flake-config.nix {
+        inherit
+          home-manager
+          inputs
+          nixpkgs
+          sops-nix
+          ;
       };
+
+      # Handle a given flakeConfigName config based on whether its underlying system is nixos or darwin
+      mkHost =
+        {
+          flakeConfigName,
+          outputName ? flakeConfigName,
+          currentConfigName ? outputName,
+          hostPath ? ./nx/hosts/${flakeConfigName},
+          diskoTesting ? false,
+        }:
+        {
+          ${outputName} =
+            let
+              hostFlakeConfig = resolveHostFlakeConfig flakeConfigName;
+              # NixSecrets = builtins.toString inputs.nix-secrets ;
+            in
+            hostFlakeConfig.systemFunc {
+              specialArgs = {
+                ProjectRoot = ./.;
+                DiskoTesting = diskoTesting;
+                NixSecrets = builtins.toString inputs.nix-secrets;
+                inherit inputs outputs;
+
+                # ========== Extend lib with lib.custom ==========
+                # NOTE: This approach allows lib.custom to propagate into hm
+                # see: https://github.com/nix-community/home-manager/pull/3454
+                # lib = nixpkgs.lib.extend (self: super: { custom = import ./lib { inherit (nixpkgs) lib; }; });
+
+              };
+              modules = [
+                # ./flake-caches/cachix.nix
+                himmelblau.nixosModules.himmelblau
+
+                ./nx/common/host_cfg.nix
+                hostPath
+
+                hostFlakeConfig.homeManager.nixosModules.home-manager
+                disko.nixosModules.disko
+                inputs.nix-flatpak.nixosModules.nix-flatpak
+                hostFlakeConfig.sopsNix.nixosModules.sops
+                {
+                  hostCfg.machineHostName = outputName + "Nix";
+                  hostCfg.currentConfigName = currentConfigName;
+                  # hostCfg.nasUser = "nasadmin";
+                  # hostCfg.nasGroup = "nasuser";
+                  hostCfg.root = ./.;
+                }
+                # { nixpkgs.overlays = [ rust-overlay.overlays.default ]; }
+                ({ config, lib, ... }: {
+                  config._module.args.personal = import "${inputs.nix-secrets}/personal" { };
+                })
+              ];
+            };
+        };
       # Invoke mkHost for each flakeConfigName config that is declared for either nixos or darwin
       mkHostConfigs =
         hosts:
-        lib.foldl (acc: set: acc // set) { } (lib.map (flakeConfigName: mkHost flakeConfigName) hosts);
+        lib.foldl (acc: set: acc // set) { } (
+          lib.map (flakeConfigName: mkHost { inherit flakeConfigName; }) hosts
+        );
       # Return the hosts declared in the given directory
       readHosts = lib.attrNames (builtins.readDir ./nx/hosts);
 
+      testHostConfigs = import ./tests/testing.nix { inherit lib mkHost; };
+
     in
     {
-      nixosConfigurations = mkHostConfigs (readHosts);
+      nixosConfigurations = mkHostConfigs (readHosts) // testHostConfigs;
     };
 }

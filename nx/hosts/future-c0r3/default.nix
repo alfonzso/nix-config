@@ -12,6 +12,8 @@ in
 {
   system.stateVersion = "25.11";
 
+  hostCfg.currentConfigName = lib.mkForce "c0r3";
+
   boot.loader.systemd-boot.configurationLimit = 5;
 
   users.users.${config.hostCfg.username}.extraGroups = [
