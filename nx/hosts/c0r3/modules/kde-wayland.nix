@@ -1,6 +1,13 @@
-{ config, pkgs, ... }:
+{
+  config,
+  inputs,
+  pkgs,
+  ...
+}:
 let
   hostCfg = config.hostCfg;
+  wallpaper = "${./../assets/starry-nebula-219.png}";
+  carelinkKdebar = inputs.carelink-tui.packages.${pkgs.stdenv.hostPlatform.system}.carelink-kdebar;
 in
 {
   services.xserver.enable = true;
@@ -55,66 +62,139 @@ in
     samba
   ];
 
-  home-manager.users.${hostCfg.username} = {
-    programs.plasma = {
-      enable = true;
+  home-manager.users.${hostCfg.username} =
+    { lib, ... }:
+    {
+      home.packages = [ carelinkKdebar ];
 
-      configFile = {
-        kdeglobals = {
-          General = {
-            ColorScheme = "BreezeDark";
-            Name = "Breeze Dark";
+      programs.plasma = {
+        enable = true;
+
+        panels = [
+          {
+            location = "bottom";
+            widgets = [
+              "org.kde.plasma.kickoff"
+              "org.kde.plasma.pager"
+              {
+                iconTasks.launchers = [
+                  "applications:org.kde.kate.desktop"
+                  "applications:sublime_text.desktop"
+                  "applications:firefox.desktop"
+                  "applications:google-chrome.desktop"
+                  "applications:steam.desktop"
+                  "applications:signal.desktop"
+                  "applications:systemsettings.desktop"
+                  "preferred://filemanager"
+                  "applications:org.kde.konsole.desktop"
+                  "applications:org.kde.plasma-systemmonitor.desktop"
+                  "applications:com.usebottles.bottles.desktop"
+                ];
+              }
+              "net.lehel.carelink.kdebar"
+              "org.kde.plasma.marginsseparator"
+              {
+                name = "org.kde.plasma.weather";
+                config.WeatherStation = {
+                  placeDisplayName = "Budapest, Hungary, HU";
+                  placeInfo = "Budapest, Hungary, HU|3054643";
+                  provider = "bbcukmet";
+                };
+              }
+              "org.kde.plasma.systemtray"
+              {
+                digitalClock = {
+                  date = {
+                    enable = true;
+                    format = "isoDate";
+                  };
+                  time.format = "24h";
+                  calendar = {
+                    firstDayOfWeek = "monday";
+                    showWeekNumbers = true;
+                  };
+                };
+              }
+              "org.kde.plasma.showdesktop"
+            ];
+          }
+        ];
+
+        configFile = {
+          kdeglobals = {
+            General = {
+              ColorScheme = "BreezeDark";
+              Name = "Breeze Dark";
+            };
+            Icons.Theme = "breeze-dark";
+            KDE.LookAndFeelPackage = "org.kde.breezedark.desktop";
+            UiSettings.ColorScheme = "BreezeDark";
+            WM.colorScheme = "BreezeDark";
           };
-          Icons.Theme = "breeze-dark";
-          KDE.LookAndFeelPackage = "org.kde.breezedark.desktop";
-          UiSettings.ColorScheme = "BreezeDark";
-          WM.colorScheme = "BreezeDark";
+
+          kscreenlockerrc.Daemon.Lock = false;
+          ksmserverrc.General.loginMode = "emptySession";
+          kxkbrc.Layout = {
+            DisplayNames = ",";
+            LayoutList = "us,hu";
+            Use = true;
+            VariantList = ",";
+          };
+          plasmarc = {
+            Theme.name = "breeze-dark";
+            Wallpapers.usersWallpapers = wallpaper;
+          };
+          kwinrc = {
+            NightColor.Active = true;
+          };
+          "plasma-org.kde.plasma.desktop-appletsrc" = {
+            "Containments/1/Wallpaper/org.kde.image/General" = {
+              FillMode = 0;
+              Image = "file://${wallpaper}";
+            };
+          };
+
+          powerdevilrc = {
+            "AC/DPMSControl" = {
+              idleTime = 0;
+              turnOffIdle = false;
+            };
+            "Battery/DPMSControl" = {
+              idleTime = 0;
+              turnOffIdle = false;
+            };
+            "LowBattery/DPMSControl" = {
+              idleTime = 0;
+              turnOffIdle = false;
+            };
+          };
         };
 
-        kscreenlockerrc.Daemon.Lock = false;
-        plasmarc.Theme.name = "breeze-dark";
-
-        powerdevilrc = {
-          "AC/DPMSControl" = {
-            idleTime = 0;
-            turnOffIdle = false;
-          };
-          "Battery/DPMSControl" = {
-            idleTime = 0;
-            turnOffIdle = false;
-          };
-          "LowBattery/DPMSControl" = {
-            idleTime = 0;
-            turnOffIdle = false;
-          };
+        kscreenlocker = {
+          autoLock = false;
+          lockOnResume = false;
+          lockOnStartup = false;
+          passwordRequired = false;
+          timeout = 0;
         };
-      };
 
-      kscreenlocker = {
-        autoLock = false;
-        lockOnResume = false;
-        lockOnStartup = false;
-        passwordRequired = false;
-        timeout = 0;
-      };
-
-      powerdevil = {
-        AC = {
-          autoSuspend.action = "nothing";
-          dimDisplay.enable = false;
-          turnOffDisplay.idleTimeout = "never";
-        };
-        battery = {
-          autoSuspend.action = "nothing";
-          dimDisplay.enable = false;
-          turnOffDisplay.idleTimeout = "never";
-        };
-        lowBattery = {
-          autoSuspend.action = "nothing";
-          dimDisplay.enable = false;
-          turnOffDisplay.idleTimeout = "never";
+        powerdevil = {
+          AC = {
+            autoSuspend.action = "nothing";
+            dimDisplay.enable = false;
+            turnOffDisplay.idleTimeout = "never";
+          };
+          battery = {
+            autoSuspend.action = "nothing";
+            dimDisplay.enable = false;
+            turnOffDisplay.idleTimeout = "never";
+          };
+          lowBattery = {
+            autoSuspend.action = "nothing";
+            dimDisplay.enable = false;
+            turnOffDisplay.idleTimeout = "never";
+          };
         };
       };
     };
-  };
 }

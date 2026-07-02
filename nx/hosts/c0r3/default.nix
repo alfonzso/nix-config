@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ProjectRoot,
   ...
 }:
@@ -19,6 +20,8 @@ in
     "video"
   ];
 
+  security.rtkit.enable = true;
+
   security.sudo.extraRules = [
     {
       users = [ config.hostCfg.username ];
@@ -30,6 +33,49 @@ in
       ];
     }
   ];
+
+  services.pipewire = {
+    enable = true;
+    alsa = {
+      enable = true;
+      support32Bit = true;
+    };
+    pulse.enable = true;
+    wireplumber = {
+      enable = true;
+      extraConfig."99-c0r3-audio-profile" = {
+        "monitor.alsa.rules" = [
+          {
+            matches = [ { "device.name" = "alsa_card.pci-0000_00_1f.3"; } ];
+            actions."update-props" = {
+              "device.profile" = "pro-audio";
+            };
+          }
+          {
+            matches = [ { "device.name" = "alsa_card.pci-0000_01_00.1"; } ];
+            actions."update-props" = {
+              "device.profile" = "off";
+            };
+          }
+        ];
+      };
+    };
+  };
+  services.pulseaudio.enable = false;
+
+  environment.systemPackages = with pkgs; [
+    alsa-utils
+    pavucontrol
+    pulseaudio
+  ];
+
+  home-manager.users.${config.hostCfg.username} =
+    { lib, ... }:
+    {
+      home.activation.seedC0r3AudioState = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+        ${pkgs.python3}/bin/python3 ${./scripts/seed-wireplumber-audio-state.py}
+      '';
+    };
 
   imports = lib.flatten [
     ./hm

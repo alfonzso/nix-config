@@ -19,6 +19,10 @@
       inputs.nixpkgs.follows = "nixpkgs_26_05";
       inputs.home-manager.follows = "home-manager_26_05";
     };
+    carelink-tui = {
+      url = "path:/home/alfonzso/workspace/home/carelink-tui";
+      inputs.nixpkgs.follows = "nixpkgs_26_05";
+    };
     nix-flatpak.url = "github:gmodena/nix-flatpak";
     sops_nix_26_05 = {
       url = "github:mic92/sops-nix";

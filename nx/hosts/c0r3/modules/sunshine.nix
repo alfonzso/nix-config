@@ -25,16 +25,24 @@
           After = [
             "graphical-session.target"
             "pipewire.service"
+            "pipewire-pulse.service"
+            "wireplumber.service"
             "xdg-desktop-portal.service"
             "xdg-desktop-portal-gnome.service"
           ];
           Wants = [
             "graphical-session.target"
             "pipewire.service"
+            "pipewire-pulse.service"
+            "wireplumber.service"
             "xdg-desktop-portal.service"
             "xdg-desktop-portal-gnome.service"
           ];
-          PartOf = [ "graphical-session.target" ];
+          PartOf = [
+            "graphical-session.target"
+            "pipewire.service"
+            "pipewire-pulse.service"
+          ];
         };
 
         Service = {

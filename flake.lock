@@ -1,5 +1,22 @@
 {
   "nodes": {
+    "carelink-tui": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs_26_05"
+        ]
+      },
+      "locked": {
+        "lastModified": 1782949971,
+        "narHash": "sha256-EmjX8vJmBkDgRfQCsDuagXjS5TRgSDgotM56MSQvseI=",
+        "path": "/home/alfonzso/workspace/home/carelink-tui",
+        "type": "path"
+      },
+      "original": {
+        "path": "/home/alfonzso/workspace/home/carelink-tui",
+        "type": "path"
+      }
+    },
     "disko": {
       "inputs": {
         "nixpkgs": "nixpkgs"
@@ -218,6 +235,7 @@
     },
     "root": {
       "inputs": {
+        "carelink-tui": "carelink-tui",
         "disko": "disko",
         "himmelblau": "himmelblau",
         "home-manager": "home-manager",
