@@ -20,7 +20,7 @@
       inputs.home-manager.follows = "home-manager_26_05";
     };
     carelink-tui = {
-      url = "git+ssh://git@github.com:alfonzso/carelink-tui.git?ref=main&shallow=1";
+      url = "git+ssh://git@github.com/alfonzso/carelink-tui.git?ref=main&shallow=1";
       inputs.nixpkgs.follows = "nixpkgs_26_05";
     };
     nix-flatpak.url = "github:gmodena/nix-flatpak";
