@@ -1,105 +1,156 @@
+# Agent-reviewed Restic excludes for /home/alfonzso.
+#
+# Goal: keep personal files, source code, configs, and small useful metadata;
+# skip caches, generated build outputs, package stores, VM images, and other
+# reproducible/heavy state.
 
-# Cache directories
-.cache/
-*.cache/
-**/cache/
-**/Cache/
-**/CacheData/**
-**/CachedData/**
+# Global cache and temporary directories
+**/.cache/**
+**/.compose-cache/**
+**/.tmp/**
+**/tmp/**
+**/.Trash/**
+**/.local/share/Trash/**
+**/.thumbnails/**
+**/.vim-tmp/**
+**/*~
+**/*.swp
+**/*.bak
+**/*.tmp
+
+# Browser and Electron caches
+**/.mozilla/firefox/*/cache2/**
+**/.mozilla/firefox/*/startupCache/**
+**/.config/google-chrome/OptGuideOnDeviceModel/**
+**/.config/google-chrome/optimization_guide_model_store/**
+**/.config/google-chrome/OnDeviceHeadSuggestModel/**
+**/.config/google-chrome/OptimizationHints/**
+**/.config/google-chrome/MEIPreload/**
+**/.config/google-chrome/WasmTtsEngine/**
+**/.config/google-chrome/segmentation_platform/**
+**/.config/google-chrome/Safe Browsing/**
+**/.config/google-chrome/**/AutofillAiModelCache/**
+**/.config/google-chrome/**/optimization_guide_hint_cache_store/**
+**/.config/google-chrome/**/Segmentation Platform/**
+**/.config/google-chrome/**/Cache/**
+**/.config/google-chrome/**/Code Cache/**
+**/.config/google-chrome/**/GPUCache/**
+**/.config/google-chrome/**/GrShaderCache/**
+**/.config/google-chrome/**/ShaderCache/**
+**/.config/chromium/**/Cache/**
+**/.config/chromium/**/Code Cache/**
+**/.config/chromium/**/GPUCache/**
+**/.config/microsoft-edge/**
 **/CacheStorage/**
-**/Extensions/**
-**/Index*DB/**
-**/Code/logs/**
+**/CachedData/**
+**/CacheData/**
+**/GPUCache/**
+**/GrShaderCache/**
+**/ShaderCache/**
+**/Code Cache/**
 
-# Temporary files
-.tmp/
-*.tmp/
-**/tmp/
-/tmp/
+# Desktop/search indexes and generated desktop metadata
+**/.local/share/baloo/**
+**/.local/share/RecentDocuments/**
+**/.local/share/recently-used.xbel
+**/.local/share/gvfs-metadata/**
+**/.local/share/klipper/**
+**/.local/share/kactivitymanagerd/**
+**/.local/share/user-places.xbel.tbcache
+**/.config/kwinoutputconfig.json
+**/.config/monitors.xml~
+**/.config/monitors.xml.bak
 
-# Browser caches and data
-.mozilla/firefox/*/cache2/
-.config/google-chrome/*/Cache/
-.config/chromium/*/Cache/
+# KDE/Qt/graphics caches
+**/.cache/ksycoca6_*
+**/.cache/plasma_theme_*.kcache
+**/.cache/mesa_shader_cache/**
+**/.cache/qtshadercache-*/**
+**/.cache/nvidia/**
+**/.nv/**
 
-# Development Stuffs
-node_modules/
-.venv/
-__pycache__/
-*.pyc
+# Editor/IDE caches and remote servers
+**/.vscode-server/**
+**/.cursor-server/**
+**/.local/share/nvim/**
+**/.local/state/nvim/**
+**/.cache/nvim/**
+**/nvim.headless.log
 
-# System garbage
-.Trash/
-.local/share/Trash/
-
-# Large media caches that we don't care about
-.thumbnails/
-
-# Junk from Windows Drives
-$RECYCLE.BIN/
-System\ Volume\ Information/
-
-
-**/venv/**
-**/.venv/**
+# Python
 **/__pycache__/**
-**/*.pyc
+**/*.py[cod]
 **/.pytest_cache/**
-
-# git
-# **/.git/*
-**/.git/*
-!**/.git/config
-
-# node
+**/.mypy_cache/**
+**/.ruff_cache/**
+**/.venv/**
+**/venv/**
 **/virtualenv/**
+**/.tox/**
+**/.nox/**
+
+# JavaScript / TypeScript / web builds
 **/node_modules/**
-**/.ansible/**
-**/.tldrc/**
 **/.npm/**
-**/.cargo/**
-**/.docker/buildx/**
+**/.pnpm-store/**
+**/.yarn/cache/**
+**/.next/**
+**/.nuxt/**
+**/.svelte-kit/**
+**/coverage/**
 **/dist/**
 **/build/**
 
-# caches, temporary
-**/.cache/**
-**/*.swp
-**/*~
-**/*.bak
+# Go / Rust / language build caches
+$HOME/go/**
+**/.cache/go-build/**
+**/target/**
 
-# VM/disks/databases (review before enabling)
+# Keep source repositories, but skip Git internals that are normally reproducible.
+**/.git/*
+!**/.git/config
+!**/.gitignore
+
+# Containers, VMs, and generated machine images
+**/.local/share/containers/storage/**
+**/.docker/buildx/**
+**/.config/libvirt/**
+**/VirtualBox VMs/**
+**/var/vm/**
+**/var/installer/**
+**/*.qcow2
 **/*.vdi
 **/*.vmdk
+**/*.vhd
+**/*.vhdx
 **/*.iso
 **/*.img
-**/*.sqlite3
-**/*.db
 
-# more ignoring ...
-**/.mypy_cache/**
-**/__dist__/**
-**/.ruff_cache/**
-**/.tmp/**
-**/tmp/**
-**/.vagrant/**
-**/.arduino15/**
-**/.config/intune/**
-**/.config/libvirt/**
-**/.config/microsoft-edge/**
+# Large app stores / reproducible package state
+**/.local/share/Steam/**
+**/.steam/**
+**/.local/share/bottles/**
+**/.local/share/flatpak/**
+**/.local/share/pipx/**
+**/.cargo/registry/**
+**/.cargo/git/**
 
+# Logs and crash dumps
+**/.cache/drkonqi/**
+**/.local/share/drkonqi/**
+**/.config/session/**
+**/*.log
+!**/.bash_eternal_history
 
-**/VirtualBox VMs
-# /home/alfoldi/go
-**/go/**
-**/snap
-**/share/containers/storage/**
+# Windows/foreign-drive junk
+**/$RECYCLE.BIN/**
+**/System Volume Information/**
+
+# Project-specific broken/generated bulky directories seen in this home
+**/.autodesk_fusion.broken-*/**
+**/fusion-wine-build/**
+**/fusion-wine-build.broken-*/**
+
+# Corporate/cloud sync folders that should be backed up elsewhere if needed
 **/NokiaOneDrive/**
 **/NokiaSharePoint/**
-**/.vagrant.d/**
-**/.vscode-server/**
-**/.vscode/**
-**/.local/share/nvim/**
-**/.local/state/nvim/**
-**/.local/share/pipx/**
-
