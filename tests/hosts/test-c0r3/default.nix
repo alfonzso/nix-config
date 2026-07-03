@@ -6,7 +6,7 @@
 }:
 {
   imports = [
-    ../../../nx/hosts/future-c0r3
+    ../../../nx/hosts/c0r3
     (modulesPath + "/profiles/qemu-guest.nix")
   ];
 

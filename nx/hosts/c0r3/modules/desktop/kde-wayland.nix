@@ -72,6 +72,17 @@ in
       programs.plasma = {
         enable = true;
 
+        workspace.wallpaper = "${config.home.homeDirectory}/${wallpaperPath}";
+
+        desktop.icons = {
+          alignment = "left";
+          arrangement = "topToBottom";
+          sorting = {
+            mode = "name";
+            foldersFirst = true;
+          };
+        };
+
         panels = [
           {
             location = "bottom";
@@ -154,12 +165,6 @@ in
           };
           kwinrc = {
             NightColor.Active = true;
-          };
-          "plasma-org.kde.plasma.desktop-appletsrc" = {
-            "Containments/1/Wallpaper/org.kde.image/General" = {
-              FillMode = 0;
-              Image = "file://${config.home.homeDirectory}/${wallpaperPath}";
-            };
           };
 
           powerdevilrc = {
