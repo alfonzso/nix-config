@@ -6,6 +6,7 @@ DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null && pwd)"
 #   scripts/_run_nx_any.sh zs00lt
 #   SSH_HOST=root@zs00lt-c0r3 scripts/_run_nx_any.sh c0r3
 #   PHASES=install SSH_HOST=root@zs00lt-c0r3 scripts/_run_nx_any.sh c0r3
+#   SSH_HOST=root@zs00lt-c0r3 scripts/_run_nx_any.sh c0r3 -build-host -target-host
 #
 # SSH_HOST defaults to admin@nix-<target>-iso.
 # PHASES defaults to kexec,disko,install, except c0r3 defaults to install.
@@ -31,12 +32,23 @@ _uptime_test=$(ssh $_ssh_host -- "uptime")
 	exit 1
 }
 
-if [[ -z "${PHASES:-}" && "$target" == "c0r3" ]]; then
-	_extras="install"
-else
-	_extras="kexec,disko,install"
-fi
+_extras="kexec,disko,install"
 extras="--phases ${PHASES:-$_extras}"
+nixos_anywhere_args=()
+
+for arg in "${@:2}"; do
+	case "$arg" in
+	-build-host | --build-host)
+		nixos_anywhere_args+=(--build-on-remote)
+		;;
+	-target-host | --target-host)
+		nixos_anywhere_args+=(--target-host "$_ssh_host")
+		;;
+	*)
+		nixos_anywhere_args+=("$arg")
+		;;
+	esac
+done
 
 keys_src_home="/home/${USER}/.config/sops/age/keys.txt"
 keys_src_persists="/persists/sops/age/keys.txt"
@@ -62,7 +74,7 @@ if ! rsync -avz --mkpath "$keys_src" "$keys_target"; then
 fi
 
 nix run github:numtide/nixos-anywhere -- \
-	--flake .#$target ${extras} --extra-files $root \
+	--flake .#$target ${extras} --extra-files $root "${nixos_anywhere_args[@]}" \
 	$_ssh_host
 
 echo "rm -r $root"
