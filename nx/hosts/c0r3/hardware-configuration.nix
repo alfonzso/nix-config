@@ -22,26 +22,6 @@
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot";
 
-  fileSystems."/" = {
-    device = "/dev/disk/by-uuid/c4925d85-a089-4df6-9cf3-73d859b683ed";
-    fsType = "ext4";
-  };
-
-  fileSystems."/mnt/windows-c" = {
-    device = "/dev/disk/by-label/C";
-    fsType = "ntfs3";
-    options = [
-      "noauto"
-      "nofail"
-      "ro"
-      "uid=1000"
-      "gid=100"
-      "umask=022"
-      "users"
-      "windows_names"
-    ];
-  };
-
   swapDevices = [
     {
       device = "/swapfile";

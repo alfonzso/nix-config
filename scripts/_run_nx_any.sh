@@ -2,7 +2,13 @@
 set -euo pipefail
 
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null && pwd)"
-# ws=$DIR/../
+# Examples:
+#   scripts/_run_nx_any.sh zs00lt
+#   SSH_HOST=root@zs00lt-c0r3 scripts/_run_nx_any.sh c0r3
+#   PHASES=install SSH_HOST=root@zs00lt-c0r3 scripts/_run_nx_any.sh c0r3
+#
+# SSH_HOST defaults to admin@nix-<target>-iso.
+# PHASES defaults to kexec,disko,install, except c0r3 defaults to install.
 ws=$(realpath $DIR/../)
 
 target=$1
@@ -33,20 +39,16 @@ fi
 extras="--phases ${PHASES:-$_extras}"
 
 keys_src_home="/home/${USER}/.config/sops/age/keys.txt"
-keys_src_persist="/persist/sops/age/keys.txt"
 keys_src_persists="/persists/sops/age/keys.txt"
 
 if [[ -f "$keys_src_home" ]]; then
 	keys_src="$keys_src_home"
-elif [[ -f "$keys_src_persist" ]]; then
-	keys_src="$keys_src_persist"
 elif [[ -f "$keys_src_persists" ]]; then
 	keys_src="$keys_src_persists"
 else
 	echo "Cannot find sops age key."
 	echo "Checked:"
 	echo "  $keys_src_home"
-	echo "  $keys_src_persist"
 	echo "  $keys_src_persists"
 	exit 1
 fi
