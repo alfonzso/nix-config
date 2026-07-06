@@ -68,6 +68,12 @@ in {
     options zfs zfs_txg_timeout=300
   '';
 
+  services.zfs.autoScrub = {
+    enable = true;
+    pools = [ "rpool" "securepool" "fastpool" ];
+    interval = "monthly";
+  };
+
   disko.rootMountPoint = "/mnt";
 
   disko.devices = {
@@ -249,11 +255,6 @@ in {
               recordsize = "64K";
             };
           };
-          nix = {
-            type = "zfs_fs";
-            mountpoint = "/nix";
-            options = zfsCommon // { mountpoint = "legacy"; };
-          };
         };
       };
 
@@ -317,6 +318,11 @@ in {
           home = {
             type = "zfs_fs";
             mountpoint = "/home";
+            options = zfsCommon;
+          };
+          nix = {
+            type = "zfs_fs";
+            mountpoint = "/nix";
             options = zfsCommon;
           };
         };
