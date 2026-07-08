@@ -325,6 +325,23 @@ in {
             mountpoint = "/nix";
             options = zfsCommon;
           };
+          swap = {
+            type = "zfs_volume";
+            size = "8G";
+            content = {
+              type = "swap";
+              mountOptions = [ "defaults" "nofail" ];
+            };
+            options = {
+              volblocksize = "4096";
+              compression = "zle";
+              logbias = "throughput";
+              sync = "always";
+              primarycache = "metadata";
+              secondarycache = "none";
+              "com.sun:auto-snapshot" = "false";
+            };
+          };
         };
       };
     };
