@@ -1,7 +1,18 @@
-{ pkgs, ... }: {
+{ pkgs, ... }:
+let
+  # Generated with https://edid.build/ using 1080p + LPCM audio support.
+  c0r3AudioEdid = pkgs.runCommand "c0r3-1080p-audio-edid" { } ''
+    mkdir -p "$out/lib/firmware/edid"
+    cp ${../../firmware/edid/1920x1080-audio.bin} "$out/lib/firmware/edid/1920x1080-audio.bin"
+  '';
+in
+{
   services.xserver.videoDrivers = [ "nvidia" ];
 
-  hardware.firmware = [ pkgs.edid-generator ];
+  hardware.firmware = [
+    pkgs.edid-generator
+    c0r3AudioEdid
+  ];
 
   hardware.graphics = {
     enable = true;
@@ -28,8 +39,9 @@
 
   boot.kernelParams = [
     "nvidia-drm.modeset=1"
-    # Force HDMI on with a generic 1080p EDID so headless streaming has a real mode.
-    "drm.edid_firmware=HDMI-A-1:edid/1920x1080.bin"
+    # Force HDMI on with an audio-capable 1080p EDID so local monitor-jack
+    # audio and headless Sunshine can use the same connector.
+    "drm.edid_firmware=HDMI-A-1:edid/1920x1080-audio.bin"
     "video=HDMI-A-1:1920x1080@60e"
   ];
 

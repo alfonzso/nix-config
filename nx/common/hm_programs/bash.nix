@@ -66,7 +66,6 @@ in {
         # source <(rclone completion bash)
 
         source ${gitPrompt}
-        eval "$(starship init bash)"
       '';
     };
   };

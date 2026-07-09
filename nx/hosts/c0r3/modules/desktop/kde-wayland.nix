@@ -77,8 +77,9 @@ in
         desktop.icons = {
           alignment = "left";
           arrangement = "topToBottom";
+          size = 0;
           sorting = {
-            mode = "name";
+            mode = "manual";
             foldersFirst = true;
           };
         };
@@ -86,6 +87,7 @@ in
         panels = [
           {
             location = "bottom";
+            height = 36;
             widgets = [
               "org.kde.plasma.kickoff"
               "org.kde.plasma.pager"

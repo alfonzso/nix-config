@@ -28,6 +28,7 @@
     nodejs_24
 
     # Desktop applications
+    code-cursor
     gimp
     google-chrome
     signal-desktop

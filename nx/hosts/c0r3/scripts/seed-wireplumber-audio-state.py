@@ -4,7 +4,7 @@ from pathlib import Path
 STATE_DIR = Path.home() / ".local/state/wireplumber"
 
 
-def set_values(path, section, updates):
+def set_values(path, section, updates, remove_keys=(), remove_prefixes=()):
     if path.exists():
         lines = path.read_text().splitlines()
     else:
@@ -31,6 +31,22 @@ def set_values(path, section, updates):
         if sep:
             existing[key] = idx
 
+    remove_indexes = sorted((
+        idx
+        for key, idx in existing.items()
+        if key in remove_keys
+        or any(key.startswith(prefix) for prefix in remove_prefixes)
+    ), reverse=True)
+    for idx in remove_indexes:
+        del lines[idx]
+        end -= 1
+
+    existing = {}
+    for idx in range(start + 1, end):
+        key, sep, _ = lines[idx].partition("=")
+        if sep:
+            existing[key] = idx
+
     for key, value in updates.items():
         line = f"{key}={value}"
         if key in existing:
@@ -50,16 +66,15 @@ def main():
         "default-profile",
         {
             "alsa_card.pci-0000_00_1f.3": "pro-audio",
-            "alsa_card.pci-0000_01_00.1": "off",
         },
+        remove_keys=("alsa_card.pci-0000_01_00.1",),
     )
 
     set_values(
         STATE_DIR / "default-nodes",
         "default-nodes",
-        {
-            "default.configured.audio.sink": "alsa_output.pci-0000_00_1f.3.pro-output-0",
-        },
+        {},
+        remove_prefixes=("default.configured.audio.sink",),
     )
 
 
