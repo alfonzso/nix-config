@@ -327,7 +327,7 @@ in {
           };
           swap = {
             type = "zfs_volume";
-            size = "8G";
+            size = "16G";
             content = {
               type = "swap";
               mountOptions = [ "defaults" "nofail" ];
