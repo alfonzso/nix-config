@@ -24,6 +24,7 @@
   };
 
   environment.systemPackages = with pkgs; [
+    podman-compose
     qemu
     swtpm
     virt-viewer

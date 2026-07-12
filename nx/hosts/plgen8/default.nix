@@ -10,6 +10,7 @@ in {
 
     ./modules/disko.nix
     ./modules/k8s.nix
+    ./modules/palworld.nix
     ./modules/sops.nix
     ./modules/samba.nix
 
