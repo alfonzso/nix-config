@@ -1,9 +1,8 @@
-{ config, lib, ProjectRoot, ... }:
+{ config, lib, ... }:
 let
   hostCfg = config.hostCfg;
   homeDir = "/home/${hostCfg.username}";
   vimTMP = "${homeDir}/.vim-tmp";
-  _hm_programs = ProjectRoot + "/nx/common/hm_programs";
 
 in {
   systemd.user.tmpfiles.rules =

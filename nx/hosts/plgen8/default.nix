@@ -1,11 +1,12 @@
-{ config, lib, ProjectRoot, ... }:
+{ config, currentConfigName, inputs, lib, ProjectRoot, ... }:
 let
   _common = ProjectRoot + "/nx/common";
   _activations = _common + "/activations";
 in {
   imports = lib.flatten [
 
-    ./hm
+    (builtins.getAttr currentConfigName
+      inputs.home-manager-config.homeManagerModules.hosts)
     "${_common}/hm"
 
     ./modules/disko.nix

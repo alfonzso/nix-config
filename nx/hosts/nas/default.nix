@@ -1,14 +1,17 @@
-{ config, lib, ProjectRoot, ... }:
+{ config, currentConfigName, inputs, lib, ProjectRoot, ... }:
 let
   _common = ProjectRoot + "/nx/common";
   _desktop = ProjectRoot + "/nx/desktop";
   _activations = _common + "/activations";
 in {
 
-  users.users.${config.hostCfg.username} = { extraGroups = [ "${config.hostCfg.nasGroup}" ]; };
+  users.users.${config.hostCfg.username} = {
+    extraGroups = [ "${config.hostCfg.nasGroup}" ];
+  };
 
   imports = lib.flatten [
-    ./hm
+    (builtins.getAttr currentConfigName
+      inputs.home-manager-config.homeManagerModules.hosts)
     "${_common}/hm"
 
     ./hardware-configuration.nix
@@ -32,7 +35,7 @@ in {
     "${_common}/nix/config_nix.nix"
     "${_common}/nix/env_sys_pack.nix"
 
-    "${_common}/networking/networking.nix"
+    "${_common}/networking"
     "${_common}/networking/ssh.nix"
 
     "${_common}/_virtualisation.nix"

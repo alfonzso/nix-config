@@ -22,6 +22,24 @@
         "url": "ssh://git@github.com/alfonzso/carelink-tui.git"
       }
     },
+    "catppuccin": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_2"
+      },
+      "locked": {
+        "lastModified": 1783500374,
+        "narHash": "sha256-a1BtX5sbb7ZwDRgD5/WtPQpU0f9cw3F5KLmSmkcZFzI=",
+        "owner": "catppuccin",
+        "repo": "nix",
+        "rev": "d88e830b7bff7a591a49d031f6895312c15c27b1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "catppuccin",
+        "repo": "nix",
+        "type": "github"
+      }
+    },
     "disko": {
       "inputs": {
         "nixpkgs": "nixpkgs"
@@ -81,6 +99,33 @@
         "type": "github"
       }
     },
+    "home-manager-config": {
+      "inputs": {
+        "catppuccin": "catppuccin",
+        "home-manager": [
+          "home-manager"
+        ],
+        "nix-secrets": [
+          "nix-secrets"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "sops-nix": [
+          "sops-nix"
+        ]
+      },
+      "locked": {
+        "lastModified": 1783949716,
+        "narHash": "sha256-NAyr6la8EWkv3a9fYFQPhfN+afefKR45ndFE085U0oM=",
+        "path": "/home/alfoldi/workspace/home/nix/home-manager",
+        "type": "path"
+      },
+      "original": {
+        "path": "/home/alfoldi/workspace/home/nix/home-manager",
+        "type": "path"
+      }
+    },
     "home-manager_26_05": {
       "inputs": {
         "nixpkgs": [
@@ -119,7 +164,7 @@
     },
     "nix-secrets": {
       "inputs": {
-        "nixpkgs": "nixpkgs_2"
+        "nixpkgs": "nixpkgs_3"
       },
       "locked": {
         "lastModified": 1782233047,
@@ -155,16 +200,15 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1764947035,
-        "narHash": "sha256-EYHSjVM4Ox4lvCXUMiKKs2vETUSL5mx+J2FfutM7T9w=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "a672be65651c80d3f592a89b3945466584a22069",
-        "type": "github"
+        "lastModified": 1782918843,
+        "narHash": "sha256-mFP086y1bNA1g9AsY/pCue3H3W2R7ayroHyRbZrcMf0=",
+        "rev": "e8273b29fe1390ec8d4603f2477357555291432e",
+        "type": "tarball",
+        "url": "https://releases.nixos.org/nixpkgs/nixpkgs-26.11pre1025900.e8273b29fe13/nixexprs.tar.xz"
       },
       "original": {
-        "id": "nixpkgs",
-        "type": "indirect"
+        "type": "tarball",
+        "url": "https://channels.nixos.org/nixpkgs-unstable/nixexprs.tar.xz"
       }
     },
     "nixpkgs_26_05": {
@@ -185,6 +229,20 @@
     },
     "nixpkgs_3": {
       "locked": {
+        "lastModified": 1764947035,
+        "narHash": "sha256-EYHSjVM4Ox4lvCXUMiKKs2vETUSL5mx+J2FfutM7T9w=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "a672be65651c80d3f592a89b3945466584a22069",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "type": "indirect"
+      }
+    },
+    "nixpkgs_4": {
+      "locked": {
         "lastModified": 1782847189,
         "narHash": "sha256-twXPFqFsrrY5r28Zh7Homgcp2gUMBgQ6WDS98Q/3xFI=",
         "owner": "nixos",
@@ -199,7 +257,7 @@
         "type": "github"
       }
     },
-    "nixpkgs_4": {
+    "nixpkgs_5": {
       "locked": {
         "lastModified": 1775888245,
         "narHash": "sha256-nwASzrRDD1JBEu/o8ekKYEXm/oJW6EMCzCRdrwcLe90=",
@@ -244,10 +302,11 @@
         "disko": "disko",
         "himmelblau": "himmelblau",
         "home-manager": "home-manager",
+        "home-manager-config": "home-manager-config",
         "home-manager_26_05": "home-manager_26_05",
         "nix-flatpak": "nix-flatpak",
         "nix-secrets": "nix-secrets",
-        "nixpkgs": "nixpkgs_3",
+        "nixpkgs": "nixpkgs_4",
         "nixpkgs_26_05": "nixpkgs_26_05",
         "plasma-manager": "plasma-manager",
         "sops-nix": "sops-nix",
@@ -256,7 +315,7 @@
     },
     "sops-nix": {
       "inputs": {
-        "nixpkgs": "nixpkgs_4"
+        "nixpkgs": "nixpkgs_5"
       },
       "locked": {
         "lastModified": 1783104586,

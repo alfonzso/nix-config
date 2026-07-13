@@ -1,4 +1,4 @@
-{ lib, ProjectRoot, ... }:
+{ currentConfigName, inputs, lib, ProjectRoot, ... }:
 let
   _common = ProjectRoot + "/nx/common";
   _desktop = ProjectRoot + "/nx/desktop";
@@ -8,7 +8,8 @@ in {
   system.stateVersion = "25.05";
 
   imports = lib.flatten [
-    ./hm
+    (builtins.getAttr currentConfigName
+      inputs.home-manager-config.homeManagerModules.hosts)
     "${_common}/hm"
 
     ./modules/disko.nix

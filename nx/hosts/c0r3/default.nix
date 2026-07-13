@@ -1,40 +1,27 @@
-{
-  config,
-  lib,
-  pkgs,
-  ProjectRoot,
-  ...
-}:
+{ config, currentConfigName, inputs, lib, pkgs, ProjectRoot, ... }:
 let
   _common = ProjectRoot + "/nx/common";
   _activations = _common + "/activations";
-in
-{
+in {
   system.stateVersion = "25.11";
 
   boot.loader.systemd-boot.configurationLimit = 5;
 
-  users.users.${config.hostCfg.username}.extraGroups = [
-    "audio"
-    "input"
-    "networkmanager"
-    "render"
-    "video"
-  ];
+  users.users.${config.hostCfg.username}.extraGroups =
+    [ "audio" "input" "networkmanager" "render" "video" ];
+
+  home-manager.users.${config.hostCfg.username}.imports =
+    [ inputs.plasma-manager.homeModules.plasma-manager ];
 
   security.rtkit.enable = true;
 
-  security.sudo.extraRules = [
-    {
-      users = [ config.hostCfg.username ];
-      commands = [
-        {
-          command = "ALL";
-          options = [ "NOPASSWD" ];
-        }
-      ];
-    }
-  ];
+  security.sudo.extraRules = [{
+    users = [ config.hostCfg.username ];
+    commands = [{
+      command = "ALL";
+      options = [ "NOPASSWD" ];
+    }];
+  }];
 
   services.pipewire = {
     enable = true;
@@ -46,24 +33,16 @@ in
     wireplumber = {
       enable = true;
       extraConfig."99-c0r3-audio-profile" = {
-        "monitor.alsa.rules" = [
-          {
-            matches = [ { "device.name" = "alsa_card.pci-0000_00_1f.3"; } ];
-            actions."update-props" = {
-              "device.profile" = "pro-audio";
-            };
-          }
-        ];
+        "monitor.alsa.rules" = [{
+          matches = [{ "device.name" = "alsa_card.pci-0000_00_1f.3"; }];
+          actions."update-props" = { "device.profile" = "pro-audio"; };
+        }];
       };
     };
   };
   services.pulseaudio.enable = false;
 
-  environment.systemPackages = with pkgs; [
-    alsa-utils
-    pavucontrol
-    pulseaudio
-  ];
+  environment.systemPackages = with pkgs; [ alsa-utils pavucontrol pulseaudio ];
 
   # Legacy audio recovery workarounds, kept here for quick rollback/debugging.
   #
@@ -99,7 +78,8 @@ in
   # };
 
   imports = lib.flatten [
-    ./hm
+    (builtins.getAttr currentConfigName
+      inputs.home-manager-config.homeManagerModules.hosts)
 
     "${_common}/hm"
 
