@@ -123,11 +123,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1784041095,
-        "narHash": "sha256-CRAKYAEj71n7PR80VmWsiEe4SVHzPh+EXxA+isb3c6k=",
+        "lastModified": 1784045001,
+        "narHash": "sha256-7aVvFGs56ggTFERprqAJ9ilzmiB4cTkHakpAHb2mEPY=",
         "ref": "main",
-        "rev": "09afad1678954ca90ade282e8a17bfad2900ba70",
-        "revCount": 120,
+        "rev": "f545cb37e68bcb6c477806c96dd4adf1f018d0d9",
+        "revCount": 121,
         "type": "git",
         "url": "ssh://git@github.com/alfonzso/home-manager.git"
       },
