@@ -116,14 +116,18 @@
         ]
       },
       "locked": {
-        "lastModified": 1783949716,
-        "narHash": "sha256-NAyr6la8EWkv3a9fYFQPhfN+afefKR45ndFE085U0oM=",
-        "path": "/home/alfoldi/workspace/home/nix/home-manager",
-        "type": "path"
+        "lastModified": 1783971941,
+        "narHash": "sha256-MVrTgmltNZJSNd6AXNtwI/ORSz8UQ7cNO+VHiyjpeaE=",
+        "ref": "dev/merge-home-manager",
+        "rev": "a28944319cd6fc2a7521c4b756c557dd7c6d3d4c",
+        "revCount": 110,
+        "type": "git",
+        "url": "ssh://git@github.com/alfonzso/home-manager.git"
       },
       "original": {
-        "path": "/home/alfoldi/workspace/home/nix/home-manager",
-        "type": "path"
+        "ref": "dev/merge-home-manager",
+        "type": "git",
+        "url": "ssh://git@github.com/alfonzso/home-manager.git"
       }
     },
     "home-manager_26_05": {
