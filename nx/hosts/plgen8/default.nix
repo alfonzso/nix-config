@@ -40,4 +40,10 @@ in {
 
   nix.settings.trusted-users = [ "cube" ];
 
+  zramSwap = {
+    enable = true;
+    algorithm = "zstd";
+    memoryPercent = 50;
+  };
+
 }

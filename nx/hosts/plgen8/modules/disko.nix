@@ -63,6 +63,8 @@ in {
 
   environment.systemPackages = with pkgs; [ zfs ];
 
+  boot.zfs.forceImportRoot = false;
+
   # ZFS tuning for less HDD noise
   boot.extraModprobeConfig = ''
     options zfs zfs_txg_timeout=300
@@ -324,23 +326,6 @@ in {
             type = "zfs_fs";
             mountpoint = "/nix";
             options = zfsCommon;
-          };
-          swap = {
-            type = "zfs_volume";
-            size = "16G";
-            content = {
-              type = "swap";
-              mountOptions = [ "defaults" "nofail" ];
-            };
-            options = {
-              volblocksize = "4096";
-              compression = "zle";
-              logbias = "throughput";
-              sync = "always";
-              primarycache = "metadata";
-              secondarycache = "none";
-              "com.sun:auto-snapshot" = "false";
-            };
           };
         };
       };
