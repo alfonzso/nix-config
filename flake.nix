@@ -1,41 +1,33 @@
 {
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
     # nixpkgs.url = "github:nixos/nixpkgs/master";
     disko.url = "github:nix-community/disko";
     sops-nix.url = "github:mic92/sops-nix";
     home-manager = {
-      url = "github:nix-community/home-manager/release-25.11";
+      url = "github:nix-community/home-manager/release-26.05";
       # url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     home-manager-config = {
-      url = "git+ssh://git@github.com/alfonzso/home-manager.git?ref=dev/merge-home-manager";
+      url = "git+ssh://git@github.com/alfonzso/home-manager.git?ref=main";
       inputs.home-manager.follows = "home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs-prettier.follows = "nixpkgs";
       inputs.nix-secrets.follows = "nix-secrets";
       inputs.sops-nix.follows = "sops-nix";
     };
-    nixpkgs_26_05.url = "github:nixos/nixpkgs/nixos-26.05";
-    home-manager_26_05 = {
-      url = "github:nix-community/home-manager/release-26.05";
-      inputs.nixpkgs.follows = "nixpkgs_26_05";
-    };
     plasma-manager = {
       url = "github:nix-community/plasma-manager";
-      inputs.nixpkgs.follows = "nixpkgs_26_05";
-      inputs.home-manager.follows = "home-manager_26_05";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
     };
     carelink-tui = {
       url =
         "git+ssh://git@github.com/alfonzso/carelink-tui.git?ref=main&shallow=1";
-      inputs.nixpkgs.follows = "nixpkgs_26_05";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-flatpak.url = "github:gmodena/nix-flatpak";
-    sops_nix_26_05 = {
-      url = "github:mic92/sops-nix";
-      inputs.nixpkgs.follows = "nixpkgs_26_05";
-    };
     nix-secrets = {
       url =
         "git+ssh://git@github.com/alfonzso/nix-secrets.git?ref=main&shallow=1";
