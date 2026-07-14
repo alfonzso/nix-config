@@ -5,6 +5,15 @@ let
 in {
   system.stateVersion = "25.11";
 
+  nixpkgs.overlays = [
+    (final: _prev: {
+      prettier = (import inputs.nixpkgs_25_11 {
+        system = final.stdenv.hostPlatform.system;
+        config.allowUnfree = true;
+      }).prettier;
+    })
+  ];
+
   boot.loader.systemd-boot.configurationLimit = 5;
 
   users.users.${config.hostCfg.username}.extraGroups =

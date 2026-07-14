@@ -1,6 +1,7 @@
 {
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
+    nixpkgs_25_11.url = "github:nixos/nixpkgs/nixos-25.11";
     # nixpkgs.url = "github:nixos/nixpkgs/master";
     disko.url = "github:nix-community/disko";
     sops-nix.url = "github:mic92/sops-nix";
@@ -13,7 +14,7 @@
       url = "git+ssh://git@github.com/alfonzso/home-manager.git?ref=main";
       inputs.home-manager.follows = "home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nixpkgs-prettier.follows = "nixpkgs";
+      inputs.nixpkgs-prettier.follows = "nixpkgs_25_11";
       inputs.nix-secrets.follows = "nix-secrets";
       inputs.sops-nix.follows = "sops-nix";
     };
