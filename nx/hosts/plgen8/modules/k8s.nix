@@ -49,6 +49,7 @@ in {
   # Auto-install Flux after k3s starts
   systemd.services.flux-install = {
     description = "Install FluxCD";
+    requires = [ "k3s.service" ];
     after = [ "k3s.service" ];
     wantedBy = [ "multi-user.target" ];
     path = [ pkgs.k3s pkgs.fluxcd ];
@@ -57,6 +58,7 @@ in {
       RemainAfterExit = true;
       Environment = "KUBECONFIG=/etc/rancher/k3s/k3s.yaml";
       EnvironmentFile = config.sops.templates.FLUXCD_ENV.path;
+      TimeoutStartSec = "5min";
     };
     script = ''
       # Wait for k3s to be ready
