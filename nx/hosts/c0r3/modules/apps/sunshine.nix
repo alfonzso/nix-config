@@ -3,17 +3,25 @@
   pkgs,
   ...
 }:
+let
+  sunshineSettings = {
+    # KWin/PipeWire capture can stop producing video frames while audio and
+    # input continue. KMS avoids that capture path.
+    capture = "kms";
+  };
+  sunshineConfig = (pkgs.formats.keyValue { }).generate "sunshine.conf" sunshineSettings;
+in
 {
   services.sunshine = {
     enable = true;
     autoStart = false;
     capSysAdmin = true;
     openFirewall = true;
+    settings = sunshineSettings;
     package = pkgs.sunshine.override {
       cudaSupport = true;
       cudaPackages = pkgs.cudaPackages;
     };
-    # settings.output_name = "Meta-0";
   };
 
   home-manager.users.${config.hostCfg.username} =
@@ -47,7 +55,7 @@
 
         Service = {
           ExecStartPre = "${pkgs.coreutils}/bin/sleep 10";
-          ExecStart = "/run/wrappers/bin/sunshine";
+          ExecStart = "/run/wrappers/bin/sunshine ${sunshineConfig}";
           Restart = "on-failure";
           RestartSec = "5s";
         };
