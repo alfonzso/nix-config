@@ -1,6 +1,5 @@
 {
   config,
-  lib,
   pkgs,
   ...
 }:
@@ -17,6 +16,18 @@ let
     }
   );
 
+  seedTransmissionSettings = pkgs.writeShellScript "seed-transmission-settings" ''
+    settings_dir="/home/${username}/.config/transmission"
+    settings_file="$settings_dir/settings.json"
+
+    ${pkgs.coreutils}/bin/install -d -m 0700 "/home/${username}/Downloads"
+    if [ ! -e "$settings_file" ]; then
+      ${pkgs.coreutils}/bin/install -d -m 0700 "$settings_dir"
+      ${pkgs.coreutils}/bin/install -m 0600 \
+        ${transmissionSettings} "$settings_file"
+    fi
+  '';
+
   guardedTransmission = pkgs.symlinkJoin {
     name = "transmission-gtk-guarded";
     paths = [ pkgs.transmission_4-gtk ];
@@ -29,7 +40,7 @@ let
 in
 {
   home-manager.users.${username} =
-    { lib, ... }:
+    { ... }:
     {
       home.packages = [ guardedTransmission ];
 
@@ -40,22 +51,12 @@ in
           PartOf = [ "graphical-session.target" ];
         };
         Service = {
+          ExecStartPre = seedTransmissionSettings;
           ExecStart = "${guardedTransmission}/bin/transmission-gtk --minimized";
           Restart = "on-failure";
           RestartSec = "5s";
         };
         Install.WantedBy = [ "graphical-session.target" ];
       };
-
-      home.activation.seedTransmissionSettings = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-        settings_dir="$HOME/.config/transmission"
-        settings_file="$settings_dir/settings.json"
-        ${pkgs.coreutils}/bin/install -d -m 0700 "$HOME/Downloads"
-        if [ ! -e "$settings_file" ]; then
-          ${pkgs.coreutils}/bin/install -d -m 0700 "$settings_dir"
-          ${pkgs.coreutils}/bin/install -m 0600 \
-            ${transmissionSettings} "$settings_file"
-        fi
-      '';
     };
 }
