@@ -29,6 +29,7 @@ in
       "input"
       "networkmanager"
       "render"
+      "uinput"
       "video"
     ];
   };
