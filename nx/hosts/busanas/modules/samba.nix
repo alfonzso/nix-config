@@ -11,8 +11,9 @@ in
 {
   imports = [
     (common + "/fileshare/samba.nix")
-    ./sops.nix
   ];
+
+  sops.secrets.samba_user_pwd.owner = config.hostCfg.username;
 
   services.samba = {
     openFirewall = lib.mkForce false;

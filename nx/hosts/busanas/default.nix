@@ -69,14 +69,16 @@ in
     ./modules/packages.nix
     ./modules/samba.nix
     ./modules/sunshine.nix
+    ./modules/transmission.nix
 
     ./hardware-configuration.nix
     ./_global_host_config.nix
 
-    "${activations}/manage_ssh.nix"
+    # busa hosts is my friend machine so dont need my private stuff
+    # "${activations}/manage_ssh.nix"
 
     "${common}/sops"
-    "${common}/sops/ssh.nix"
+    # "${common}/sops/ssh.nix"
     "${common}/sops/wifi.nix"
 
     "${common}/nix/common.nix"

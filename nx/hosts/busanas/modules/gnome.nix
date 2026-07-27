@@ -6,11 +6,11 @@
 }:
 let
   username = config.hostCfg.username;
-  busanasEdid = pkgs.runCommand "busanas-1080p-audio-edid" { } ''
-    mkdir -p "$out/lib/firmware/edid"
-    cp ${../../c0r3/firmware/edid/1920x1080-audio.bin} \
-      "$out/lib/firmware/edid/1920x1080-audio.bin"
-  '';
+  # busanasEdid = pkgs.runCommand "busanas-1080p-audio-edid" { } ''
+  #   mkdir -p "$out/lib/firmware/edid"
+  #   cp ${../../c0r3/firmware/edid/1920x1080-audio.bin} \
+  #     "$out/lib/firmware/edid/1920x1080-audio.bin"
+  # '';
 in
 {
   imports = [ (ProjectRoot + "/nx/desktop/gnome.gdm.nix") ];
@@ -46,11 +46,11 @@ in
   };
   services.pulseaudio.enable = false;
 
-  hardware.firmware = [ busanasEdid ];
-  boot.kernelParams = [
-    "drm.edid_firmware=HDMI-A-1:edid/1920x1080-audio.bin"
-    "video=HDMI-A-1:1920x1080@60e"
-  ];
+  # hardware.firmware = [ busanasEdid ];
+  # boot.kernelParams = [
+  #   "drm.edid_firmware=HDMI-A-1:edid/1920x1080-audio.bin"
+  #   "video=HDMI-A-1:1920x1080@60e"
+  # ];
 
   home-manager.users.${username}.dconf = {
     enable = true;
