@@ -58,9 +58,15 @@ in
   home-manager.users.${username} =
     { lib, ... }:
     {
+      home.packages = [ pkgs.gnomeExtensions.appindicator ];
+
       dconf = {
         enable = true;
         settings = {
+          "org/gnome/shell".enabled-extensions = lib.mkForce [
+            pkgs.gnomeExtensions.dash-to-panel.extensionUuid
+            pkgs.gnomeExtensions.appindicator.extensionUuid
+          ];
           "org/gnome/desktop/input-sources".sources = [
             (lib.hm.gvariant.mkTuple [
               "xkb"
