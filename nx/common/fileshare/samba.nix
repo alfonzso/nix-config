@@ -1,4 +1,4 @@
-{ config, pkgs, ... }: {
+{ config, lib, pkgs, ... }: {
 
   # Enable Samba service
   services.samba = {
@@ -62,7 +62,7 @@
 
       # added || true cuz when installed with nx anywhere its fails and
       # breaks the whole install process
-      printf "$pass_to_shell\n$pass_to_shell\n" | ${pkgs.samba}/bin/smbpasswd -a -s ${user} || true
+      printf '%s\n%s\n' "$pass_to_shell" "$pass_to_shell" | ${pkgs.samba}/bin/smbpasswd -a -s ${user} || true
     '';
     deps = [ "users" "groups" "setupSecrets" ];
   };
