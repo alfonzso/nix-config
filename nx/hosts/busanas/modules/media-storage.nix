@@ -8,9 +8,15 @@ let
   group = config.hostCfg.nasGroup;
 in
 {
+  systemd.tmpfiles.rules = [ "d /srv/media 0755 root root -" ];
+
   systemd.services.busanas-media-permissions = {
     description = "Prepare the mounted busanas media filesystem";
-    wantedBy = [ "multi-user.target" ];
+    wantedBy = [
+      "multi-user.target"
+      "srv-media.mount"
+    ];
+    bindsTo = [ "srv-media.mount" ];
     after = [ "srv-media.mount" ];
     requires = [ "srv-media.mount" ];
     unitConfig.ConditionPathIsMountPoint = "/srv/media";

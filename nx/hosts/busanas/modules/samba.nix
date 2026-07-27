@@ -49,6 +49,8 @@ in
   };
 
   systemd.services.samba-smbd = {
+    wantedBy = [ "srv-media.mount" ];
+    bindsTo = [ "srv-media.mount" ];
     after = [
       "srv-media.mount"
       "busanas-media-permissions.service"

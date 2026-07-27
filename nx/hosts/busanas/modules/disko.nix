@@ -64,6 +64,8 @@ in
               "defaults"
               "nofail"
               "noatime"
+              "x-systemd.automount"
+              "x-systemd.device-bound"
               "x-systemd.device-timeout=10s"
             ];
           };
