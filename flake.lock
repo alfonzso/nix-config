@@ -123,11 +123,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1785180618,
-        "narHash": "sha256-9myyzi1LGHbp5/SAP5m796NzNvvuZSeiioDb2X1/ZmI=",
+        "lastModified": 1785182194,
+        "narHash": "sha256-j0AHjUFvKicFJlzdDuvd0K4ySD5jDJZBPk8lih31C+M=",
         "ref": "main",
-        "rev": "6874fbce81ddff2d1c18e7708a6010d99243dfad",
-        "revCount": 125,
+        "rev": "8c4ec7816d9c439078496a56a734c38a7ba4bee2",
+        "revCount": 126,
         "type": "git",
         "url": "ssh://git@github.com/alfonzso/home-manager.git"
       },
@@ -157,10 +157,10 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1785173902,
-        "narHash": "sha256-559wteUNgzKaeSI9fJNT2kuuQEFXtO1FkqVIKikChoo=",
+        "lastModified": 1785182677,
+        "narHash": "sha256-MUJw4co7P7VN5OhxzHe5cm7PPkB/mSMfOfIZlcuX6vs=",
         "ref": "main",
-        "rev": "23667c7babb595be853633d8127273761a0d2151",
+        "rev": "c97f29b8823f23a8957bd75bb42d1211c406c458",
         "shallow": true,
         "type": "git",
         "url": "ssh://git@github.com/alfonzso/nix-secrets.git"

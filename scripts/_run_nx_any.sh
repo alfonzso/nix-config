@@ -51,17 +51,17 @@ for arg in "${@:2}"; do
 done
 
 keys_src_home="/home/${USER}/.config/sops/age/keys.txt"
-keys_src_persists="/persists/sops/age/keys.txt"
+keys_src_persist="/persist/sops/age/keys.txt"
 
 if [[ -f "$keys_src_home" ]]; then
 	keys_src="$keys_src_home"
-elif [[ -f "$keys_src_persists" ]]; then
-	keys_src="$keys_src_persists"
+elif [[ -f "$keys_src_persist" ]]; then
+	keys_src="$keys_src_persist"
 else
 	echo "Cannot find sops age key."
 	echo "Checked:"
 	echo "  $keys_src_home"
-	echo "  $keys_src_persists"
+	echo "  $keys_src_persist"
 	exit 1
 fi
 

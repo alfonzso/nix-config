@@ -54,6 +54,7 @@ in
       content = {
         type = "gpt";
         partitions.media = {
+          label = "media";
           size = "100%";
           content = {
             type = "filesystem";
