@@ -15,6 +15,9 @@ in
 {
   imports = [ (ProjectRoot + "/nx/desktop/gnome.gdm.nix") ];
 
+  console.keyMap = "hu";
+  services.xserver.xkb.layout = "hu,us";
+
   services.displayManager.autoLogin = {
     enable = true;
     user = username;
@@ -52,21 +55,35 @@ in
   #   "video=HDMI-A-1:1920x1080@60e"
   # ];
 
-  home-manager.users.${username}.dconf = {
-    enable = true;
-    settings = {
-      "org/gnome/desktop/session".idle-delay = 0;
-      "org/gnome/desktop/screensaver" = {
-        idle-activation-enabled = false;
-        lock-enabled = false;
-      };
-      "org/gnome/settings-daemon/plugins/power" = {
-        idle-dim = false;
-        sleep-inactive-ac-type = "nothing";
-        sleep-inactive-ac-timeout = 0;
-        sleep-inactive-battery-type = "nothing";
-        sleep-inactive-battery-timeout = 0;
+  home-manager.users.${username} =
+    { lib, ... }:
+    {
+      dconf = {
+        enable = true;
+        settings = {
+          "org/gnome/desktop/input-sources".sources = [
+            (lib.hm.gvariant.mkTuple [
+              "xkb"
+              "hu"
+            ])
+            (lib.hm.gvariant.mkTuple [
+              "xkb"
+              "us"
+            ])
+          ];
+          "org/gnome/desktop/session".idle-delay = 0;
+          "org/gnome/desktop/screensaver" = {
+            idle-activation-enabled = false;
+            lock-enabled = false;
+          };
+          "org/gnome/settings-daemon/plugins/power" = {
+            idle-dim = false;
+            sleep-inactive-ac-type = "nothing";
+            sleep-inactive-ac-timeout = 0;
+            sleep-inactive-battery-type = "nothing";
+            sleep-inactive-battery-timeout = 0;
+          };
+        };
       };
     };
-  };
 }
