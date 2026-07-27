@@ -5,13 +5,14 @@
   ...
 }:
 let
+  username = config.hostCfg.username;
   transmissionSettings = pkgs.writeText "busanas-transmission-settings.json" (
     builtins.toJSON {
       download-dir = "/srv/media";
       incomplete-dir = "/srv/media/incomplete";
       incomplete-dir-enabled = true;
       rpc-enabled = false;
-      watch-dir = "/srv/media/watch";
+      watch-dir = "/home/${username}/Downloads";
       watch-dir-enabled = true;
     }
   );
@@ -27,14 +28,29 @@ let
   };
 in
 {
-  home-manager.users.${config.hostCfg.username} =
+  home-manager.users.${username} =
     { lib, ... }:
     {
       home.packages = [ guardedTransmission ];
 
+      systemd.user.services.transmission-gtk = {
+        Unit = {
+          Description = "Transmission GTK torrent client";
+          After = [ "graphical-session.target" ];
+          PartOf = [ "graphical-session.target" ];
+        };
+        Service = {
+          ExecStart = "${guardedTransmission}/bin/transmission-gtk --minimized";
+          Restart = "on-failure";
+          RestartSec = "5s";
+        };
+        Install.WantedBy = [ "graphical-session.target" ];
+      };
+
       home.activation.seedTransmissionSettings = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
         settings_dir="$HOME/.config/transmission"
         settings_file="$settings_dir/settings.json"
+        ${pkgs.coreutils}/bin/install -d -m 0700 "$HOME/Downloads"
         if [ ! -e "$settings_file" ]; then
           ${pkgs.coreutils}/bin/install -d -m 0700 "$settings_dir"
           ${pkgs.coreutils}/bin/install -m 0600 \

@@ -28,7 +28,7 @@ in
         "server min protocol" = "SMB2_02";
         "interfaces" = "lo eno2 wlo1";
         "bind interfaces only" = "yes";
-        "hosts allow" = "127.0.0.1 192.168.1.0/24";
+        "hosts allow" = "127.0.0.1 192.168.0.0/16";
         "hosts deny" = "0.0.0.0/0";
       };
 
@@ -61,7 +61,7 @@ in
   };
 
   networking.firewall.extraInputRules = ''
-    ip saddr 192.168.1.0/24 tcp dport { 139, 445 } accept
-    ip saddr 192.168.1.0/24 udp dport { 137, 138 } accept
+    ip saddr 192.168.0.0/16 tcp dport { 139, 445 } accept
+    ip saddr 192.168.0.0/16 udp dport { 137, 138 } accept
   '';
 }
