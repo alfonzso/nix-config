@@ -8,7 +8,11 @@ let
   group = config.hostCfg.nasGroup;
 in
 {
-  systemd.tmpfiles.rules = [ "d /srv/media 0755 root root -" ];
+  # Mode and ownership are left to busanas-media-permissions below. A rule that
+  # pins them here would be re-applied on every activation, and because the disk
+  # is an automount, tmpfiles walks into the mounted filesystem and would reset
+  # its root directory instead of the empty mountpoint.
+  systemd.tmpfiles.rules = [ "d /srv/media - - - -" ];
 
   systemd.services.busanas-media-permissions = {
     description = "Prepare the mounted busanas media filesystem";
@@ -17,7 +21,10 @@ in
       "srv-media.mount"
     ];
     bindsTo = [ "srv-media.mount" ];
-    after = [ "srv-media.mount" ];
+    after = [
+      "srv-media.mount"
+      "systemd-tmpfiles-setup.service"
+    ];
     requires = [ "srv-media.mount" ];
     unitConfig.ConditionPathIsMountPoint = "/srv/media";
     serviceConfig = {
