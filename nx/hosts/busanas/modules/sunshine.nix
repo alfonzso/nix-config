@@ -29,8 +29,8 @@ in
   };
 
   networking.firewall.extraInputRules = ''
-    ip saddr 192.168.1.0/24 tcp dport { 47984, 47989, 47990, 48010 } accept
-    ip saddr 192.168.1.0/24 udp dport { 47998-48000, 48002, 48010 } accept
+    ip saddr 192.168.0.0/16 tcp dport { 47984, 47989, 47990, 48010 } accept
+    ip saddr 192.168.0.0/16 udp dport { 47998-48000, 48002, 48010 } accept
   '';
 
   home-manager.users.${config.hostCfg.username} =
