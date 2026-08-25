@@ -59,14 +59,13 @@ find_sops_key() {
   local candidate
   for candidate in \
     "/home/${USER}/.config/sops/age/keys.txt" \
-    "/persist/sops/age/keys.txt" \
-    "/persists/sops/age/keys.txt"; do
+    "/persist/sops/age/keys.txt"; do
     [[ -f "$candidate" ]] && {
       printf '%s\n' "$candidate"
       return
     }
   done
-  echo "Cannot find sops age key (checked ~/.config, /persist, /persists)." >&2
+  echo "Cannot find sops age key (checked ~/.config and /persist)." >&2
   exit 1
 }
 
