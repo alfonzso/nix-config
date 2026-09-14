@@ -28,6 +28,11 @@ in
   services.desktopManager.plasma6.enable = true;
   programs.kdeconnect.enable = true;
 
+  networking.hosts."192.168.1.126" = [
+    "carelink.lehel.net"
+    "hippo.lehel.net"
+  ];
+
   services.xrdp = {
     enable = true;
     openFirewall = true;
