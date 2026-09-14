@@ -44,6 +44,27 @@
         "url": "ssh://git@gitea.cnwco.duckdns.org/alfonzso/cgm-desktop.git"
       }
     },
+    "condeco-next-gen": {
+      "inputs": {
+        "home-manager": "home-manager_2",
+        "nixpkgs": "nixpkgs_2"
+      },
+      "locked": {
+        "lastModified": 1785451320,
+        "narHash": "sha256-jzChAjIKzCHCp/0v+Y7gpXgRSiZr6+z2V7MjABgU6+k=",
+        "ref": "main",
+        "rev": "6fca05713b1a03f2a9631484e31036e2381658e3",
+        "shallow": true,
+        "type": "git",
+        "url": "ssh://git@gitea.cnwco.duckdns.org/alfonzso/condeco-next-gen.git"
+      },
+      "original": {
+        "ref": "main",
+        "shallow": true,
+        "type": "git",
+        "url": "ssh://git@gitea.cnwco.duckdns.org/alfonzso/condeco-next-gen.git"
+      }
+    },
     "disko": {
       "inputs": {
         "nixpkgs": "nixpkgs"
@@ -106,6 +127,10 @@
     "home-manager-config": {
       "inputs": {
         "catppuccin": "catppuccin",
+        "cgm-desktop": [
+          "cgm-desktop"
+        ],
+        "condeco-next-gen": "condeco-next-gen",
         "home-manager": [
           "home-manager"
         ],
@@ -123,11 +148,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1785182194,
-        "narHash": "sha256-j0AHjUFvKicFJlzdDuvd0K4ySD5jDJZBPk8lih31C+M=",
+        "lastModified": 1789420446,
+        "narHash": "sha256-lFFrB2pGw+mEuJKCpdhCzL4pdDsbBWyEgMqtY+PRLf0=",
         "ref": "main",
-        "rev": "8c4ec7816d9c439078496a56a734c38a7ba4bee2",
-        "revCount": 126,
+        "rev": "c153d56fa5d79c5a724982ff6f24ef7c92733e1a",
+        "revCount": 145,
         "type": "git",
         "url": "ssh://git@github.com/alfonzso/home-manager.git"
       },
@@ -135,6 +160,28 @@
         "ref": "main",
         "type": "git",
         "url": "ssh://git@github.com/alfonzso/home-manager.git"
+      }
+    },
+    "home-manager_2": {
+      "inputs": {
+        "nixpkgs": [
+          "home-manager-config",
+          "condeco-next-gen",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1785306346,
+        "narHash": "sha256-DScBkW0fOgpGPK2trNoX3ryLTlaC14+gglFo/BhGJ4g=",
+        "owner": "nix-community",
+        "repo": "home-manager",
+        "rev": "e705714e918c3b11affcdd15db2cbe3a070420a0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "home-manager",
+        "type": "github"
       }
     },
     "nix-flatpak": {
@@ -154,7 +201,7 @@
     },
     "nix-secrets": {
       "inputs": {
-        "nixpkgs": "nixpkgs_2"
+        "nixpkgs": "nixpkgs_3"
       },
       "locked": {
         "lastModified": 1785182677,
@@ -190,16 +237,18 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1764947035,
-        "narHash": "sha256-EYHSjVM4Ox4lvCXUMiKKs2vETUSL5mx+J2FfutM7T9w=",
+        "lastModified": 1785318670,
+        "narHash": "sha256-dN6Ou5x/+23FZLEpYP3IffO+NyJFzUlGumt1uu3MMaY=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "a672be65651c80d3f592a89b3945466584a22069",
+        "rev": "0954f7ee2f6bb3dc7d4e3d0d8bcb8fd4bde4cfc5",
         "type": "github"
       },
       "original": {
-        "id": "nixpkgs",
-        "type": "indirect"
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
       }
     },
     "nixpkgs_25_11": {
@@ -220,6 +269,20 @@
     },
     "nixpkgs_3": {
       "locked": {
+        "lastModified": 1764947035,
+        "narHash": "sha256-EYHSjVM4Ox4lvCXUMiKKs2vETUSL5mx+J2FfutM7T9w=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "a672be65651c80d3f592a89b3945466584a22069",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "type": "indirect"
+      }
+    },
+    "nixpkgs_4": {
+      "locked": {
         "lastModified": 1783856661,
         "narHash": "sha256-ZGP04e+Q6WyQJGA9ZvI5CL6+heGQldbAG9U1T9NGvmU=",
         "owner": "nixos",
@@ -234,7 +297,7 @@
         "type": "github"
       }
     },
-    "nixpkgs_4": {
+    "nixpkgs_5": {
       "locked": {
         "lastModified": 1782175435,
         "narHash": "sha256-EMzXKmnOtBQ2MnvpiNOm7E+kOMvdPrIKaeg52Tip2Uk=",
@@ -282,7 +345,7 @@
         "home-manager-config": "home-manager-config",
         "nix-flatpak": "nix-flatpak",
         "nix-secrets": "nix-secrets",
-        "nixpkgs": "nixpkgs_3",
+        "nixpkgs": "nixpkgs_4",
         "nixpkgs_25_11": "nixpkgs_25_11",
         "plasma-manager": "plasma-manager",
         "sops-nix": "sops-nix"
@@ -290,7 +353,7 @@
     },
     "sops-nix": {
       "inputs": {
-        "nixpkgs": "nixpkgs_4"
+        "nixpkgs": "nixpkgs_5"
       },
       "locked": {
         "lastModified": 1783174389,

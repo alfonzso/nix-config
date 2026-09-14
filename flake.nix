@@ -17,6 +17,7 @@
       inputs.nixpkgs-prettier.follows = "nixpkgs_25_11";
       inputs.nix-secrets.follows = "nix-secrets";
       inputs.sops-nix.follows = "sops-nix";
+      inputs.cgm-desktop.follows = "cgm-desktop";
     };
     plasma-manager = {
       url = "github:nix-community/plasma-manager";

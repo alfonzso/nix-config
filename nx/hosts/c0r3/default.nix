@@ -19,9 +19,6 @@ in {
   users.users.${config.hostCfg.username}.extraGroups =
     [ "audio" "input" "networkmanager" "render" "video" ];
 
-  home-manager.users.${config.hostCfg.username}.imports =
-    [ inputs.plasma-manager.homeModules.plasma-manager ];
-
   security.rtkit.enable = true;
 
   security.sudo.extraRules = [{
@@ -79,13 +76,6 @@ in {
   #     amixer -c PCH set 'Auto-Mute Mode' Disabled || true
   #   '';
   # };
-  #
-  # home-manager.users.${config.hostCfg.username} = { lib, ... }: {
-  #   home.activation.seedC0r3AudioState = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-  #     ${pkgs.python3}/bin/python3 ${./scripts/seed-wireplumber-audio-state.py}
-  #   '';
-  # };
-
   imports = lib.flatten [
     (builtins.getAttr currentConfigName
       inputs.home-manager-config.homeManagerModules.hosts)
@@ -102,7 +92,6 @@ in {
     ./modules/hardware/nvidia.nix
 
     # Apps and gaming
-    ./modules/apps/firefox.nix
     ./modules/apps/flatpak.nix
     ./modules/apps/gaming.nix
 
