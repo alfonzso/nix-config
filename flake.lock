@@ -1,27 +1,5 @@
 {
   "nodes": {
-    "carelink-tui": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1782950048,
-        "narHash": "sha256-ifjC+fxqm8qK5AA0nzZu4EmmMihIgt75HHTatOWW8Co=",
-        "ref": "main",
-        "rev": "83840f9c39e750221c2a23f620700411dc467916",
-        "shallow": true,
-        "type": "git",
-        "url": "ssh://git@github.com/alfonzso/carelink-tui.git"
-      },
-      "original": {
-        "ref": "main",
-        "shallow": true,
-        "type": "git",
-        "url": "ssh://git@github.com/alfonzso/carelink-tui.git"
-      }
-    },
     "catppuccin": {
       "inputs": {
         "nixpkgs": [
@@ -42,6 +20,28 @@
         "ref": "v26.05",
         "repo": "nix",
         "type": "github"
+      }
+    },
+    "cgm-desktop": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1789408330,
+        "narHash": "sha256-tVPamxrUp64ZdbiogrFEy3ruTTctlQolQ4zG4kHKDcE=",
+        "ref": "main",
+        "rev": "05e547eacc56493fde91c08eaa5edaac6d87241b",
+        "shallow": true,
+        "type": "git",
+        "url": "ssh://git@gitea.cnwco.duckdns.org/alfonzso/cgm-desktop.git"
+      },
+      "original": {
+        "ref": "main",
+        "shallow": true,
+        "type": "git",
+        "url": "ssh://git@gitea.cnwco.duckdns.org/alfonzso/cgm-desktop.git"
       }
     },
     "disko": {
@@ -275,7 +275,7 @@
     },
     "root": {
       "inputs": {
-        "carelink-tui": "carelink-tui",
+        "cgm-desktop": "cgm-desktop",
         "disko": "disko",
         "himmelblau": "himmelblau",
         "home-manager": "home-manager",

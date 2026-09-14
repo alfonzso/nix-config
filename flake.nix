@@ -23,9 +23,9 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.home-manager.follows = "home-manager";
     };
-    carelink-tui = {
+    cgm-desktop = {
       url =
-        "git+ssh://git@github.com/alfonzso/carelink-tui.git?ref=main&shallow=1";
+        "git+ssh://git@gitea.cnwco.duckdns.org/alfonzso/cgm-desktop.git?ref=main&shallow=1";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-flatpak.url = "github:gmodena/nix-flatpak";

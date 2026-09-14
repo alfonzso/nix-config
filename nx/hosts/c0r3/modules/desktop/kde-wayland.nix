@@ -8,7 +8,7 @@ let
   hostCfg = config.hostCfg;
   wallpaperSource = ../../assets/starry-nebula-219.png;
   wallpaperPath = ".local/share/wallpapers/starry-nebula-219.png";
-  carelinkKdebar = inputs.carelink-tui.packages.${pkgs.stdenv.hostPlatform.system}.carelink-kdebar;
+  cgmKdebar = inputs.cgm-desktop.packages.${pkgs.stdenv.hostPlatform.system}.kde;
 in
 {
   services.xserver.enable = true;
@@ -67,7 +67,7 @@ in
     { config, lib, ... }:
     {
       home.file.${wallpaperPath}.source = wallpaperSource;
-      home.packages = [ carelinkKdebar ];
+      home.packages = [ cgmKdebar ];
 
       programs.plasma = {
         enable = true;
@@ -106,7 +106,22 @@ in
                   "applications:com.usebottles.bottles.desktop"
                 ];
               }
-              "net.lehel.carelink.kdebar"
+              {
+                name = "net.lehel.cgm.desktop";
+                config.General = {
+                  providerPreset = "hippo";
+                  providerLabel = "CGM";
+                  baseUrl = "https://provider.example";
+                  carelinkBaseUrl = "http://carelink.lehel.net";
+                  hippoBaseUrl = "http://hippo.lehel.net";
+                  unit = "mmol";
+                  refreshIntervalSeconds = 90;
+                  historyLimit = 45;
+                  longHistorySize = 45;
+                  shortHistorySize = 15;
+                  operationalNotifications = true;
+                };
+              }
               "org.kde.plasma.marginsseparator"
               {
                 name = "org.kde.plasma.weather";
