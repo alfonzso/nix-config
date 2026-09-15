@@ -86,6 +86,8 @@ in {
     ./modules/storage/disko.nix
 
     # Desktop
+    # GNOME and KDE X11 were used only for testing. Their modules are
+    # intentionally unused but kept as safety fallbacks.
     ./modules/desktop/kde-wayland.nix
 
     # Hardware
