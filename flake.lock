@@ -29,10 +29,10 @@
         ]
       },
       "locked": {
-        "lastModified": 1789510320,
-        "narHash": "sha256-C8gWeKmxltFpEUHyLfCElZ7+DfI2LIenHe3dWvUKOCo=",
+        "lastModified": 1789512904,
+        "narHash": "sha256-yYtdhNBcdbqbp5fbmJcIsZ5/kiem7ClEn19uQdmgosI=",
         "ref": "main",
-        "rev": "66e39b969b35e4b142896c06c06b1595bbddf79b",
+        "rev": "105aa07004f41f7a27500b7bf578e64863d0c124",
         "shallow": true,
         "type": "git",
         "url": "ssh://git@gitea.cnwco.duckdns.org/alfonzso/cgm-desktop.git"
@@ -148,11 +148,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1789510363,
-        "narHash": "sha256-FpiPT2jPOtmhIWxj4V5nh3U1dTbCE+Anrn4ZRqWnuo0=",
+        "lastModified": 1789512931,
+        "narHash": "sha256-IhR99KSkOWUnjEYArBXos3b6yxcxjlSSRWKAzv3hKXg=",
         "ref": "main",
-        "rev": "45caa0f0cb076941428520ebb8e19f108eff248b",
-        "revCount": 149,
+        "rev": "7542587f2fd5f0d2f9144cd5f102fad6319acebd",
+        "revCount": 151,
         "type": "git",
         "url": "ssh://git@github.com/alfonzso/home-manager.git"
       },
