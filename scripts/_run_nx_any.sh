@@ -50,22 +50,28 @@ for arg in "${@:2}"; do
 	esac
 done
 
-keys_src_home="/home/${USER}/.config/sops/age/keys.txt"
+current_user="${USER:-$(id -un)}"
+keys_src_runtime="/run/sops-age-users/${current_user}/keys.txt"
+keys_src_home="/home/${current_user}/.config/sops/age/keys.txt"
 keys_src_persist="/persist/sops/age/keys.txt"
 
-if [[ -f "$keys_src_home" ]]; then
+if [[ -f "$keys_src_runtime" && -r "$keys_src_runtime" ]]; then
+	keys_src="$keys_src_runtime"
+elif [[ -f "$keys_src_home" && -r "$keys_src_home" ]]; then
 	keys_src="$keys_src_home"
-elif [[ -f "$keys_src_persist" ]]; then
+elif [[ -f "$keys_src_persist" && -r "$keys_src_persist" ]]; then
 	keys_src="$keys_src_persist"
 else
 	echo "Cannot find sops age key."
 	echo "Checked:"
+	echo "  $keys_src_runtime"
 	echo "  $keys_src_home"
 	echo "  $keys_src_persist"
 	exit 1
 fi
 
 root=$(mktemp -d)
+trap 'rm -rf -- "$root"' EXIT
 keys_target="$root/persist/sops/age/"
 
 if ! rsync -avz --mkpath "$keys_src" "$keys_target"; then
@@ -76,5 +82,3 @@ fi
 nix run github:numtide/nixos-anywhere -- \
 	--flake .#$target ${extras} --extra-files $root "${nixos_anywhere_args[@]}" \
 	$_ssh_host
-
-echo "rm -r $root"

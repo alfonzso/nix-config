@@ -70,7 +70,9 @@ make -C scripts/c0r3-anywhere start-installed
 ## Prerequisites
 
 `nix`, `qemu` (`qemu-system-x86_64`, `qemu-img`), `curl`, `ssh`, `ssh-keygen`,
-`rsync`, and a sops age key at `~/.config/sops/age/keys.txt` (or `/persist/...`).
+`rsync`, and a readable sops age key. On a running personal NixOS host it is
+normally `/run/sops-age-users/$USER/keys.txt`; the installer also accepts the
+legacy `~/.config/sops/age/keys.txt` and root-readable `/persist/...` paths.
 KVM is used automatically when available.
 
 ## Fixes baked into the flow (for reference)

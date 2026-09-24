@@ -56,16 +56,18 @@ require_cmd() {
 }
 
 find_sops_key() {
-  local candidate
+  local candidate current_user
+  current_user="${USER:-$(id -un)}"
   for candidate in \
-    "/home/${USER}/.config/sops/age/keys.txt" \
+    "/run/sops-age-users/${current_user}/keys.txt" \
+    "/home/${current_user}/.config/sops/age/keys.txt" \
     "/persist/sops/age/keys.txt"; do
-    [[ -f "$candidate" ]] && {
+    [[ -f "$candidate" && -r "$candidate" ]] && {
       printf '%s\n' "$candidate"
       return
     }
   done
-  echo "Cannot find sops age key (checked ~/.config and /persist)." >&2
+  echo "Cannot find a readable sops age key (checked /run, ~/.config, and /persist)." >&2
   exit 1
 }
 
