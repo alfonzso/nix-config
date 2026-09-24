@@ -1,12 +1,18 @@
-{ config, lib, NixSecrets, ... }:
+{ config, lib, NixSecrets, pkgs, ... }:
 let
   sopsFolder = NixSecrets + "/sops";
   hostCfg = config.hostCfg;
+  ageKeyFile = "/persist/sops/age/keys.txt";
 
 in {
-  sops.age.keyFile = "/persist/sops/age/keys.txt";
+  system.activationScripts.lockSopsAgeKey.text = ''
+    if [ -f ${ageKeyFile} ]; then
+      ${pkgs.coreutils}/bin/chown root:root ${ageKeyFile}
+      ${pkgs.coreutils}/bin/chmod 0600 ${ageKeyFile}
+    fi
+  '';
 
-  environment.variables = { SOPS_AGE_KEY_FILE = "/persist/sops/age/keys.txt"; };
+  sops.age.keyFile = ageKeyFile;
 
   sops = {
 
