@@ -55,20 +55,23 @@ require_cmd() {
   done
 }
 
-find_sops_key() {
-  local candidate current_user
-  current_user="${USER:-$(id -un)}"
-  for candidate in \
-    "/run/sops-age-users/${current_user}/keys.txt" \
-    "/home/${current_user}/.config/sops/age/keys.txt" \
-    "/persist/sops/age/keys.txt"; do
-    [[ -f "$candidate" && -r "$candidate" ]] && {
-      printf '%s\n' "$candidate"
-      return
-    }
-  done
-  echo "Cannot find a readable sops age key (checked /run, ~/.config, and /persist)." >&2
-  exit 1
+copy_sops_key() {
+  local source="/persist/sops/age/keys.txt"
+  local target="$1"
+
+  install -d -m 0700 "$(dirname "$target")"
+  install -m 0600 /dev/null "$target"
+  if [[ -f "$source" && -s "$source" && ! -L "$source" && -r "$source" ]]; then
+    cat "$source" >"$target"
+  elif command -v sudo >/dev/null \
+    && sudo test -f "$source" \
+    && sudo test -s "$source" \
+    && sudo test ! -L "$source"; then
+    sudo cat "$source" >"$target"
+  else
+    echo "Cannot read canonical sops age key: $source" >&2
+    return 1
+  fi
 }
 
 find_xorriso() {
@@ -209,7 +212,7 @@ cmd_build_iso() {
   fi
 
   work="$(mktemp -d)"
-  trap 'rm -rf "$work"' RETURN
+  trap 'command rm -rf "$work"' RETURN
 
   ovl="$work/ovl"
   mkdir -p \
@@ -274,7 +277,7 @@ cmd_start_qemu() {
   if [[ "$REBUILD_ISO" == "1" || ! -f "$ISO" ]]; then
     local keys_file
     keys_file="$(mktemp)"
-    trap 'rm -f "$keys_file"' RETURN
+    trap 'command rm -f "$keys_file"' RETURN
 
     cat "$SSH_KEY.pub" >"$keys_file"
     [[ -f "$EXTRA_PUBKEY" ]] && cat "$EXTRA_PUBKEY" >>"$keys_file"
@@ -319,7 +322,7 @@ cmd_start_qemu() {
 cmd_nx_any_installer() {
   require_cmd nix ssh rsync
 
-  local phase="${1:-install}" phases host keys_src extra_files
+  local phase="${1:-install}" phases host extra_files cleanup_cmd
   case "$phase" in
     disko) phases="${PHASES:-kexec,disko}" ;;
     install) phases="${PHASES:-kexec,disko,install}" ;;
@@ -342,10 +345,10 @@ cmd_nx_any_installer() {
     exit 1
   fi
 
-  keys_src="$(find_sops_key)"
   extra_files="$(mktemp -d)"
-  trap 'rm -rf "$extra_files"' RETURN
-  rsync -avz --mkpath "$keys_src" "$extra_files/persist/sops/age/"
+  printf -v cleanup_cmd 'command rm -rf -- %q' "$extra_files"
+  trap "$cleanup_cmd" EXIT
+  copy_sops_key "$extra_files/persist/sops/age/keys.txt"
 
   cd "$WS"
   nix run github:numtide/nixos-anywhere -- \

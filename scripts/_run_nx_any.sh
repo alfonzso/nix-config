@@ -50,32 +50,23 @@ for arg in "${@:2}"; do
 	esac
 done
 
-current_user="${USER:-$(id -un)}"
-keys_src_runtime="/run/sops-age-users/${current_user}/keys.txt"
-keys_src_home="/home/${current_user}/.config/sops/age/keys.txt"
 keys_src_persist="/persist/sops/age/keys.txt"
 
-if [[ -f "$keys_src_runtime" && -r "$keys_src_runtime" ]]; then
-	keys_src="$keys_src_runtime"
-elif [[ -f "$keys_src_home" && -r "$keys_src_home" ]]; then
-	keys_src="$keys_src_home"
-elif [[ -f "$keys_src_persist" && -r "$keys_src_persist" ]]; then
-	keys_src="$keys_src_persist"
-else
-	echo "Cannot find sops age key."
-	echo "Checked:"
-	echo "  $keys_src_runtime"
-	echo "  $keys_src_home"
-	echo "  $keys_src_persist"
-	exit 1
-fi
-
 root=$(mktemp -d)
-trap 'rm -rf -- "$root"' EXIT
-keys_target="$root/persist/sops/age/"
+trap 'command rm -rf -- "$root"' EXIT
+keys_target="$root/persist/sops/age/keys.txt"
+install -d -m 0700 "$(dirname "$keys_target")"
+install -m 0600 /dev/null "$keys_target"
 
-if ! rsync -avz --mkpath "$keys_src" "$keys_target"; then
-	echo "Failed to copy sops age key from $keys_src to $keys_target"
+if [[ -f "$keys_src_persist" && -s "$keys_src_persist" && ! -L "$keys_src_persist" && -r "$keys_src_persist" ]]; then
+	cat "$keys_src_persist" >"$keys_target"
+elif command -v sudo >/dev/null \
+	&& sudo test -f "$keys_src_persist" \
+	&& sudo test -s "$keys_src_persist" \
+	&& sudo test ! -L "$keys_src_persist"; then
+	sudo cat "$keys_src_persist" >"$keys_target"
+else
+	echo "Cannot read canonical sops age key: $keys_src_persist"
 	exit 1
 fi
 
